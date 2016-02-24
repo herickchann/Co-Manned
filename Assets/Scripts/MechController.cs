@@ -8,6 +8,11 @@ public class MechController : MonoBehaviour
 	private Quaternion _lookRotation;
 	private Vector3 _direction;
 
+	public GameObject bullet;
+	public Transform bulletSpawn;
+	private float nextFire;
+	public float fireRate;
+
     void Start() {
         rb = GetComponent<Rigidbody>();
     }
@@ -39,16 +44,22 @@ public class MechController : MonoBehaviour
 		
 			}
 		}
+
+		if (Input.GetButton ("Fire1") && Time.time > nextFire) {
+			nextFire = Time.time + fireRate;
+			GameObject clone = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
+		}
+
 	}
 
     void FixedUpdate() {
-		float moveH = Input.GetAxis ("Horizontal");
-		float moveV = Input.GetAxis ("Vertical");
+//		float moveH = Input.GetAxis ("Horizontal");
+//		float moveV = Input.GetAxis ("Vertical");
+//
+//		Vector3 movement = new Vector3(moveH, 0.0f, moveV);
 
-		Vector3 movement = new Vector3(moveH, 0.0f, moveV);
-
-//		Vector3 movement = new Vector3(Input.acceleration.x, 0.0f, Input.acceleration.y);
-		movement = transform.TransformDirection(movement);
+		Vector3 movement = new Vector3(Input.acceleration.x, 0.0f, Input.acceleration.y);
+		//movement = transform.TransformDirection(movement);
 		rb.velocity = movement * speed;
     }
 }
