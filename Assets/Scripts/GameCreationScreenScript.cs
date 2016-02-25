@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class GameCreationScreenScript : MonoBehaviour {
 
+	private string gameName;
+	private string gamePass;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -14,6 +17,14 @@ public class GameCreationScreenScript : MonoBehaviour {
 	
 	}
 
+	public void setGameName (string input) {
+		this.gameName = input;
+	}
+
+	public void setGamePass (string input) {
+		this.gamePass = input;
+	}
+
 	// returns to lobby screen
 	public void backToLobby () {
 		SceneManager.LoadScene("GameLobbyScreen");
@@ -21,6 +32,8 @@ public class GameCreationScreenScript : MonoBehaviour {
 
 	// makes the game
 	public void makeGame () {
+		GameManager.instance.gameName = this.gameName;
+		GameManager.instance.gamePass = this.gamePass;
 		SceneManager.LoadScene("GameRoomScreen");
 	}
 }

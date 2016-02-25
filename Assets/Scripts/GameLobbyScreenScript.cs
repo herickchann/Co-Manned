@@ -6,12 +6,16 @@ public class GameLobbyScreenScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		// selected game
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	public void selectGame () {
+
 	}
 
 	// loads the game creation screen
