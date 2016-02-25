@@ -71,7 +71,7 @@ public class GameRoomScreenScript : MonoBehaviour {
 			SceneManager.LoadScene("pilot");
 		} else if (selection == GameManager.Role.RedEngineer || selection == GameManager.Role.BlueEngineer) {
 			Debug.Log("Loading engineer mode...");
-			//SceneManager.LoadScene("engineer");
+			SceneManager.LoadScene("engineer");
 		}
 	}
 
