@@ -47,7 +47,7 @@ public class MechController : MonoBehaviour
 
     private void Turn () {
         float angle = Mathf.Atan2(moveH, moveV) * Mathf.Rad2Deg;
-        if (angle != -180) {
+        if (angle != 0) {
             rb.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
         }
     }
