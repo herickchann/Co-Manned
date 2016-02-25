@@ -9,33 +9,24 @@ public class MechController : MonoBehaviour
     private RectTransform joystickTrans;
 
 	public GameObject bullet;
-    public SimpleJoystick joystick;
 	public Transform bulletSpawn;
 	private float nextFire;
 	public float fireRate;
 
     private float moveH;
     private float moveV;
-    //private bool joystickHidden = true;
-    //private Vector3 joystickLocation;
 
     void Start () {
         rb = GetComponent<Rigidbody>();
-        //joystickTrans = joystick.GetComponent<RectTransform>();
-        //joystickLocation = joystickTrans.position;
     }
 
     void Update () {
-        //joystick.SetActive(joystickHidden);
-        //joystickTrans.position = joystickLocation;
-
         moveH = CnInputManager.GetAxis("Horizontal");
         moveV = CnInputManager.GetAxis("Vertical");
 
         Move();
         Turn();
         Fire();
-        //ToggleJoystick();
     }
 
     private void Move () {
@@ -69,27 +60,4 @@ public class MechController : MonoBehaviour
             }
         }
     }
-
-    //private void ToggleJoystick () {
-    //    foreach (Touch touch in Input.touches) {
-    //        if (touch.phase == TouchPhase.Began) {
-    //            if (touch.position.x < (Screen.width / 2)) {
-    //                joystickTrans.position = touch.position;
-    //            }
-    //        } 
-    //    }
-
-    //    if (Input.GetMouseButtonDown(0)) {
-    //        if (Input.mousePosition.x < (Screen.width / 2)) {
-    //            joystickLocation = Input.mousePosition;
-    //            joystickHidden = true;
-    //        }
-    //    }
-    //    if (Input.GetMouseButtonUp(0)) {
-    //        joystickHidden = true;
-    //    }
-
-    //    joystick.SetActive(joystickHidden);
-    //    joystickTrans.position = joystickLocation;
-    //}
 }
