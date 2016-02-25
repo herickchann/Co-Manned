@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/EngineerScene.unity
+  isLoaded: 1
+  isActive: 1
