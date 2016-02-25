@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityStandardAssets.CrossPlatformInput;
+using CnControls;
 
 public class MechController : MonoBehaviour
 {
@@ -9,7 +9,7 @@ public class MechController : MonoBehaviour
     private RectTransform joystickTrans;
 
 	public GameObject bullet;
-    public GameObject joystick;
+    public SimpleJoystick joystick;
 	public Transform bulletSpawn;
 	private float nextFire;
 	public float fireRate;
@@ -29,8 +29,8 @@ public class MechController : MonoBehaviour
         //joystick.SetActive(joystickHidden);
         //joystickTrans.position = joystickLocation;
 
-        moveH = CrossPlatformInputManager.GetAxis("Horizontal");
-        moveV = CrossPlatformInputManager.GetAxis("Vertical");
+        moveH = CnInputManager.GetAxis("Horizontal");
+        moveV = CnInputManager.GetAxis("Vertical");
 
         Move();
         Turn();
