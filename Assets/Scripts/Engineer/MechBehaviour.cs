@@ -30,8 +30,6 @@ public class MechBehaviour : MonoBehaviour
 
     void Start()
     {
-        height = Camera.main.orthographicSize * 2;
-        width = height * Screen.width / Screen.height;
         ammoIcon = (GameObject)Resources.Load("AmmoIcon");
         energyCell = Resources.Load("EnergyCell");
         holdingBay = GetComponent<Transform>().Find("Canvas").Find("Holding Bay");
@@ -70,6 +68,7 @@ public class MechBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		
         healthText.text = "Health: " + health + "/100";
         fuelText.text = "Fuel: " + fuel + "/100";
         healthBar.fillAmount = (float)health / maxHealth;

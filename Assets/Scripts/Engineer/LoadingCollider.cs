@@ -12,15 +12,15 @@ public class LoadingCollider : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "EnergyCell")
-        {
+        //if (other.gameObject.tag == "EnergyCell")
+        //{
             cell = other.gameObject.GetComponent<AmmoBehaviour>();
             if (!mech.AmmoFull())
             {
                 mech.AddAmmo(cell.GetValue());
                 Destroy(other.gameObject);
             }
-        }
+        //}
     }
 
     // Update is called once per frame
