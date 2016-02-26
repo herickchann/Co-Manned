@@ -40,45 +40,46 @@ public class GameRoomScreenScript : MonoBehaviour {
 		excludeAllRoles();
 		role[0].enabled = false;
 		role[0].image.color = Color.gray;
-		GameManager.instance.role = GameManager.Role.RedPilot;
+		GameManager.instance.roleSelection = GameManager.Role.RedPilot;
 	}
 
 	public void selectRedEngineer() {
 		excludeAllRoles();
 		role[1].enabled = false;
 		role[1].image.color = Color.gray;
-		GameManager.instance.role = GameManager.Role.RedEngineer;
+		GameManager.instance.roleSelection = GameManager.Role.RedEngineer;
 	}
 
 	public void selectBluePilot() {
 		excludeAllRoles();
 		role[2].enabled = false;
 		role[2].image.color = Color.gray;
-		GameManager.instance.role = GameManager.Role.BluePilot;
+		GameManager.instance.roleSelection = GameManager.Role.BluePilot;
 	}
 
 	public void selectBlueEngineer() {
 		excludeAllRoles();
 		role[3].enabled = false;
 		role[3].image.color = Color.gray;
-		GameManager.instance.role = GameManager.Role.BlueEngineer;
+		GameManager.instance.roleSelection = GameManager.Role.BlueEngineer;
 	}
 
 	public void playerReady () {
-		GameManager.Role selection = GameManager.instance.role;
+		GameManager.Role selection = GameManager.instance.roleSelection;
 		if (selection == GameManager.Role.RedPilot || selection == GameManager.Role.BluePilot) {
 			Debug.Log("Loading pilot mode...");
 			SceneManager.LoadScene("pilot");
 		} else if (selection == GameManager.Role.RedEngineer || selection == GameManager.Role.BlueEngineer) {
 			Debug.Log("Loading engineer mode...");
 			SceneManager.LoadScene("engineer");
-		}
+		} // None selection does nothing
 	}
 
 	// returns to lobby screen
 	public void backToLobby () {
 		GameManager.instance.gameName = "";
 		GameManager.instance.gamePass = "";
+		GameManager.instance.roleSelection = GameManager.Role.None;
 		SceneManager.LoadScene("GameLobbyScreen");
 		// detach from game instance
 	}
