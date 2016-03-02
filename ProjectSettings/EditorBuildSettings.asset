@@ -11,9 +11,9 @@ EditorBuildSettings:
     path: Assets/Scenes/GameCreationScreen.unity
   - enabled: 0
     path: Assets/Scenes/GameLobbyScreen.unity
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/GameRoomScreen.unity
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/pilot.unity
   - enabled: 1
     path: Assets/Scenes/engineer.unity

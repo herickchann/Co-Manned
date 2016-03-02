@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 using CnControls;
+using UnityEngine.Networking;
+using UnityEngine.UI;
 
-public class PilotMechController : MonoBehaviour
+public class PilotMechController : NetworkBehaviour
 {
     public float speed;
     private Rigidbody rb;
     private RectTransform joystickTrans;
 
 	public GameObject bullet;
+	public GameObject statusText;
 	public Transform bulletSpawn;
+	private Vector3 offset;
 	private float nextFire;
 	public float fireRate;
 
@@ -18,10 +22,18 @@ public class PilotMechController : MonoBehaviour
 
     void Start () {
         rb = GetComponent<Rigidbody>();
+		offset = transform.position;
+		statusText.GetComponent<TextMesh> ().text = GetComponent<Combat> ().health.ToString ();
     }
 
     void Update () {
-        moveH = CnInputManager.GetAxis("Horizontal");
+		if(!isLocalPlayer)
+			return;
+
+		//Camera.main.transform.position = new Vector3 (transform.position.x, transform.position.y, Camera.main.transform.position.z);
+		statusText.transform.position = transform.position + offset;
+
+		moveH = CnInputManager.GetAxis("Horizontal");
         moveV = CnInputManager.GetAxis("Vertical");
 
         Move();
@@ -42,21 +54,32 @@ public class PilotMechController : MonoBehaviour
             rb.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
         }
     }
+		
+	[Command]
+	void CmdFire(){
+		nextFire = Time.time + fireRate;
 
-    private void Fire () {
+		var b = (GameObject)Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
+
+		b.GetComponent<Rigidbody> ().velocity = transform.forward * speed;
+		NetworkServer.Spawn (b);
+		Destroy (b, 2.0f);
+	}
+
+    void Fire () {
+		// this is for touch
         foreach (Touch touch in Input.touches) {
             if (touch.phase == TouchPhase.Began) {
                 if (touch.position.x > (Screen.width / 2) && Time.time > nextFire) {
-                    nextFire = Time.time + fireRate;
-                    Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
+					CmdFire ();
                 }
             }
         }
 
+		// this is for mouse click
         if (Input.GetMouseButtonDown(0)) {
             if (Input.mousePosition.x > (Screen.width / 2) && Time.time > nextFire) {
-                nextFire = Time.time + fireRate;
-                Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation);
+				CmdFire ();
             }
         }
     }

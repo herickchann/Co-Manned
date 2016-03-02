@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 public class GameRoomScreenScript : MonoBehaviour {
 
@@ -68,6 +69,7 @@ public class GameRoomScreenScript : MonoBehaviour {
 		GameManager.Role selection = GameManager.instance.roleSelection;
 		if (selection == GameManager.Role.RedPilot || selection == GameManager.Role.BluePilot) {
 			Debug.Log("Loading pilot mode...");
+
 			SceneManager.LoadScene("pilot");
 		} else if (selection == GameManager.Role.RedEngineer || selection == GameManager.Role.BlueEngineer) {
 			Debug.Log("Loading engineer mode...");
