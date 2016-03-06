@@ -14,15 +14,16 @@ public class HealthCollider : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        //if (other.gameObject.tag == "EnergyCell")
-        //{
+        if (other.gameObject.tag == "EnergyCell")
+        {
             cell = other.gameObject.GetComponent<AmmoBehaviour>();
             if (!mech.HealthFull())
             {
-                mech.AddHealth(cell.GetValue()*25);
+                //mech.AddHealth(cell.GetValue()*25);
+                mech.Load(cell.GetValue(), 0);
                 Destroy(other.gameObject);
             }
-        //}
+        }
     }
 
     // Update is called once per frame

@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class MechBehaviour : MonoBehaviour
+public class MechBehaviour : NetworkBehaviour
 {
+    public TimingMiniGameBehaviour tmg;
+    public Text healthBayText;
+    public Text ammoBayText;
+    public Text fuelBayText;
     Object energyCell;
     GameObject ammoIcon;
     const int holdingBaySize = 12;
@@ -27,6 +32,7 @@ public class MechBehaviour : MonoBehaviour
     int lastAmmoCount;
     float height;
     float width;
+    int[] loaded = new int[3];
 
     void Start()
     {
@@ -41,9 +47,6 @@ public class MechBehaviour : MonoBehaviour
         fuelText = StatusPanel.Find("FuelText").gameObject.GetComponent<Text>();
         energyCellScale = GetComponent<Transform>().Find("Canvas").Find("FuelConverterBackground").Find("FuelConverter").localScale;
         baseCellPosition = holdingBay.position;
-
-
-        //baseCellPosition = new Vector3(0, 0, 0);
         baseCellPosition.x -= (float)5;
         baseCellPosition.y -= (float)-1;
         for (int x = 0; x < holdingBaySize; x++)
@@ -84,13 +87,30 @@ public class MechBehaviour : MonoBehaviour
         }
         if (ammoCount > lastAmmoCount)
         {
-            AddAmmoIcon(ammoCount - 1);
+            for (int x = lastAmmoCount; x < ammoCount; x++)
+            {
+                AddAmmoIcon(x);
+            }
         }
         else if (ammoCount < lastAmmoCount)
         {
-            DeleteAmmoIcon(lastAmmoCount - 1);
+            for (int x = lastAmmoCount; x > ammoCount; x--)
+            {
+                DeleteAmmoIcon(x);
+            }
         }
         lastAmmoCount = ammoCount;
+
+        for (int x =0; x<loaded.Length; x++)
+        {
+            if (loaded[x] > 0)
+            {
+                tmg.StartBar(x);
+            }
+        }
+        healthBayText.text = "" +loaded[0];
+        fuelBayText.text = "" + loaded[1];
+        ammoBayText.text = "" + loaded[2];
     }
 
     GameObject CreateEnergyCell(int type)
@@ -120,25 +140,6 @@ public class MechBehaviour : MonoBehaviour
         float h = holdingBay.localScale.y * holdingBay.gameObject.GetComponent<RectTransform>().rect.height;
         Vector3 pos = new Vector3(-1 * w * (float)0.42, h * (float)0.25, 0);
         Vector3 scale = new Vector3(energyCellScale.x, energyCellScale.y, energyCellScale.z);
-        //Vector3 scale = new Vector3(width, height, 1);
-        /*if (index < holdingBaySize / 2)
-        {
-            pos.x += 2 * (index);
-        }
-        else
-        {
-            pos.x += 2 * (index - (holdingBaySize / 2));
-            pos.y -= (float)2.2;
-        }*/
-        /*if (index < holdingBaySize / 2)
-        {
-            pos.x += width-(width/(2*index));
-        }
-        else
-        {
-            pos.x += 2 * (index - (holdingBaySize / 2));
-            pos.y -= (float)2.2;
-        }*/
         if (index < holdingBaySize / 2)
         {
             pos.x += (w / (holdingBaySize / 2) * ((holdingBaySize / 2) - index - 1));//2 * (index);
@@ -222,6 +223,19 @@ public class MechBehaviour : MonoBehaviour
         {
             fuel = 0;
         }
+    }
+
+    public void Load(int val, int index)
+    {
+        loaded[index] += val;
+    }
+
+    public void Convert(double healthVal, double fuelVal, double ammoVal)
+    {
+        AddHealth((int)(loaded[0] * healthVal * 25));
+        AddFuel((int)(loaded[1]*fuelVal*25));
+        AddAmmo((int)(loaded[2] * ammoVal ));
+        System.Array.Clear(loaded,0,3);
     }
 
 }

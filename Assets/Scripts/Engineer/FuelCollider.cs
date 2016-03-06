@@ -14,15 +14,16 @@ public class FuelCollider : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        //if (other.gameObject.tag == "EnergyCell")
-        //{
+        if (other.gameObject.tag == "EnergyCell")
+        {
             cell = other.gameObject.GetComponent<AmmoBehaviour>();
             if (!mech.FuelFull())
             {
-                mech.AddFuel(cell.GetValue() * 25);
+                //mech.AddFuel(cell.GetValue() * 25);
+                mech.Load(cell.GetValue(), 1);
                 Destroy(other.gameObject);
             }
-        //}
+        }
     }
 
     // Update is called once per frame
