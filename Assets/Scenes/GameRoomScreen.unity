@@ -1560,7 +1560,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1434849458}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f151292b0c51e4415a2315b7af257ee2, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fd4b22dae7bc4a42aa299386677f2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_NetworkPort: 7777
@@ -1607,7 +1607,7 @@ MonoBehaviour:
     m_ReactorMaximumReceivedMessages: 1024
     m_ReactorMaximumSentMessages: 1024
     m_MaxPacketSize: 2000
-  m_Channels: 
+  m_Channels: 0500000000000000
   m_UseWebSockets: 0
   m_UseSimulator: 0
   m_SimulatedLatency: 1
