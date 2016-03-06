@@ -1326,7 +1326,7 @@ GameObject:
   - 222: {fileID: 1276726152}
   - 114: {fileID: 1276726151}
   m_Layer: 5
-  m_Name: RoomName
+  m_Name: RoomNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1381,7 +1381,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Room:'
+  m_Text: 'Room: '
 --- !u!222 &1276726152
 CanvasRenderer:
   m_ObjectHideFlags: 0

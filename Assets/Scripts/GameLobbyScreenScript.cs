@@ -1,17 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameLobbyScreenScript : MonoBehaviour {
 
-	// Use this for initialization
+	public Text UserName;
+
 	void Start () {
-		// selected game
+		UserName.text = "Username: " + GameManager.instance.userName;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 
 	public void selectGame () {
