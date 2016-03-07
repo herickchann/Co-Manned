@@ -13,15 +13,20 @@ public class GameRoomScreenScript : MonoBehaviour {
 	public Button BluePilot;
 	public Button BlueEngineer;
 
-	private Button[] role = new Button[4];
+	private Button[,] teamRoles;
 
 	// Use this for initialization
 	void Start () {
 		RoomName.text = "Room: " + GameManager.instance.gameName;
-		role[0] = RedPilot;
-		role[1] = RedEngineer;
-		role[2] = BluePilot;
-		role[3] = BlueEngineer;
+		// length-1 to account for None
+		int numTeams = System.Enum.GetValues(typeof(GameManager.Team)).Length - 1;
+		int numRoles = System.Enum.GetValues(typeof(GameManager.Role)).Length - 1;
+		this.teamRoles = new Button[numTeams, numRoles];
+		// access via this.teamRoles[team, role]
+		this.teamRoles[(int)GameManager.Team.Red, (int)GameManager.Role.Pilot] = RedPilot;
+		this.teamRoles[(int)GameManager.Team.Red, (int)GameManager.Role.Engineer] = RedEngineer;
+		this.teamRoles[(int)GameManager.Team.Blue,(int)GameManager.Role.Pilot] = BluePilot;
+		this.teamRoles[(int)GameManager.Team.Blue,(int)GameManager.Role.Engineer] = BlueEngineer;
 	}
 	
 	// Update is called once per frame
@@ -29,49 +34,50 @@ public class GameRoomScreenScript : MonoBehaviour {
 	
 	}
 
-	// TODO: re-write more cleanly
-	private void excludeAllRoles() {
-		foreach (Button button in this.role) {
+	private void updateButtonUIArray() {
+		// reset all buttons to unselected state
+		foreach (Button button in this.teamRoles) {
 			button.enabled = true;
 			button.image.color = Color.white;
 		}
+		// darken just the user clicked button
+		GameManager.Team myTeam = GameManager.instance.teamSelection;
+		GameManager.Role myRole = GameManager.instance.roleSelection;
+		Button selectedButton = this.teamRoles[(int)myTeam,(int)myRole];
+		selectedButton.enabled = false;
+		selectedButton.image.color = Color.gray;
 	}
 
 	public void selectRedPilot() {
-		excludeAllRoles();
-		role[0].enabled = false;
-		role[0].image.color = Color.gray;
-		GameManager.instance.roleSelection = GameManager.Role.RedPilot;
+		GameManager.instance.teamSelection = GameManager.Team.Red;
+		GameManager.instance.roleSelection = GameManager.Role.Pilot;
+		updateButtonUIArray();
 	}
 
 	public void selectRedEngineer() {
-		excludeAllRoles();
-		role[1].enabled = false;
-		role[1].image.color = Color.gray;
-		GameManager.instance.roleSelection = GameManager.Role.RedEngineer;
+		GameManager.instance.teamSelection = GameManager.Team.Red;
+		GameManager.instance.roleSelection = GameManager.Role.Engineer;
+		updateButtonUIArray();
 	}
 
 	public void selectBluePilot() {
-		excludeAllRoles();
-		role[2].enabled = false;
-		role[2].image.color = Color.gray;
-		GameManager.instance.roleSelection = GameManager.Role.BluePilot;
+		GameManager.instance.teamSelection = GameManager.Team.Blue;
+		GameManager.instance.roleSelection = GameManager.Role.Pilot;
+		updateButtonUIArray();
 	}
 
 	public void selectBlueEngineer() {
-		excludeAllRoles();
-		role[3].enabled = false;
-		role[3].image.color = Color.gray;
-		GameManager.instance.roleSelection = GameManager.Role.BlueEngineer;
+		GameManager.instance.teamSelection = GameManager.Team.Blue;
+		GameManager.instance.roleSelection = GameManager.Role.Engineer;
+		updateButtonUIArray();
 	}
 
 	public void playerReady () {
-		GameManager.Role selection = GameManager.instance.roleSelection;
-		if (selection == GameManager.Role.RedPilot || selection == GameManager.Role.BluePilot) {
+		GameManager.Role myRole = GameManager.instance.roleSelection;
+		if (myRole == GameManager.Role.Pilot) {
 			Debug.Log("Loading pilot mode...");
-
 			SceneManager.LoadScene("pilot");
-		} else if (selection == GameManager.Role.RedEngineer || selection == GameManager.Role.BlueEngineer) {
+		} else if (myRole == GameManager.Role.Engineer) {
 			Debug.Log("Loading engineer mode...");
 			SceneManager.LoadScene("engineer");
 		} // None selection does nothing
@@ -81,6 +87,7 @@ public class GameRoomScreenScript : MonoBehaviour {
 	public void backToLobby () {
 		GameManager.instance.gameName = "";
 		GameManager.instance.gamePass = "";
+		GameManager.instance.teamSelection = GameManager.Team.None;
 		GameManager.instance.roleSelection = GameManager.Role.None;
 		SceneManager.LoadScene("GameLobbyScreen");
 		// detach from game instance

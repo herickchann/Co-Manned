@@ -9,7 +9,9 @@ public class GameManager : MonoBehaviour {
 	public string gameName = "";
 	public string gamePass = "";
 
-	public enum Role{None, RedPilot, RedEngineer, BluePilot, BlueEngineer};
+	public enum Team{Red, Blue, None};
+	public enum Role{Pilot, Engineer, None};
+	public Team teamSelection = Team.None;
 	public Role roleSelection = Role.None;
 
 	// Use this for initialization
