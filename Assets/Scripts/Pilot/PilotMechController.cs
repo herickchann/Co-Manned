@@ -24,13 +24,16 @@ public class PilotMechController : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
 		offset = transform.position;
 		statusText.GetComponent<TextMesh> ().text = GetComponent<Combat> ().health.ToString ();
+        rb.isKinematic = true;
     }
 
     void Update () {
-		if(!isLocalPlayer)
+		if (!isLocalPlayer)
 			return;
+        if (rb.IsSleeping()) {
+            rb.isKinematic = true;
+        }
 
-		//Camera.main.transform.position = new Vector3 (transform.position.x, transform.position.y, Camera.main.transform.position.z);
 		statusText.transform.position = transform.position + offset;
 
 		moveH = CnInputManager.GetAxis("Horizontal");
@@ -42,9 +45,9 @@ public class PilotMechController : NetworkBehaviour
     }
 
     private void Move () {
+        rb.isKinematic = false;
+
         Vector3 movement = new Vector3(moveH, 0.0f, moveV);
-        //Vector3 movement = new Vector3(Input.acceleration.x, 0.0f, Input.acceleration.y);
-        //movement = transform.TransformDirection(movement);
         rb.velocity = movement * speed;
     }
 
