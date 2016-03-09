@@ -1543,8 +1543,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1434849460}
-  - 114: {fileID: 1434849459}
   - 114: {fileID: 1434849461}
+  - 114: {fileID: 1434849459}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1560,7 +1560,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1434849458}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fd4b22dae7bc4a42aa299386677f2b3, type: 3}
+  m_Script: {fileID: 11500000, guid: b9c835af0cdc24ea4b624ab34912ff3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_NetworkPort: 7777
@@ -1607,7 +1607,7 @@ MonoBehaviour:
     m_ReactorMaximumReceivedMessages: 1024
     m_ReactorMaximumSentMessages: 1024
     m_MaxPacketSize: 2000
-  m_Channels: 0500000000000000
+  m_Channels: 
   m_UseWebSockets: 0
   m_UseSimulator: 0
   m_SimulatedLatency: 1

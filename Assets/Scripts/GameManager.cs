@@ -27,6 +27,27 @@ public class GameManager : NetworkManager {
 		StartHost ();
 	}
 
+	public string getTeamSelection(){
+		if (teamSelection == Team.Red) {
+			return "Red";
+		} else if (teamSelection == Team.Blue) {
+			return "Blue";
+		} else {
+			return "None";
+		}
+	}
+
+	public string getRoleSelection(){
+		if (roleSelection == Role.Engineer) {
+			return "Engineer";
+		} else if (roleSelection == Role.Pilot) {
+			return "Pilot";
+		} else {
+			return "None";
+		}
+	}
+
+
 	public override void OnServerConnect(NetworkConnection conn) {
 		Debug.Log ("player connected");
 	}
@@ -71,6 +92,7 @@ public class GameManager : NetworkManager {
     }
 
     void Awake () {
+		DontDestroyOnLoad (this);
         if (instance == null) { // instance not set?
 			instance = this; // set instance to this
 		} else if (instance != this) { // already exists?
