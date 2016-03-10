@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameLobbyScreenScript : MonoBehaviour {
 
 	public Text UserName;
+	public CanvasGroup JoinGameMaskPanel;
 
 	void Start () {
 		UserName.text = "Username: " + GameManager.instance.userName;

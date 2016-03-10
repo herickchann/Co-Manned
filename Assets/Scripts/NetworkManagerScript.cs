@@ -4,13 +4,23 @@ using UnityEngine.Networking;
 
 public class NetworkManagerScript : NetworkManager {
 
+	public NetworkDiscovery discovery;
+
+	public void enterLobby() {
+		//discovery.Initialize();
+		//discovery.showGUI = true;
+	}
+
 	// Use this for initialization
 	public void Join () {
-		StartClient ();
+		StartClient();
+		//discovery.StopBroadcast();
+		//discovery.showGUI = false;
 	}
 
 	public void Host () {
-		StartHost ();
+		StartHost();
+		//discovery.StartAsServer();
 	}
 
 	public override void OnServerConnect(NetworkConnection conn){
@@ -18,8 +28,8 @@ public class NetworkManagerScript : NetworkManager {
 	}
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
-    {
-        var player = (GameObject)GameObject.Instantiate(playerPrefab, new Vector3(0,0,0), Quaternion.identity);
+	{
+        /*var player = (GameObject)GameObject.Instantiate(playerPrefab, new Vector3(0,0,0), Quaternion.identity);
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
 
         //Setup Camera
@@ -30,6 +40,7 @@ public class NetworkManagerScript : NetworkManager {
             if (followScript != null) {
                 followScript.player = player;
             }
-        }
+        }*/
+		Debug.Log("player added");
     }
 }
