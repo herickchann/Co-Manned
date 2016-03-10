@@ -1675,6 +1675,7 @@ MonoBehaviour:
   userName: 
   gameName: 
   gamePass: 
+  teamSelection: 2
   roleSelection: 0
 --- !u!4 &1465253402
 Transform:
