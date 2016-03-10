@@ -20,10 +20,14 @@ public class PilotMechController : NetworkBehaviour
     private float moveH;
     private float moveV;
 
+    private Vector3 camOffset;
+
     void Start () {
         rb = GetComponent<Rigidbody>();
 		offset = transform.position;
 		statusText.GetComponent<TextMesh> ().text = GetComponent<Combat> ().health.ToString ();
+        if(isLocalPlayer)
+            camOffset = Camera.main.transform.position - transform.position;
     }
 
     void Update () {
@@ -40,6 +44,14 @@ public class PilotMechController : NetworkBehaviour
         Turn();
         Fire();
     }
+
+    	
+	// Update is called once per frame
+	void LateUpdate () {
+        if(!isLocalPlayer)
+            return;
+        Camera.main.transform.position = transform.position + camOffset;
+	}
 
     private void Move () {
         Vector3 movement = new Vector3(moveH, 0.0f, moveV);
