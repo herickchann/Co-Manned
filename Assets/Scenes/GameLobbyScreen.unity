@@ -254,7 +254,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &237987736
@@ -508,7 +508,7 @@ GameObject:
   - 114: {fileID: 339348647}
   - 225: {fileID: 339348649}
   m_Layer: 5
-  m_Name: JoinGameMaskPanel
+  m_Name: GamePopupMaskPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1257,7 +1257,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 0
+        m_CallState: 2
       - m_Target: {fileID: 947218549}
         m_MethodName: Host
         m_Mode: 1
@@ -1268,7 +1268,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &620975829
@@ -1562,7 +1562,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1078884500}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0
+  m_Size: 0.9766667
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2024,7 +2024,7 @@ GameObject:
   - 222: {fileID: 844558649}
   - 114: {fileID: 844558648}
   m_Layer: 5
-  m_Name: PopupTitle
+  m_Name: PopupTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2321,7 +2321,7 @@ GameObject:
   - 222: {fileID: 1077157119}
   - 114: {fileID: 1077157118}
   m_Layer: 5
-  m_Name: JoinGameInputPanel
+  m_Name: GamePopupInputPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2724,7 +2724,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1348740332}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1667782844}
+        m_MethodName: popupCancelButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1348740332
@@ -2839,7 +2850,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000005722046, y: 300}
+  m_AnchoredPosition: {x: 0.000005722046, y: 299.99997}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1370448713
@@ -3295,7 +3306,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UserName: {fileID: 2121210861}
-  JoinGameMaskPanel: {fileID: 0}
+  GamePopupMaskPanel: {fileID: 339348649}
+  GamePopupTitleText: {fileID: 844558648}
+  GamePopupGameName: {fileID: 450550465}
 --- !u!4 &1667782845
 Transform:
   m_ObjectHideFlags: 0
@@ -3675,7 +3688,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1838036045}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1667782844}
+        m_MethodName: popupOkButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1838036045

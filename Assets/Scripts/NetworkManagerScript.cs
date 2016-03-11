@@ -6,21 +6,21 @@ public class NetworkManagerScript : NetworkManager {
 
 	public NetworkDiscovery discovery;
 
-	public void enterLobby() {
-		//discovery.Initialize();
-		//discovery.showGUI = true;
+	void Start () {
+		discovery.Initialize();
 	}
 
 	// Use this for initialization
 	public void Join () {
-		StartClient();
+		discovery.StartAsClient();
+		//StartClient();
 		//discovery.StopBroadcast();
 		//discovery.showGUI = false;
 	}
 
 	public void Host () {
-		StartHost();
-		//discovery.StartAsServer();
+		discovery.StartAsServer();
+		//StartHost();
 	}
 
 	public override void OnServerConnect(NetworkConnection conn){
