@@ -46,11 +46,16 @@ public class GameLobbyScreenScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		int curTime = (int)(System.DateTime.Now.Ticks / 10000);
-		foreach(KeyValuePair<string, DiscoveredGameInfo> gameInfo in this.gameInfoDict) {
-			if (curTime - gameInfo.Value.timeStamp > this.gameInfoExpirationMs) {
-				this.gameInfoDict.Remove(gameInfo.Key); // remove outdated records
-				Destroy(this.selectionButtonsDict[gameInfo.Key]); // delete button
-				this.selectionButtonsDict.Remove(gameInfo.Key); // remove entry
+		// not allowed to modify dictionary during iteration, must use key list
+		List<string> gameKeys = new List<string>(this.gameInfoDict.Keys);
+		foreach(string gameKey in gameKeys) {
+			DiscoveredGameInfo gameInfo = this.gameInfoDict[gameKey];
+			if (curTime - gameInfo.timeStamp > this.gameInfoExpirationMs) {
+				this.gameInfoDict.Remove(gameKey); // remove outdated info records
+				Button buttonToRemove = this.selectionButtonsDict[gameKey];
+				Destroy(buttonToRemove.gameObject); // delete button
+				this.selectionButtonsDict.Remove(gameKey); // remove button reference
+				Debug.Log("Removed game key: " + gameKey);
 			}
 		}
 	}
@@ -79,19 +84,21 @@ public class GameLobbyScreenScript : MonoBehaviour {
 		if (this.gameInfoDict.ContainsKey(hostKey)) { // update last record
 			this.gameInfoDict[hostKey] = gameInfo;
 			// update button
-			Destroy(this.selectionButtonsDict[hostKey]);
-			this.selectionButtonsDict[hostKey] = addInfoButton(hostKey, gameInfo);
+			Button buttonToUpdate = this.selectionButtonsDict[hostKey]; 
+			buttonToUpdate.GetComponentInChildren<Text>().text = formatGameInfo(gameInfo);
+			Debug.Log("Updated game key: " + hostKey);
 		} else { // else insert
 			this.gameInfoDict.Add(hostKey, gameInfo);
 			// keep track of this button
 			this.selectionButtonsDict.Add(hostKey, addInfoButton(hostKey, gameInfo));
+			Debug.Log("Added game key: " + hostKey);
 		}
 	}
 
 	public void selectGame (string hostKey) {
 		// called button listing
 		Debug.Log("hostKey: " + hostKey + " was selected.");
-		this.selectionButtonsDict[hostKey].enabled = false;
+		//this.selectionButtonsDict[hostKey].enabled = false;
 		this.selectionButtonsDict[hostKey].image.color = Color.gray;
 	}
 
