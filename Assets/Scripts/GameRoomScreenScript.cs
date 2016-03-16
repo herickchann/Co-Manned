@@ -13,6 +13,7 @@ public class GameRoomScreenScript : NetworkBehaviour {
 	public Button REButton; // red engineer
 	public Button BPButton; // blue pilot
 	public Button BEButton; // blue engineer
+	// Launch / Ready button ?
 	// store usernames to be rendered in the UI
 	public string RPuname = "";
 	public string REuname = "";
@@ -70,6 +71,7 @@ public class GameRoomScreenScript : NetworkBehaviour {
 	}
 
 	public void playerReady () {
+		// if not ready nothing happens
 		GameManager.Role myRole = GameManager.instance.roleSelection;
 		if (myRole == GameManager.Role.Pilot) {
 			Debug.Log("Loading pilot mode...");

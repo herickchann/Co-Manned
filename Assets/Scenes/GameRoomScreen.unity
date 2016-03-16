@@ -892,21 +892,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc964d00cc5747479fff1c6952ce7e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RPpid: 
-  REpid: 
-  BPpid: 
-  BEpid: 
-  RPuname: 
-  REuname: 
-  BPuname: 
-  BEuname: 
   RoomName: {fileID: 1276726151}
   RPButton: {fileID: 559685870}
   REButton: {fileID: 1211801711}
   BPButton: {fileID: 986193117}
   BEButton: {fileID: 231310137}
-  myPid: 
-  myUserName: 
+  RPuname: 
+  REuname: 
+  BPuname: 
+  BEuname: 
 --- !u!4 &930504945
 Transform:
   m_ObjectHideFlags: 0
@@ -985,7 +979,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Host
+  m_Text: Ready
 --- !u!222 &974082963
 CanvasRenderer:
   m_ObjectHideFlags: 0

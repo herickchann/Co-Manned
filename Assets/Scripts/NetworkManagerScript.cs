@@ -6,22 +6,47 @@ public class NetworkManagerScript : NetworkManager {
 
 	public NetworkDiscovery discovery;
 
+	// current game broadcast details
+	public string gameName = "";
+	public string gamePass = ""; // just broadcast true/false, not the actual password
+	public int numPlayers = 0;
+	public const int playerLimit = 4;
+	public string passwordRequired = "false";
+
 	void Start () {
-		// discovery must be initialized or else it will not work
-		discovery.Initialize();
+		discovery.Initialize(); // discovery must be initialized
+		discovery.StartAsClient(); // start listening as soon as we enter lobby
 	}
 
 	// Use this for initialization
-	public void Join () {
-		discovery.StartAsClient();
+	/*public void Join () {
 		//StartClient();
 		//discovery.StopBroadcast();
 		//discovery.showGUI = false;
-	}
+	}*/
 
-	public void Host () {
+	/*public void Host () {
 		discovery.StartAsServer();
 		//StartHost();
+	}*/
+
+	private void updateBroadcastMessage() {
+	// NetworkManager:host:port:gameName:password?:numPlayers:playerLimit
+		// gameName is last in case user input messes with colon delimiter
+		string message = string.Format("NetworkManager:{0}:{1}:{2}:{3}:{4}:{5}",
+		networkAddress, networkPort.ToString(), this.gameName, passwordRequired, 
+			numPlayers.ToString(), playerLimit.ToString());
+		discovery.broadcastData = message;
+	}
+
+	public void startBroadcast(string gameName, string gamePass) {
+		this.gameName = gameName;
+		this.gamePass = gamePass;
+		this.passwordRequired = (this.gamePass == "" ? "false" : "true");
+		this.numPlayers++; // 1 for this player
+		updateBroadcastMessage();
+		discovery.StartAsServer(); // start broadcasting
+		Debug.Log("Broadcasting with gameName: " + gameName + " and password: " + gamePass);
 	}
 
 	public override void OnStartHost() {
@@ -36,8 +61,18 @@ public class NetworkManagerScript : NetworkManager {
 		Debug.Log("OnStopClient called");
 	}
 
-	public override void OnServerConnect(NetworkConnection conn){
+	public override void OnServerConnect(NetworkConnection conn) {
 		Debug.Log ("player connected");
+		this.numPlayers++;
+		updateBroadcastMessage();
+		base.OnServerConnect(conn);
+	}
+
+	public override void OnClientDisconnect (NetworkConnection conn) {
+		Debug.Log ("player disconnected");
+		this.numPlayers--;
+		updateBroadcastMessage();
+		base.OnClientDisconnect(conn);
 	}
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
