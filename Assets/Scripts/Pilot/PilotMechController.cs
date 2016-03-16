@@ -7,51 +7,72 @@ using UnityEngine.SceneManagement;
 
 public class PilotMechController : NetworkBehaviour
 {
+	// Metch physics
     public float speed;
     private Rigidbody rb;
     private RectTransform joystickTrans;
-
-	public GameObject bullet;
-	public GameObject statusText;
-	public GameObject gameManager;
-	public Transform bulletSpawn;
-	private Vector3 offset;
+	private float moveH;
+	private float moveV;
+	private Vector3 statusTextOffset;
 	private float nextFire;
 	public float fireRate;
 
-    private float moveH;
-    private float moveV;
-	private GameObject gameManagerData;
+	// Mech related objects
+	public GameObject bullet;
+	public GameObject statusText;
+	public Transform bulletSpawn;
+	public GameObject gameManager;
+	public GameObject serverData;
 
-    void Start () {
-        rb = GetComponent<Rigidbody>();
-		offset = transform.position;
-		statusText.GetComponent<TextMesh> ().text = GetComponent<Combat> ().health.ToString ();
-        rb.isKinematic = true;
+	// Mech team info
+	public GameManager.Team team;
+	public GameManager.Role role;
+	    
+	// Mech camera stuff
+    private Vector3 camOffset;
+
+	void Awake(){
 		gameManager = GameObject.Find ("GameManager");
-		if (gameManager == null) {
-			Debug.Log ("cannot find player info object");
-		} else {
-			string playerTeam = gameManager.GetComponent<GameManager> ().getTeamSelection ();
-			Debug.Log (playerTeam);
-			string playerRole = gameManager.GetComponent<GameManager> ().getRoleSelection ();
-			Debug.Log (playerRole);
+		serverData = GameObject.Find ("ServerData");
+		if(serverData == null){
+			Debug.Log ("ServerData not found");
+		}
 
-			if(playerRole.Equals("Engineer")){
-				SceneManager.LoadScene ("engineer");
+		// init team info on load
+		if(gameManager != null){
+			var gameData = gameManager.GetComponent<GameManager> ();
+			if(gameData != null){
+				team = gameData.getTeamSelection ();
+				role = gameData.getRoleSelection ();
 			}
 		}
-		
+	}
+
+
+    void Start () {
+		// set up physics
+        rb = GetComponent<Rigidbody>();
+		statusTextOffset = transform.position - statusText.transform.position;
+
+		// set up manager to pull data from game room
+
+		// test set up string
+		// statusText.GetComponent<TextMesh> ().text = GetComponent<Combat> ().health.ToString ();
+		loadStatusText ();
+
+
+        SetCamera();
     }
 
+	public void loadStatusText(){
+		int health = GetComponent<Combat> ().health;
+		statusText.GetComponent<TextMesh> ().text = health.ToString();
+	}
     void Update () {
-		if (!isLocalPlayer)
+		if(!isLocalPlayer)
 			return;
-        if (rb.IsSleeping()) {
-            rb.isKinematic = true;
-        }
 
-		statusText.transform.position = transform.position + offset;
+		statusText.transform.position = transform.position + statusTextOffset;
 
 		moveH = CnInputManager.GetAxis("Horizontal");
         moveV = CnInputManager.GetAxis("Vertical");
@@ -61,9 +82,19 @@ public class PilotMechController : NetworkBehaviour
         Fire();
     }
 
-    private void Move () {
-        rb.isKinematic = false;
+    private void SetCamera () {
+        if(isLocalPlayer) { 
+            Camera camera = Camera.main;
+            if (camera != null) {
+                PilotCamera followScript = camera.GetComponent("PilotCamera") as PilotCamera;
+                if (followScript != null) {
+                    followScript.player = transform;
+                }
+            }
+        }
+    }
 
+    private void Move () {
         Vector3 movement = new Vector3(moveH, 0.0f, moveV);
         rb.velocity = movement * speed;
     }

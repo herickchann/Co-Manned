@@ -15,8 +15,18 @@ public class GameRoomScreenScript : MonoBehaviour {
 
 	private Button[,] teamRoles;
 
+	// wire up network manager
+	public GameObject networkManager;
+
 	// Use this for initialization
 	void Start () {
+
+		// set up network manager
+		networkManager = GameObject.Find("NetworkManager");
+		if(networkManager == null){
+			Debug.Log ("Error: cannot find network manager");
+		}
+
 		RoomName.text = "Room: " + GameManager.instance.gameName;
 		// length-1 to account for None
 		int numTeams = System.Enum.GetValues(typeof(GameManager.Team)).Length - 1;
@@ -48,27 +58,38 @@ public class GameRoomScreenScript : MonoBehaviour {
 		selectedButton.image.color = Color.gray;
 	}
 
+	public void setRoleScene (GameManager.Role role){
+		if (networkManager != null) {
+			string roleScene = (role == GameManager.Role.Engineer)?"engineer":"pilot";
+			networkManager.GetComponent<NetworkManagerScript>().onlineScene = roleScene;
+		}
+	}
+
 	public void selectRedPilot() {
 		GameManager.instance.teamSelection = GameManager.Team.Red;
 		GameManager.instance.roleSelection = GameManager.Role.Pilot;
+		setRoleScene (GameManager.Role.Pilot);
 		updateButtonUIArray();
 	}
 
 	public void selectRedEngineer() {
 		GameManager.instance.teamSelection = GameManager.Team.Red;
 		GameManager.instance.roleSelection = GameManager.Role.Engineer;
+		setRoleScene (GameManager.Role.Engineer);
 		updateButtonUIArray();
 	}
 
 	public void selectBluePilot() {
 		GameManager.instance.teamSelection = GameManager.Team.Blue;
 		GameManager.instance.roleSelection = GameManager.Role.Pilot;
+		setRoleScene (GameManager.Role.Pilot);
 		updateButtonUIArray();
 	}
 
 	public void selectBlueEngineer() {
 		GameManager.instance.teamSelection = GameManager.Team.Blue;
 		GameManager.instance.roleSelection = GameManager.Role.Engineer;
+		setRoleScene (GameManager.Role.Engineer);
 		updateButtonUIArray();
 	}
 
