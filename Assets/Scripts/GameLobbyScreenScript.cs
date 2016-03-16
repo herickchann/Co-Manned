@@ -10,6 +10,9 @@ public class GameLobbyScreenScript : MonoBehaviour {
 	public CanvasGroup GamePopupMaskPanel;
 	public Text GamePopupTitleText;
 	public InputField GamePopupGameName;
+	public InputField GamePopupGamePassword;
+	// Network Manager
+	public NetworkManagerScript netManager;
 
 	private bool popupClientMode = true; // false if creating a game
 	private string gameName;
@@ -66,9 +69,11 @@ public class GameLobbyScreenScript : MonoBehaviour {
 		if (this.popupClientMode) {
 			// start as client
 			Debug.Log("UI is invoking client startup");
+			netManager.StartClient();
 		} else {
 			// start as server
 			Debug.Log("UI is invoking server startup");
+			netManager.StartHost();
 		}
 		//SceneManager.LoadScene("GameCreationScreen");
 	}
@@ -77,5 +82,7 @@ public class GameLobbyScreenScript : MonoBehaviour {
 		GamePopupMaskPanel.alpha = 0;
 		GamePopupMaskPanel.interactable = false;
 		GamePopupMaskPanel.blocksRaycasts = false;
+		GamePopupGameName.textComponent.text = "";
+		GamePopupGamePassword.textComponent.text = "";
 	}
 }
