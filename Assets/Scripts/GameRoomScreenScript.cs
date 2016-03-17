@@ -90,5 +90,6 @@ public class GameRoomScreenScript : NetworkBehaviour {
 		GameManager.instance.roleSelection = GameManager.Role.None;
 		SceneManager.LoadScene("GameLobbyScreen");
 		// detach from game instance
+		// TODO: tell netManager to disconnect and stop the client
 	}
 }

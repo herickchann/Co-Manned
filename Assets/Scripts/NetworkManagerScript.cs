@@ -26,23 +26,11 @@ public class NetworkManagerScript : NetworkManager {
 		discovery.StartAsClient(); // start listening as soon as we enter lobby
 	}
 
-	// Use this for initialization
-	/*public void Join () {
-		//StartClient();
-		//discovery.StopBroadcast();
-		//discovery.showGUI = false;
-	}*/
-
-	/*public void Host () {
-		discovery.StartAsServer();
-		//StartHost();
-	}*/
-
 	private void updateBroadcastMessage() {
 	// NetworkManager:host:port:gameName:password?:numPlayers:playerLimit
 		// gameName is last in case user input messes with colon delimiter
 		string message = string.Format("NetworkManager:{0}:{1}:{2}:{3}:{4}:{5}",
-		networkAddress, networkPort.ToString(), this.gameName, passwordRequired, 
+			networkAddress, networkPort.ToString(), this.gameName, passwordRequired, 
 			numPlayers.ToString(), playerLimit.ToString());
 		discovery.broadcastData = message;
 	}
@@ -78,10 +66,12 @@ public class NetworkManagerScript : NetworkManager {
 		discovery.Initialize(); // discovery must be initialized
 		initBroadcastMsg();
 		discovery.StartAsServer(); // start broadcasting
+		maxConnections = playerLimit;
 		base.OnStartHost();
 	}
 
 	public override void OnStopHost() {
+		Debug.Log("OnStopHost called");
 		discovery.StopBroadcast();
 		this.gameName = "";
 		this.gamePass = "";
@@ -107,6 +97,11 @@ public class NetworkManagerScript : NetworkManager {
 		Debug.Log ("player disconnected");
 		this.numPlayers--;
 		updateBroadcastMessage();
+		base.OnServerDisconnect(conn);
+	}
+
+	public override void OnClientDisconnect(NetworkConnection conn) {
+		// load offline scene
 		base.OnClientDisconnect(conn);
 	}
 
