@@ -4,75 +4,74 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 
-public class GameRoomScreenScript : MonoBehaviour {
+public class GameRoomScreenScript : NetworkBehaviour {
 
 	// drag and dropped from the editor
 	public Text RoomName;
-	public Button RedPilot;
-	public Button RedEngineer;
-	public Button BluePilot;
-	public Button BlueEngineer;
-
-	private Button[,] teamRoles;
+	// all these are just held here for the GameRoomPlayer who updates the buttons
+	public Button RPButton; // red pilot
+	public Button REButton; // red engineer
+	public Button BPButton; // blue pilot
+	public Button BEButton; // blue engineer
+	// Launch / Ready button ?
+	// store usernames to be rendered in the UI
+	public string RPuname = "";
+	public string REuname = "";
+	public string BPuname = "";
+	public string BEuname = "";
 
 	// Use this for initialization
 	void Start () {
 		RoomName.text = "Room: " + GameManager.instance.gameName;
-		// length-1 to account for None
-		int numTeams = System.Enum.GetValues(typeof(GameManager.Team)).Length - 1;
-		int numRoles = System.Enum.GetValues(typeof(GameManager.Role)).Length - 1;
-		this.teamRoles = new Button[numTeams, numRoles];
-		// access via this.teamRoles[team, role]
-		this.teamRoles[(int)GameManager.Team.Red, (int)GameManager.Role.Pilot] = RedPilot;
-		this.teamRoles[(int)GameManager.Team.Red, (int)GameManager.Role.Engineer] = RedEngineer;
-		this.teamRoles[(int)GameManager.Team.Blue,(int)GameManager.Role.Pilot] = BluePilot;
-		this.teamRoles[(int)GameManager.Team.Blue,(int)GameManager.Role.Engineer] = BlueEngineer;
+		Debug.Log("Game Room created");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
-
-	private void updateButtonUIArray() {
-		// reset all buttons to unselected state
-		foreach (Button button in this.teamRoles) {
-			button.enabled = true;
-			button.image.color = Color.white;
+		// the buttons are constantly refreshed incase another user has booked a button
+		// until more abstraction needed, we will hardcode UI updates
+		// red pilot
+		if (this.RPuname != "") {
+			buttonBooked(RPButton, "Red Pilot\n" + this.RPuname);
+		} else {
+			buttonAvailable(RPButton, "Red Pilot\n---");
 		}
-		// darken just the user clicked button
-		GameManager.Team myTeam = GameManager.instance.teamSelection;
-		GameManager.Role myRole = GameManager.instance.roleSelection;
-		Button selectedButton = this.teamRoles[(int)myTeam,(int)myRole];
-		selectedButton.enabled = false;
-		selectedButton.image.color = Color.gray;
+		// red engineer
+		if (this.REuname != "") {
+			buttonBooked(REButton, "Red Engineer\n" + this.REuname);
+		} else {
+			buttonAvailable(REButton, "Red Engineer\n---");
+		}
+		// blue pilot
+		if (this.BPuname != "") {
+			buttonBooked(BPButton, "Blue Pilot\n" + this.BPuname);
+		} else {
+			buttonAvailable(BPButton, "Blue Pilot\n---");
+		}
+		// blue engineer
+		if (this.BEuname != "") {
+			buttonBooked(BEButton, "Blue Engineer\n" + this.BEuname);
+		} else {
+			buttonAvailable(BEButton, "Blue Engineer\n---");
+		}
 	}
 
-	public void selectRedPilot() {
-		GameManager.instance.teamSelection = GameManager.Team.Red;
-		GameManager.instance.roleSelection = GameManager.Role.Pilot;
-		updateButtonUIArray();
+	public void buttonAvailable(Button b, string label) {
+		b.enabled = true;
+		b.image.color = Color.white;
+		Text btex = b.GetComponentInChildren<Text>();
+		btex.text = label;
 	}
 
-	public void selectRedEngineer() {
-		GameManager.instance.teamSelection = GameManager.Team.Red;
-		GameManager.instance.roleSelection = GameManager.Role.Engineer;
-		updateButtonUIArray();
-	}
-
-	public void selectBluePilot() {
-		GameManager.instance.teamSelection = GameManager.Team.Blue;
-		GameManager.instance.roleSelection = GameManager.Role.Pilot;
-		updateButtonUIArray();
-	}
-
-	public void selectBlueEngineer() {
-		GameManager.instance.teamSelection = GameManager.Team.Blue;
-		GameManager.instance.roleSelection = GameManager.Role.Engineer;
-		updateButtonUIArray();
+	public void buttonBooked(Button b, string label) {
+		b.enabled = false;
+		b.image.color = Color.gray;
+		Text btex = b.GetComponentInChildren<Text>();
+		btex.text = label;
 	}
 
 	public void playerReady () {
+		// if not ready nothing happens
 		GameManager.Role myRole = GameManager.instance.roleSelection;
 		if (myRole == GameManager.Role.Pilot) {
 			Debug.Log("Loading pilot mode...");
@@ -91,5 +90,6 @@ public class GameRoomScreenScript : MonoBehaviour {
 		GameManager.instance.roleSelection = GameManager.Role.None;
 		SceneManager.LoadScene("GameLobbyScreen");
 		// detach from game instance
+		// TODO: tell netManager to disconnect and stop the client
 	}
 }

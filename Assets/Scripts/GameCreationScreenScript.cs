@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
+// THIS CLASS IS DEPRECATED
 public class GameCreationScreenScript : MonoBehaviour {
 
 	private string gameName;

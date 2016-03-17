@@ -929,7 +929,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 20, y: -20}
-  m_SizeDelta: {x: 411, y: 59}
+  m_SizeDelta: {x: 714, y: 59}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1078444174
 MonoBehaviour:
@@ -963,7 +963,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Game Creation
+  m_Text: Game Creation (Deprecated)
 --- !u!222 &1078444175
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1587,6 +1587,7 @@ MonoBehaviour:
   userName: 
   gameName: 
   gamePass: 
+  teamSelection: 2
   roleSelection: 0
 --- !u!4 &2138461248
 Transform:
