@@ -48,9 +48,15 @@ public class NetworkManagerScript : NetworkManager {
 		discovery.StartAsServer(); // start broadcasting
 		Debug.Log("Broadcasting with gameName: " + gameName + " and password: " + gamePass);
 	}
-
+	
+	public void setPassword(string pw) { 
+		this.gamePass = pw;
+		Network.incomingPassword = pw;
+	}
+	
 	public override void OnStartHost() {
 		Debug.Log("OnStartHost called");
+		
 	}
 
 	public override void OnStartClient(NetworkClient client) {

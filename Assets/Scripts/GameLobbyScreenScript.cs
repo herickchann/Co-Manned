@@ -23,7 +23,7 @@ public class GameLobbyScreenScript : MonoBehaviour {
 	private string gameName = "";
 	private string gamePass = "";
 
-	private DiscoveredGameInfo selectedGameInfo;
+	private string selectedHostKey = "";
 
 	// key is hostAddr:portNum
 	// using a dictionary allows us to quickly lookup membership
@@ -32,6 +32,7 @@ public class GameLobbyScreenScript : MonoBehaviour {
 	private Dictionary<string, Button> selectionButtonsDict;
 
 	public Button buttonPrefab;
+	public bool deleteDemoGameList = true;
 
 	void Start () {
 		UserName.text = "Username: " + GameManager.instance.userName;
@@ -41,16 +42,20 @@ public class GameLobbyScreenScript : MonoBehaviour {
 		GamePopupMaskPanel.blocksRaycasts = false;
 		this.gameInfoDict = new Dictionary<string, DiscoveredGameInfo>();
 		this.selectionButtonsDict = new Dictionary<string, Button> ();
+		if (this.deleteDemoGameList) { // clear demo listing if true
+			foreach (Transform child in this.gameListing.transform) {
+				Destroy(child.gameObject);
+			}
+		}
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		int curTime = (int)(System.DateTime.Now.Ticks / 10000);
 		// not allowed to modify dictionary during iteration, must use key list
 		List<string> gameKeys = new List<string>(this.gameInfoDict.Keys);
 		foreach(string gameKey in gameKeys) {
 			DiscoveredGameInfo gameInfo = this.gameInfoDict[gameKey];
-			if (curTime - gameInfo.timeStamp > this.gameInfoExpirationMs) {
+			if (isGameInfoExpired(gameInfo)) {
 				this.gameInfoDict.Remove(gameKey); // remove outdated info records
 				Button buttonToRemove = this.selectionButtonsDict[gameKey];
 				Destroy(buttonToRemove.gameObject); // delete button
@@ -58,6 +63,12 @@ public class GameLobbyScreenScript : MonoBehaviour {
 				Debug.Log("Removed game key: " + gameKey);
 			}
 		}
+	}
+
+	// checks if game info has expired
+	private bool isGameInfoExpired(DiscoveredGameInfo gameInfo) {
+		int curTime = (int)(System.DateTime.Now.Ticks / 10000);
+		return (gameInfo.timeStamp > this.gameInfoExpirationMs) ? true : false;
 	}
 
 	private string formatGameInfo(DiscoveredGameInfo gameInfo) {
@@ -98,8 +109,13 @@ public class GameLobbyScreenScript : MonoBehaviour {
 	public void selectGame (string hostKey) {
 		// called button listing
 		Debug.Log("hostKey: " + hostKey + " was selected.");
-		//this.selectionButtonsDict[hostKey].enabled = false;
+		//this.selectionButtonsDict[hostKey].enabled = false; // do not disable to allow double-click
 		this.selectionButtonsDict[hostKey].image.color = Color.gray;
+		if (this.selectedHostKey == hostKey) { // if selection clicked a second time
+			joinGame();
+		} else { // else update hostKey selection
+			this.selectedHostKey = hostKey; 
+		}
 	}
 
 	public void createGame () {
@@ -114,13 +130,25 @@ public class GameLobbyScreenScript : MonoBehaviour {
 		
 	public void joinGame() {
 		Debug.Log("Join Game Button pressed.");
-		// open game popup in client mode
-		this.popupClientMode = true;
-		GamePopupGameName.textComponent.text = "Selected Game";
-		GamePopupGameName.interactable = false; // cannot change selected game name
-		GamePopupMaskPanel.alpha = 1;
-		GamePopupMaskPanel.interactable = true;
-		GamePopupMaskPanel.blocksRaycasts = true;
+		if (this.selectedHostKey != "") { // do nothing if no game is selected
+			// check that selection is still valid
+			if (this.gameInfoDict.ContainsKey(this.selectedHostKey)) { // only act on valid keys
+				DiscoveredGameInfo myGameInfo = this.gameInfoDict[this.selectedHostKey];
+				this.popupClientMode = true; // open game popup in client mode
+				if (myGameInfo.passwordProtected) { // ask user for password if required
+					GamePopupGameName.text = myGameInfo.gameName;
+					GamePopupGameName.interactable = false; // cannot change selected game name
+					GamePopupMaskPanel.alpha = 1;
+					GamePopupMaskPanel.interactable = true;
+					GamePopupMaskPanel.blocksRaycasts = true;
+					// wait for password input and carry on at OK button
+				} else { // else join directly
+					popupOkButtonPressed();
+				}
+			} else { // pretend nothing happened if invalid
+				this.selectedHostKey = ""; // erase invalid key
+			}
+		}
 	}
 
 	// semi-colons not allowed b/c we use those as delimiters
@@ -131,6 +159,7 @@ public class GameLobbyScreenScript : MonoBehaviour {
 	public void popupOkButtonPressed() {
 		// re-using the popup for host / client so we need to differentiate between them
 		// TODO: pass network information to netManager here
+		netManager.setPassword(this.gamePass);
 		if (this.popupClientMode) {
 			// start as client
 			Debug.Log("UI is invoking client startup");
@@ -140,9 +169,9 @@ public class GameLobbyScreenScript : MonoBehaviour {
 			Debug.Log("UI is invoking server startup");
 			// commit game information to the network manager
 			netManager.startBroadcast(this.gameName, this.gamePass);
+			netManager.setPassword(this.gamePass);
 			netManager.StartHost();
 		}
-		//SceneManager.LoadScene("GameCreationScreen");
 	}
 
 	public void popupCancelButtonPressed() {
