@@ -13,7 +13,15 @@ public class NetworkManagerScript : NetworkManager {
 	public const int playerLimit = 4;
 	public string passwordRequired = "false";
 
+	private string defaultNetworkHost;
+	private int defaultNetworkPort;
+
 	void Start () {
+		this.defaultNetworkHost = networkAddress;
+		this.defaultNetworkPort = networkPort;
+	}
+
+	public void enterLobby() {
 		discovery.Initialize(); // discovery must be initialized
 		discovery.StartAsClient(); // start listening as soon as we enter lobby
 	}
@@ -39,24 +47,45 @@ public class NetworkManagerScript : NetworkManager {
 		discovery.broadcastData = message;
 	}
 
-	public void startBroadcast(string gameName, string gamePass) {
-		this.gameName = gameName;
-		this.gamePass = gamePass;
+	public void initBroadcastMsg() {
+		// reset connection info to defaults
+		networkAddress = this.defaultNetworkHost;
+		networkPort = this.defaultNetworkPort;
 		this.passwordRequired = (this.gamePass == "" ? "false" : "true");
 		this.numPlayers++; // 1 for this player
 		updateBroadcastMessage();
-		discovery.StartAsServer(); // start broadcasting
-		Debug.Log("Broadcasting with gameName: " + gameName + " and password: " + gamePass);
+		Debug.Log("Will broadcast with gameName: " + gameName + " and password: " + gamePass);
 	}
 	
-	public void setPassword(string pw) { 
-		this.gamePass = pw;
-		Network.incomingPassword = pw;
+	public void setGameNameAndPass(string gameName, string password) {
+		this.gameName = gameName;
+		this.gamePass = password;
+		Network.incomingPassword = password;
+	}
+	
+	public void setConnectionInfo(string hostAddr, string portNum) {
+		// override defaults as client
+		networkAddress = hostAddr;
+		int port;
+		Debug.Assert(int.TryParse(portNum, out port));
+		networkPort = port;
 	}
 	
 	public override void OnStartHost() {
 		Debug.Log("OnStartHost called");
-		
+		Debug.Assert(this.gameName != "", "Game name not set - please call setGameNamePass");
+		discovery.StopBroadcast(); // stop listening for other games (assuming we are already listening)
+		discovery.Initialize(); // discovery must be initialized
+		initBroadcastMsg();
+		discovery.StartAsServer(); // start broadcasting
+		base.OnStartHost();
+	}
+
+	public override void OnStopHost() {
+		discovery.StopBroadcast();
+		this.gameName = "";
+		this.gamePass = "";
+		base.OnStopHost();
 	}
 
 	public override void OnStartClient(NetworkClient client) {
@@ -74,7 +103,7 @@ public class NetworkManagerScript : NetworkManager {
 		base.OnServerConnect(conn);
 	}
 
-	public override void OnClientDisconnect (NetworkConnection conn) {
+	public override void OnServerDisconnect (NetworkConnection conn) {
 		Debug.Log ("player disconnected");
 		this.numPlayers--;
 		updateBroadcastMessage();

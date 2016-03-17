@@ -47,6 +47,7 @@ public class GameLobbyScreenScript : MonoBehaviour {
 				Destroy(child.gameObject);
 			}
 		}
+		netManager.enterLobby();
 	}
 
 	// Update is called once per frame
@@ -158,18 +159,17 @@ public class GameLobbyScreenScript : MonoBehaviour {
 
 	public void popupOkButtonPressed() {
 		// re-using the popup for host / client so we need to differentiate between them
-		// TODO: pass network information to netManager here
-		netManager.setPassword(this.gamePass);
+		netManager.setGameNameAndPass(this.gameName, this.gamePass); // commit data to networkManager
 		if (this.popupClientMode) {
+			DiscoveredGameInfo myGameInfo = this.gameInfoDict[this.selectedHostKey];
 			// start as client
 			Debug.Log("UI is invoking client startup");
+			netManager.setConnectionInfo(myGameInfo.hostAddress, myGameInfo.hostPort);
 			netManager.StartClient();
 		} else {
 			// start as server
 			Debug.Log("UI is invoking server startup");
 			// commit game information to the network manager
-			netManager.startBroadcast(this.gameName, this.gamePass);
-			netManager.setPassword(this.gamePass);
 			netManager.StartHost();
 		}
 	}
