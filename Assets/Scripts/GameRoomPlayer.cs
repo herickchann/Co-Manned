@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -38,6 +38,7 @@ public class GameRoomPlayer : NetworkBehaviour {
 	// Use this for initialization
 	void Start () {
 		Debug.Log("Game Room Player spawned");
+		Debug.Assert(playerControllerId >= 0);
 		this.myPid = playerControllerId.ToString();
 		this.myUserName = GameManager.instance.userName;
 		// for dev purposes, if no username exists, use "me"

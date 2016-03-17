@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -20,8 +20,8 @@ public class GameLobbyScreenScript : MonoBehaviour {
 	public int gameInfoExpirationMs = 5000; // milleseconds to expire a gameInfo
 
 	private bool popupClientMode = true; // false if creating a game
-	private string gameName = "";
-	private string gamePass = "";
+	private string inputGameName = "";
+	private string inputGamePass = "";
 
 	private string selectedHostKey = "";
 
@@ -153,29 +153,29 @@ public class GameLobbyScreenScript : MonoBehaviour {
 	}
 
 	// semi-colons not allowed b/c we use those as delimiters
-	public void setGameName (string input) { this.gameName = input.Replace(":", ""); }
+	public void setGameName (string input) { this.inputGameName = input.Replace(":", ""); }
 
-	public void setGamePass (string input) { this.gamePass = input; }
+	public void setGamePass (string input) { this.inputGamePass = input; }
 
 	public void popupOkButtonPressed() {
 		// re-using the popup for host / client so we need to differentiate between them
 		if (this.popupClientMode) {
 			DiscoveredGameInfo myGameInfo = this.gameInfoDict[this.selectedHostKey];
-			Debug.Assert(this.gameName != "");
-			netManager.setGameNameAndPass(this.gameName, this.gamePass); // commit data to networkManager
-			GameManager.instance.gameName = this.gameName;
+			Debug.Assert(myGameInfo.gameName != "");
+			netManager.setGameNameAndPass(myGameInfo.gameName, this.inputGamePass); // commit data to networkManager
+			GameManager.instance.gameName = myGameInfo.gameName;
 			// start as client
 			Debug.Log("UI is invoking client startup");
 			netManager.setConnectionInfo(myGameInfo.hostAddress, myGameInfo.hostPort);
 			netManager.StartClient();
 		} else {
-			if (this.gameName == "") { // gen random gameName if none is given
+			if (this.inputGameName == "") { // gen random gameName if none is given
 				Random.seed = (int)System.DateTime.Now.Ticks;
 				int randNum = Random.Range(0, 9999);
-				this.gameName = "game" + randNum.ToString("0000");
+				this.inputGameName = "game" + randNum.ToString("0000");
 			}
-			netManager.setGameNameAndPass(this.gameName, this.gamePass); // commit data to networkManager
-			GameManager.instance.gameName = this.gameName;
+			netManager.setGameNameAndPass(this.inputGameName, this.inputGamePass); // commit data to networkManager
+			GameManager.instance.gameName = this.inputGameName;
 			// start as server
 			Debug.Log("UI is invoking server startup");
 			// commit game information to the network manager
