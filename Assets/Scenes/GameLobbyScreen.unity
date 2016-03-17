@@ -1513,7 +1513,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1078884500}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.97666675
+  m_Size: 0.9766667
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2250,7 +2250,7 @@ MonoBehaviour:
   m_BroadcastInterval: 1000
   m_UseNetworkManager: 1
   m_BroadcastData: HELLO
-  m_ShowGUI: 1
+  m_ShowGUI: 0
   m_OffsetX: 0
   m_OffsetY: 0
   LobbyUI: {fileID: 0}
@@ -2806,7 +2806,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000005722046, y: 7}
+  m_AnchoredPosition: {x: 0.000005722046, y: 299.99997}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1370448713

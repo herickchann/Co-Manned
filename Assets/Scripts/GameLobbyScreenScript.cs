@@ -159,14 +159,23 @@ public class GameLobbyScreenScript : MonoBehaviour {
 
 	public void popupOkButtonPressed() {
 		// re-using the popup for host / client so we need to differentiate between them
-		netManager.setGameNameAndPass(this.gameName, this.gamePass); // commit data to networkManager
 		if (this.popupClientMode) {
 			DiscoveredGameInfo myGameInfo = this.gameInfoDict[this.selectedHostKey];
+			Debug.Assert(this.gameName != "");
+			netManager.setGameNameAndPass(this.gameName, this.gamePass); // commit data to networkManager
+			GameManager.instance.gameName = this.gameName;
 			// start as client
 			Debug.Log("UI is invoking client startup");
 			netManager.setConnectionInfo(myGameInfo.hostAddress, myGameInfo.hostPort);
 			netManager.StartClient();
 		} else {
+			if (this.gameName == "") { // gen random gameName if none is given
+				Random.seed = (int)System.DateTime.Now.Ticks;
+				int randNum = Random.Range(0, 9999);
+				this.gameName = "game" + randNum.ToString("0000");
+			}
+			netManager.setGameNameAndPass(this.gameName, this.gamePass); // commit data to networkManager
+			GameManager.instance.gameName = this.gameName;
 			// start as server
 			Debug.Log("UI is invoking server startup");
 			// commit game information to the network manager
