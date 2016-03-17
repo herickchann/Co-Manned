@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class NetworkManagerScript : NetworkManager {
 
@@ -23,17 +24,40 @@ public class NetworkManagerScript : NetworkManager {
 		StartHost ();
 	}
 
-	public override void OnClientSceneChanged (NetworkConnection conn)
+	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
 	{
-		GameManager.Role role = gameManager.GetComponent<GameManager> ().getRoleSelection ();
-		if (role == GameManager.Role.Engineer)
-			return;
-		
-		base.OnClientSceneChanged (conn);
+		GameObject player = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+
+			NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
 	}
 		
 	public override void OnServerConnect(NetworkConnection conn) {
+		
+	}
+
+	public override void OnClientSceneChanged (NetworkConnection conn)
+	{
+		
+		GameManager.Role role = gameManager.GetComponent<GameManager> ().getRoleSelection ();
+
+		if (role == GameManager.Role.Pilot) {
+			base.OnClientSceneChanged (conn);
+		} 
+
+
+	}
+
+	public override void OnClientConnect (NetworkConnection conn)
+	{
 		Debug.Log ("player connected");
+		GameManager.Role role = gameManager.GetComponent<GameManager> ().getRoleSelection ();
+
+		if (role == GameManager.Role.Engineer) {
+			Debug.Log ("entered as engineer");
+			//ClientScene.RemovePlayer (0);
+			SceneManager.LoadScene ("engineer");
+
+		} 
 	}
 		
 }

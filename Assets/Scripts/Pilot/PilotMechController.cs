@@ -32,42 +32,50 @@ public class PilotMechController : NetworkBehaviour
     private Vector3 camOffset;
 
 	void Awake(){
+		rb = GetComponent<Rigidbody>();
+		Debug.Log ("Mech awake status text: " + statusText.GetComponent<TextMesh>().text);
 		gameManager = GameObject.Find ("GameManager");
-		serverData = GameObject.Find ("ServerData");
-		if(serverData == null){
-			Debug.Log ("ServerData not found");
-		}
+
 
 		// init team info on load
-		if(gameManager != null){
+		if (gameManager != null) {
 			var gameData = gameManager.GetComponent<GameManager> ();
-			if(gameData != null){
+			if (gameData != null) {
 				team = gameData.getTeamSelection ();
 				role = gameData.getRoleSelection ();
 			}
+		} else {
+			Debug.Log ("game manager not found");
 		}
 	}
 
 
     void Start () {
 		// set up physics
-        rb = GetComponent<Rigidbody>();
+     
 		statusTextOffset = transform.position - statusText.transform.position;
 
 		// set up manager to pull data from game room
 
 		// test set up string
 		// statusText.GetComponent<TextMesh> ().text = GetComponent<Combat> ().health.ToString ();
-		loadStatusText ();
 
-
+		// set up camera
         SetCamera();
+
+		// check if health is right
+		Debug.Log("Mech start status text: " + statusText.GetComponent<TextMesh>().text);
     }
 
+	/*
 	public void loadStatusText(){
+		if (!isLocalPlayer)
+			return;
 		int health = GetComponent<Combat> ().health;
+		Debug.Log ("loaded health: " + health.ToString());
 		statusText.GetComponent<TextMesh> ().text = health.ToString();
-	}
+	}*/
+
     void Update () {
 		if(!isLocalPlayer)
 			return;

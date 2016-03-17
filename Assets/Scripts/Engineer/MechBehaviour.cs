@@ -34,6 +34,29 @@ public class MechBehaviour : NetworkBehaviour
     float width;
     int[] loaded = new int[3];
 
+	// Wire up game manager
+	GameObject gameManager;
+
+	void Awake(){
+		/*gameManager = GameObject.Find ("GameManager");
+		if (gameManager != null) {
+			var gameData = gameManager.GetComponent<GameManager> ();
+			if (gameData != null) {
+				GameManager.Team team = gameData.teamSelection;
+				if(team == GameManager.Team.Blue){
+					health = gameData.blueHealth;
+				}
+				else if(team == GameManager.Team.Red){
+					health = gameData.redHealth;
+				}
+			} else {
+				Debug.Log ("fail to load game data");
+			}
+		} else {
+			Debug.Log ("fail to load game manager");
+		}*/
+	}
+
     void Start()
     {
         ammoIcon = (GameObject)Resources.Load("AmmoIcon");
@@ -58,7 +81,7 @@ public class MechBehaviour : NetworkBehaviour
             temp.GetComponent<Transform>().parent = holdingBay;
             baseCellPosition.x += 2;*/
         }
-        health = maxHealth * 3 / 5;
+        // MODIFIED health = maxHealth * 3 / 5;
         fuel = maxFuel * 3 / 5;
         ammoCount = maxAmmoCount / 2;
         for (int x = 0; x < ammoCount; x++)
