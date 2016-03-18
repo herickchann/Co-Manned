@@ -167,7 +167,7 @@ GameObject:
   - 212: {fileID: 21201342}
   m_Layer: 8
   m_Name: Mech
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -664,7 +664,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 104098}
-  m_LocalRotation: {x: 0.6268493, y: -0.36313593, z: -0.17679079, w: 0.6662863}
+  m_LocalRotation: {x: 0.62684923, y: -0.3631359, z: -0.17679077, w: 0.66628623}
   m_LocalPosition: {x: -1.0483164, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1.0000001}
   m_Children:
@@ -1031,6 +1031,9 @@ MonoBehaviour:
   serverData: {fileID: 0}
   team: 2
   role: 2
+  ammo: 100000000
+  powerupType: 0
+  fuel: 500
 --- !u!114 &11465308
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1056,12 +1059,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 3
   m_SendInterval: 0.071428575
-  m_SyncRotationAxis: 7
+  m_SyncRotationAxis: 2
   m_RotationSyncCompression: 0
   m_SyncSpin: 1
   m_MovementTheshold: 0.001
   m_SnapThreshold: 5
-  m_InterpolateRotation: 1
+  m_InterpolateRotation: 10
   m_InterpolateMovement: 1
 --- !u!137 &13724704
 SkinnedMeshRenderer:
@@ -1156,7 +1159,23 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_InterpolateRotation
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: ammo
+      value: 100000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: fuel
+      value: 500
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 141468}

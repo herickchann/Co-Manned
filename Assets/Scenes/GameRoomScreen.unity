@@ -1888,7 +1888,7 @@ MonoBehaviour:
   m_OnlineScene: pilot
   m_SpawnPrefabs:
   - {fileID: 152828, guid: 0845020765c8443409b574fcc13a029c, type: 2}
-  m_CustomConfig: 0
+  m_CustomConfig: 1
   m_MaxConnections: 4
   m_ConnectionConfig:
     m_PacketSize: 1500
@@ -1916,7 +1916,7 @@ MonoBehaviour:
     m_ReactorMaximumReceivedMessages: 1024
     m_ReactorMaximumSentMessages: 1024
     m_MaxPacketSize: 2000
-  m_Channels: 
+  m_Channels: 0500000000000000
   m_UseWebSockets: 0
   m_UseSimulator: 0
   m_SimulatedLatency: 1

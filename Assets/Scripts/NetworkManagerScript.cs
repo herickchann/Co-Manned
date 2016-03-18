@@ -5,59 +5,78 @@ using UnityEngine.SceneManagement;
 
 public class NetworkManagerScript : NetworkManager {
 
-	// keep track of spawn points
-    private Transform[] spawnPoints;
+    // keep track of spawn points
+    private Transform[] powerupSpawns;
+    private GameObject[] powerUps;
 
-	// wire up game manager
-	public GameObject gameManager;
+    // wire up game manager
+    public GameObject gameManager;
 
-	void Awake(){
-		gameManager = GameObject.Find ("GameManager");
-	}
+    void Awake () {
+        gameManager = GameObject.Find("GameManager");
+    }
 
-	// Use this for initialization
-	public void Join () {
-		StartClient ();
-	}
+    // Use this for initialization
+    public void Join () {
+        StartClient();
+    }
 
-	public void Host () {
-		StartHost ();
-	}
+    public void Host () {
+        StartHost();
+    }
 
-	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
-	{
-		GameObject player = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+    //void Update () {
+    //    //Debug.Log(Time.deltaTime);
+    //}
 
-			NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
-	}
-		
-	public override void OnServerConnect(NetworkConnection conn) {
-		
-	}
+    public override void OnServerAddPlayer (NetworkConnection conn, short playerControllerId) {
+        GameObject player = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
 
-	public override void OnClientSceneChanged (NetworkConnection conn)
-	{
-		
-		GameManager.Role role = gameManager.GetComponent<GameManager> ().getRoleSelection ();
+        if (numPlayers > 1) {
+            SpawnPowerups();
+        }
+    }
 
-		if (role == GameManager.Role.Pilot) {
-			base.OnClientSceneChanged (conn);
-		} 
+    public override void OnServerConnect (NetworkConnection conn) {
 
+    }
 
-	}
+    public override void OnClientSceneChanged (NetworkConnection conn) {
+        GameManager.Role role = gameManager.GetComponent<GameManager>().getRoleSelection();
 
-	public override void OnClientConnect (NetworkConnection conn)
-	{
-		Debug.Log ("player connected");
-		GameManager.Role role = gameManager.GetComponent<GameManager> ().getRoleSelection ();
+        if (role == GameManager.Role.Pilot) {
+            base.OnClientSceneChanged(conn);
+        }
+    }
 
-		if (role == GameManager.Role.Engineer) {
-			Debug.Log ("entered as engineer");
-			//ClientScene.RemovePlayer (0);
-			SceneManager.LoadScene ("engineer");
+    public override void OnClientConnect (NetworkConnection conn) {
+        Debug.Log("player connected");
+        GameManager.Role role = gameManager.GetComponent<GameManager>().getRoleSelection();
 
-		} 
-	}
-		
+        if (role == GameManager.Role.Engineer) {
+            Debug.Log("entered as engineer");
+            //ClientScene.RemovePlayer (0);
+            SceneManager.LoadScene("engineer");
+        }
+    }
+    
+    private void SpawnPowerups() {
+        powerUps = Resources.LoadAll<GameObject>("Powerups");
+        Transform spawns = GameObject.Find("PowerupSpawnPoints").transform;
+        powerupSpawns = new Transform[spawns.childCount];
+        for (int i = 0; i < spawns.childCount; i++) {
+            powerupSpawns[i] = spawns.GetChild(i);
+        }
+
+        if (powerupSpawns != null) {
+            foreach (Transform powerupPoint in powerupSpawns) { 
+                //Randomize powerup types
+                int index = Random.Range(0, powerUps.Length);
+
+                GameObject powerUp = (GameObject)Instantiate(powerUps[index], powerupPoint.position, powerupPoint.rotation);
+                NetworkServer.Spawn(powerUp);
+            }
+        }
+    }
 }

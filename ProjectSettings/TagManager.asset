@@ -6,6 +6,7 @@ TagManager:
   tags:
   - EnergyCell
   - Spawn
+  - PowerupSpawn
   layers:
   - Default
   - TransparentFX
