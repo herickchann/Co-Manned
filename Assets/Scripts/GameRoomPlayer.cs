@@ -6,41 +6,24 @@ using UnityEngine.UI;
 public class GameRoomPlayer : NetworkBehaviour {
 
 	// synchronized fields
-	// unfortunately, syncvars only works with straight primitives so we shall write out the fields
-	// until the need for further abstraction arises
-	// Unity does not support pointers so a lot of explicit calls to specific get/set methods are necessary
 	// player id slots (for underlying selection)
-	[SyncVar]
-	public string RPpid = "";
-	[SyncVar]
-	public string REpid = "";
-	[SyncVar]
-	public string BPpid = "";
-	[SyncVar]
-	public string BEpid = "";
-	// user name slots (for rendering selection data)
-	[SyncVar]
-	public string RPuname = "";
-	[SyncVar]
-	public string REuname = "";
-	[SyncVar]
-	public string BPuname = "";
-	[SyncVar]
-	public string BEuname = "";
+	[SyncVar] // user name for rendering (might not be unique)
+	public SyncListString unameList = new SyncListString();
 
-	// identifiers that should not change once in the game room
-	public string myPid = "";
 	public string myUserName = "";
 
 	// Game Room UI reference is set in Start()
 	public GameRoomScreenScript GameRoomUI;
 
+	private const int maxPlayers = 4;
+
 	// Use this for initialization
 	void Start () {
 		Debug.Log("Game Room Player spawned");
-		Debug.Assert(playerControllerId >= 0);
-		this.myPid = playerControllerId.ToString();
 		this.myUserName = GameManager.instance.userName;
+		// start with no selection
+		GameManager.instance.roleSelection = GameManager.Role.None;
+		GameManager.instance.teamSelection = GameManager.Team.None;
 		// for dev purposes, if no username exists, use "me"
 		if (this.myUserName == "") {this.myUserName = "me";}
 		// register button update functions
@@ -54,172 +37,97 @@ public class GameRoomPlayer : NetworkBehaviour {
 		GameRoomUI.REButton.onClick.AddListener(() => selectRedEngineer());
 		GameRoomUI.BPButton.onClick.AddListener(() => selectBluePilot());
 		GameRoomUI.BEButton.onClick.AddListener(() => selectBlueEngineer());
+		if (unameList.Count != maxPlayers) { // if list is not initialized
+			for(int i=0;i<maxPlayers;i++) { unameList.Add(""); }
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		// update UI data
-		GameRoomUI.RPuname = this.RPuname;
-		GameRoomUI.REuname = this.REuname;
-		GameRoomUI.BPuname = this.BPuname;
-		GameRoomUI.BEuname = this.BEuname;
+		GameRoomUI.RPuname = unameList[0];
+		GameRoomUI.REuname = unameList[1];
+		GameRoomUI.BPuname = unameList[2];
+		GameRoomUI.BEuname = unameList[3];
 	}
 
-	// verbose boilerplate to support syncvars
-	// cmd = client -> server
-	// rpc = server -> clients
-	// player id sync functions
+	// hardcode index mappings for now
+	public int getTeamRoleIndex(GameManager.Team team, GameManager.Role role) {
+		if (team == GameManager.Team.Red  && role == GameManager.Role.Pilot) 	return 0;
+		if (team == GameManager.Team.Red  && role == GameManager.Role.Engineer) return 1;
+		if (team == GameManager.Team.Blue && role == GameManager.Role.Pilot) 	return 2;
+		if (team == GameManager.Team.Blue && role == GameManager.Role.Engineer) return 3;
+		Debug.LogError("Bad team / role selection");
+		return -1;
+	}
+		
 	[Command]
-	void CmdSetRPpid(string pid) { RPpid = pid; RpcSetRPpid(pid); }
-	[ClientRpc]
-	void RpcSetRPpid(string pid) { RPpid = pid; }
-	[Command]
-	void CmdSetREpid(string pid) { REpid = pid; RpcSetREpid(pid); }
-	[ClientRpc]
-	void RpcSetREpid(string pid) { REpid = pid; }
-	[Command]
-	void CmdSetBPpid(string pid) { BPpid = pid; RpcSetBPpid(pid); }
-	[ClientRpc]
-	void RpcSetBPpid(string pid) { BPpid = pid; }
-	[Command]
-	void CmdSetBEpid(string pid) { BEpid = pid; RpcSetBEpid(pid); }
-	[ClientRpc]
-	void RpcSetBEpid(string pid) { BEpid = pid; }
-	// username sync functions
-	[Command]
-	void CmdSetRPuname(string uname) { RPuname = uname; RpcSetRPuname(uname); }
-	[ClientRpc]
-	void RpcSetRPuname(string uname) { RPuname = uname; }
-	[Command]
-	void CmdSetREuname(string uname) { REuname = uname; RpcSetREuname(uname); }
-	[ClientRpc]
-	void RpcSetREuname(string uname) { REuname = uname; }
-	[Command]
-	void CmdSetBPuname(string uname) { BPuname = uname; RpcSetBPuname(uname); }
-	[ClientRpc]
-	void RpcSetBPuname(string uname) { BPuname = uname; }
-	[Command]
-	void CmdSetBEuname(string uname) { BEuname = uname; RpcSetBEuname(uname); }
-	[ClientRpc]
-	void RpcSetBEuname(string uname) { BEuname = uname; }
-
-	// TODO: find a way to abstract calls to all the set methods
+	void CmdUpdateUnameList(int idx, string uname) {
+		unameList[idx] = uname;
+		unameList.Dirty(idx);
+		Debug.Log("Tried to update entry " + idx.ToString() + " with uname " + uname);
+	}
+	
 	private void releaseCurrentRoleSelection() {
-		// we regressed from the beautiful 2d role array to this ugliness accommodate the unity syncvars
-		// abstract this if we every go beyond 4 players
+		Debug.Assert((GameManager.instance.teamSelection == GameManager.Team.None &&
+			GameManager.instance.roleSelection == GameManager.Role.None) ||
+			(GameManager.instance.teamSelection != GameManager.Team.None &&
+				GameManager.instance.roleSelection != GameManager.Role.None),
+			"Invalid selection state: team and role must be both None or both not None");
+		if (GameManager.instance.teamSelection == GameManager.Team.None &&
+			GameManager.instance.roleSelection == GameManager.Role.None) return; // nothing to release
 		GameManager.Team myTeam = GameManager.instance.teamSelection;
 		GameManager.Role myRole = GameManager.instance.roleSelection;
-		if (myTeam == GameManager.Team.Red && myRole == GameManager.Role.Pilot) {
-			if(isClient) {
-				CmdSetRPpid("");
-				CmdSetRPuname("");
-			} else {
-				RpcSetRPpid("");
-				RpcSetRPuname("");
-			}
-			Debug.Log("I released Red Pilot");
-		} else if (myTeam == GameManager.Team.Red && myRole == GameManager.Role.Engineer) {
-			if(isClient) {
-				CmdSetREpid("");
-				CmdSetREuname("");
-			} else {
-				RpcSetREpid("");
-				RpcSetREuname("");
-			}
-			Debug.Log("I released Red Engineer");
-		} else if (myTeam == GameManager.Team.Blue && myRole == GameManager.Role.Pilot) {
-			if(isClient) {
-				CmdSetBPpid("");
-				CmdSetBPuname("");
-			} else {
-				RpcSetBPpid("");
-				RpcSetBPuname("");
-			}
-			Debug.Log("I released Blue Pilot");
-		} else if (myTeam == GameManager.Team.Blue && myRole == GameManager.Role.Engineer) {
-			if(isClient) {
-				CmdSetBEpid("");
-				CmdSetBEuname("");
-			} else {
-				RpcSetBEpid("");
-				RpcSetBEuname("");
-			}
-			Debug.Log("I released Blue Engineer");
-		} // else do nothing
+		int idx = getTeamRoleIndex(myTeam, myRole);
+		Debug.Assert(0 <= idx && idx < maxPlayers, "Bad team/role index: " + idx.ToString());
+		if (isServer) {
+			unameList[idx] = "";
+			unameList.Dirty(idx);
+			Debug.Log("release as server");
+		} else {
+			CmdUpdateUnameList(idx, "");
+			Debug.Log("release as client");
+		}
+		GameManager.instance.teamSelection = GameManager.Team.None;
+		GameManager.instance.roleSelection = GameManager.Role.None;
 	}
 
-	/*public void select(role) {
-	 *	if role is Available
-	 *		if isClient
-	 *			CmdSet
-	 *		else
-	 *			RpcSet
-	 *		Update my team and role
-	 *		Log selection
-	*/
-
+	public void selectTeamRole(GameManager.Team selectedTeam, GameManager.Role selectedRole) {
+		int idx = getTeamRoleIndex(selectedTeam, selectedRole);
+		Debug.Assert(0 <= idx && idx < maxPlayers, "Bad team/role index: " + idx.ToString());
+		if (unameList[idx] == "") { // if slot is available
+			releaseCurrentRoleSelection();
+			if (isServer) {
+				unameList[idx] = myUserName;
+				unameList.Dirty(idx);
+				Debug.Log("select as server");
+			} else {
+				CmdUpdateUnameList(idx, myUserName);
+				Debug.Log("select as client");
+			}
+			GameManager.instance.teamSelection = selectedTeam;
+			GameManager.instance.roleSelection = selectedRole;
+			Debug.LogError("selection successful");
+		}
+	}
 	// selection functions
 	public void selectRedPilot() {
-		if (this.RPpid == "" && this.RPuname == "") { // role available
-			releaseCurrentRoleSelection(); // release selection
-			if(isClient) { // update everyone
-				CmdSetRPpid(this.myPid);
-				CmdSetRPuname(this.myUserName);
-			} else {
-				RpcSetRPpid(this.myPid);
-				RpcSetRPuname(this.myUserName);
-			} // record selection
-			GameManager.instance.teamSelection = GameManager.Team.Red;
-			GameManager.instance.roleSelection = GameManager.Role.Pilot;
-			Debug.Log("I selected Red Pilot");
-		}
+		if (!isLocalPlayer) return;
+		selectTeamRole(GameManager.Team.Red, GameManager.Role.Pilot);
 	}
 
 	public void selectRedEngineer() {
-		if (this.REpid == "" && this.REuname == "") { // role available
-			releaseCurrentRoleSelection(); // release selection
-			if(isClient) { // update everyone
-				CmdSetREpid(this.myPid);
-				CmdSetREuname(this.myUserName);
-			} else {
-				RpcSetREpid(this.myPid);
-				RpcSetREuname(this.myUserName);
-			} // record selection
-			GameManager.instance.teamSelection = GameManager.Team.Red;
-			GameManager.instance.roleSelection = GameManager.Role.Engineer;
-			Debug.Log("I selected Red Engineer");
-		}
+		if (!isLocalPlayer) return;
+		selectTeamRole(GameManager.Team.Red, GameManager.Role.Engineer);
 	}
 
 	public void selectBluePilot() {
-		if (this.BPpid == "" && this.BPuname == "") { // role available
-			releaseCurrentRoleSelection(); // release selection
-			if(isClient) { // update everyone
-				CmdSetBPpid(this.myPid);
-				CmdSetBPuname(this.myUserName);
-			} else {
-				RpcSetBPpid(this.myPid);
-				RpcSetBPuname(this.myUserName);
-			} // record selection
-			GameManager.instance.teamSelection = GameManager.Team.Blue;
-			GameManager.instance.roleSelection = GameManager.Role.Pilot;
-			Debug.Log("I selected Blue Pilot");
-		}
+		if (!isLocalPlayer) return;
+		selectTeamRole(GameManager.Team.Blue, GameManager.Role.Pilot);
 	}
 
 	public void selectBlueEngineer() {
-		if (this.BEpid == "" && this.BEuname == "") { // role available
-			releaseCurrentRoleSelection(); // release selection
-			if(isClient) { // update everyone
-				CmdSetBEpid(this.myPid);
-				CmdSetBEuname(this.myUserName);
-			} else {
-				RpcSetBEpid(this.myPid);
-				RpcSetBEuname(this.myUserName);
-			} // record selection
-			GameManager.instance.teamSelection = GameManager.Team.Blue;
-			GameManager.instance.roleSelection = GameManager.Role.Engineer;
-			Debug.Log("I selected Blue Engineer");
-		}
+		if (!isLocalPlayer) return;
+		selectTeamRole(GameManager.Team.Blue, GameManager.Role.Engineer);
 	}
 }

@@ -69,7 +69,7 @@ public class GameLobbyScreenScript : MonoBehaviour {
 	// checks if game info has expired
 	private bool isGameInfoExpired(DiscoveredGameInfo gameInfo) {
 		int curTime = (int)(System.DateTime.Now.Ticks / 10000);
-		return (gameInfo.timeStamp > this.gameInfoExpirationMs) ? true : false;
+		return (curTime - gameInfo.timeStamp > this.gameInfoExpirationMs) ? true : false;
 	}
 
 	private string formatGameInfo(DiscoveredGameInfo gameInfo) {

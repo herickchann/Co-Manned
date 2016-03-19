@@ -68,6 +68,9 @@ public class NetworkManagerScript : NetworkManager {
 		discovery.StartAsServer(); // start broadcasting
 		maxConnections = playerLimit;
 		base.OnStartHost();
+		// add the host's client to the player connection list
+		//NetworkConnection conn = NetworkServer.localConnections[0];
+		//OnServerAddPlayer(conn, 0);
 	}
 
 	public override void OnStopHost() {
@@ -108,7 +111,7 @@ public class NetworkManagerScript : NetworkManager {
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
 	{
         var player = (GameObject)GameObject.Instantiate(playerPrefab, new Vector3(0,0,0), Quaternion.identity);
-        NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
+		NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
 		Debug.Log("Player controller id = " + playerControllerId.ToString());
         /*//Setup Camera
         GameObject camera = GameObject.FindWithTag("MainCamera");
