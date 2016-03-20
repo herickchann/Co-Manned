@@ -17,12 +17,9 @@ public class HealthCollider : MonoBehaviour
         if (other.gameObject.tag == "EnergyCell")
         {
             cell = other.gameObject.GetComponent<AmmoBehaviour>();
-            if (!mech.HealthFull())
-            {
-                //mech.AddHealth(cell.GetValue()*25);
-                mech.Load(cell.GetValue(), 0);
-                Destroy(other.gameObject);
-            }
+            mech.Load(cell.GetValue(), 0);
+            Destroy(other.gameObject);
+
         }
     }
 
