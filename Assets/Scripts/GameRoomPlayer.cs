@@ -14,6 +14,7 @@ public class GameRoomPlayer : NetworkBehaviour {
 
 	// Game Room UI reference is set in Start()
 	public GameRoomScreenScript GameRoomUI;
+	public GameRoomManager GameRoomMgr;
 
 	private const int maxPlayers = 4;
 
@@ -40,8 +41,20 @@ public class GameRoomPlayer : NetworkBehaviour {
 		if (unameList.Count != maxPlayers) { // if list is not initialized
 			for(int i=0;i<maxPlayers;i++) { unameList.Add(""); }
 		}
+		unameList.Callback = OnUnameListChanged;
+
+		GameObject GameRoomObj = GameObject.Find("/GameRoomManager");
+		Debug.Assert(GameRoomObj, "Game Room Manager not found");
+		GameRoomManager GameRoomMan = GameRoomObj.GetComponent<GameRoomManager>();
+		Debug.Assert(GameRoomMan);
+		this.GameRoomMgr = GameRoomMan;
+
 	}
-	
+
+	public void OnUnameListChanged(SyncListString.Operation op, int index) {
+		Debug.LogError("list op " + op + " on idx " + index.ToString());
+	}
+
 	// Update is called once per frame
 	void Update () {
 		// update UI data
@@ -112,8 +125,8 @@ public class GameRoomPlayer : NetworkBehaviour {
 	}
 	// selection functions
 	public void selectRedPilot() {
-		if (!isLocalPlayer) return;
-		selectTeamRole(GameManager.Team.Red, GameManager.Role.Pilot);
+		GameRoomMgr.updateTest(myUserName);
+		//selectTeamRole(GameManager.Team.Red, GameManager.Role.Pilot);
 	}
 
 	public void selectRedEngineer() {

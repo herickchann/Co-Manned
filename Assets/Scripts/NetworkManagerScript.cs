@@ -9,7 +9,7 @@ public class NetworkManagerScript : NetworkManager {
 	// current game broadcast details
 	public string gameName = "";
 	public string gamePass = ""; // just broadcast true/false, not the actual password
-	public int numPlayers = 0;
+	public int curNumPlayers = 0;
 	public const int playerLimit = 4;
 	public string passwordRequired = "false";
 
@@ -31,7 +31,7 @@ public class NetworkManagerScript : NetworkManager {
 		// gameName is last in case user input messes with colon delimiter
 		string message = string.Format("NetworkManager:{0}:{1}:{2}:{3}:{4}:{5}",
 			networkAddress, networkPort.ToString(), this.gameName, passwordRequired, 
-			numPlayers.ToString(), playerLimit.ToString());
+			curNumPlayers.ToString(), playerLimit.ToString());
 		discovery.broadcastData = message;
 	}
 
@@ -40,7 +40,7 @@ public class NetworkManagerScript : NetworkManager {
 		networkAddress = this.defaultNetworkHost;
 		networkPort = this.defaultNetworkPort;
 		this.passwordRequired = (this.gamePass == "" ? "false" : "true");
-		this.numPlayers++; // 1 for this player
+		this.curNumPlayers++; // 1 for this player
 		updateBroadcastMessage();
 		Debug.Log("Will broadcast with gameName: " + gameName + " and password: " + gamePass);
 	}
@@ -91,14 +91,14 @@ public class NetworkManagerScript : NetworkManager {
 
 	public override void OnServerConnect(NetworkConnection conn) {
 		Debug.Log ("player connected");
-		this.numPlayers++;
+		this.curNumPlayers++;
 		updateBroadcastMessage();
 		base.OnServerConnect(conn);
 	}
 
 	public override void OnServerDisconnect (NetworkConnection conn) {
 		Debug.Log ("player disconnected");
-		this.numPlayers--;
+		this.curNumPlayers--;
 		updateBroadcastMessage();
 		base.OnServerDisconnect(conn);
 	}

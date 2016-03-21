@@ -9,10 +9,10 @@ public class NetworkDiscoveryScript : NetworkDiscovery {
 	public GameLobbyScreenScript LobbyUI;
 
 	// current game broadcast details
-	private string gameName = "";
-	private string gamePass = ""; // just broadcast true/false, not the actual password
-	private int numPlayers = 0;
-	private const int playerLimit = 4;
+	//private string gameName = "";
+	//private string gamePass = ""; // just broadcast true/false, not the actual password
+	//private int numPlayers = 0;
+	//private const int playerLimit = 4;
 
 	void Start () {
 		// register the Lobby UI
