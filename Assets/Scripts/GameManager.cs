@@ -17,6 +17,7 @@ public class GameManager : NetworkBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+		
 		if (instance == null) { // instance not set?
 			instance = this; // set instance to this
 		} else if (instance != this) { // already exists?
@@ -34,6 +35,31 @@ public class GameManager : NetworkBehaviour {
 
 	public GameManager.Role getRoleSelection(){
 		return roleSelection;
+	}
+
+	public static string teamString(Team t){
+		if(t == Team.Blue){
+			return "blue";
+		}
+		else if(t == Team.Red){
+			return "red";
+		}
+		else{
+			return "none";
+		}
+	}
+
+	public static string roleString(Role r){
+		switch (r) {
+		case Role.Engineer:
+			return "engineer";
+		case Role.Pilot:
+			return "pilot";
+		case Role.None:
+			return "none";
+		default:
+			return "none";
+		}
 	}
 
 	// Update is called once per frame

@@ -1,0 +1,482 @@
+fileFormatVersion: 2
+guid: f920cf60ae96c8340b37071d6e9c17f6
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: ArmoredGolem
+    100002: //RootNode
+    100004: ArmoredGolemHead
+    100006: ArmoredGolemHub002
+    100008: ArmoredGolemLArm1
+    100010: ArmoredGolemLArm2
+    100012: ArmoredGolemLArmCollarbone
+    100014: ArmoredGolemLArmPalm
+    100016: ArmoredGolemLLeg1
+    100018: ArmoredGolemLLeg2
+    100020: ArmoredGolemLLegAnkle
+    100022: ArmoredGolemLLegPlatform
+    100024: ArmoredGolemNeck
+    100026: ArmoredGolempelvis
+    100028: ArmoredGolemRArm1
+    100030: ArmoredGolemRArm2
+    100032: ArmoredGolemRArmCollarbone
+    100034: ArmoredGolemRArmPalm
+    100036: ArmoredGolemRLeg1
+    100038: ArmoredGolemRLeg2
+    100040: ArmoredGolemRLegAnkle
+    100042: ArmoredGolemRLegPlatform
+    100044: ArmoredGolemSpine1
+    100046: ArmoredGolemSpine2
+    100048: ArmoredGolemSpine3
+    400000: ArmoredGolem
+    400002: //RootNode
+    400004: ArmoredGolemHead
+    400006: ArmoredGolemHub002
+    400008: ArmoredGolemLArm1
+    400010: ArmoredGolemLArm2
+    400012: ArmoredGolemLArmCollarbone
+    400014: ArmoredGolemLArmPalm
+    400016: ArmoredGolemLLeg1
+    400018: ArmoredGolemLLeg2
+    400020: ArmoredGolemLLegAnkle
+    400022: ArmoredGolemLLegPlatform
+    400024: ArmoredGolemNeck
+    400026: ArmoredGolempelvis
+    400028: ArmoredGolemRArm1
+    400030: ArmoredGolemRArm2
+    400032: ArmoredGolemRArmCollarbone
+    400034: ArmoredGolemRArmPalm
+    400036: ArmoredGolemRLeg1
+    400038: ArmoredGolemRLeg2
+    400040: ArmoredGolemRLegAnkle
+    400042: ArmoredGolemRLegPlatform
+    400044: ArmoredGolemSpine1
+    400046: ArmoredGolemSpine2
+    400048: ArmoredGolemSpine3
+    7400000: Idle01
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Idle01
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 100
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: ArmoredGolem
+        weight: 0
+      - path: ArmoredGolemLLegPlatform
+        weight: 0
+      - path: ArmoredGolempelvis
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemLLeg1
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemLLeg1/ArmoredGolemLLeg2
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemLLeg1/ArmoredGolemLLeg2/ArmoredGolemLLegAnkle
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemRLeg1
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemRLeg1/ArmoredGolemRLeg2
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemRLeg1/ArmoredGolemRLeg2/ArmoredGolemRLegAnkle
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2/ArmoredGolemSpine3
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2/ArmoredGolemSpine3/ArmoredGolemHub002
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2/ArmoredGolemSpine3/ArmoredGolemHub002/ArmoredGolemLArmCollarbone
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2/ArmoredGolemSpine3/ArmoredGolemHub002/ArmoredGolemLArmCollarbone/ArmoredGolemLArm1
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2/ArmoredGolemSpine3/ArmoredGolemHub002/ArmoredGolemLArmCollarbone/ArmoredGolemLArm1/ArmoredGolemLArm2
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2/ArmoredGolemSpine3/ArmoredGolemHub002/ArmoredGolemLArmCollarbone/ArmoredGolemLArm1/ArmoredGolemLArm2/ArmoredGolemLArmPalm
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2/ArmoredGolemSpine3/ArmoredGolemHub002/ArmoredGolemNeck
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2/ArmoredGolemSpine3/ArmoredGolemHub002/ArmoredGolemNeck/ArmoredGolemHead
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2/ArmoredGolemSpine3/ArmoredGolemHub002/ArmoredGolemRArmCollarbone
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2/ArmoredGolemSpine3/ArmoredGolemHub002/ArmoredGolemRArmCollarbone/ArmoredGolemRArm1
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2/ArmoredGolemSpine3/ArmoredGolemHub002/ArmoredGolemRArmCollarbone/ArmoredGolemRArm1/ArmoredGolemRArm2
+        weight: 1
+      - path: ArmoredGolempelvis/ArmoredGolemSpine1/ArmoredGolemSpine2/ArmoredGolemSpine3/ArmoredGolemHub002/ArmoredGolemRArmCollarbone/ArmoredGolemRArm1/ArmoredGolemRArm2/ArmoredGolemRArmPalm
+        weight: 1
+      - path: ArmoredGolemRLegPlatform
+        weight: 0
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.02
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 4
+  importAnimation: 1
+  copyAvatar: 1
+  humanDescription:
+    human:
+    - boneName: ArmoredGolempelvis
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemLLeg1
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemRLeg1
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemLLeg2
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemRLeg2
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemLLegAnkle
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemRLegAnkle
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemSpine2
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemSpine3
+      humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemNeck
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemHead
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemLArmCollarbone
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemRArmCollarbone
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemLArm1
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemRArm1
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemRArm2
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemRArmPalm
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemLArm2
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ArmoredGolemLArmPalm
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: ArmoredGolem(Clone)
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: ArmoredGolem
+      position: {x: 0.0021532534, y: 0, z: 0.041334227}
+      rotation: {x: 0.50000006, y: -0.50000006, z: -0.49999997, w: 0.49999997}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: ArmoredGolemLLegPlatform
+      position: {x: -0.46676955, y: -1.1957329e-15, z: 0.19534393}
+      rotation: {x: 0.5, y: -0.5, z: -0.5, w: 0.5}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: ArmoredGolempelvis
+      position: {x: 0.0021532534, y: 1.8040097, z: 0.041333847}
+      rotation: {x: 0.5, y: -0.5, z: -0.5, w: 0.5}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: ArmoredGolemLLeg1
+      position: {x: -0, y: -0.012700567, z: 0.28355804}
+      rotation: {x: -0.050844472, y: 0.99486655, z: -0.000025359483, w: 0.087495066}
+      scale: {x: 1.0000001, y: 1, z: 0.9999999}
+      transformModified: 1
+    - name: ArmoredGolemLLeg2
+      position: {x: -0.7165229, y: 0.000000019073486, z: 0}
+      rotation: {x: 0.003494241, y: 0.058795717, z: 0.11395579, w: 0.9917384}
+      scale: {x: 0.99999994, y: 0.99999976, z: 0.99999994}
+      transformModified: 1
+    - name: ArmoredGolemLLegAnkle
+      position: {x: -1.0480918, y: 0.0000000023841857, z: 0}
+      rotation: {x: -0.018721575, y: 0.02162025, z: -0.74393415, w: 0.6676407}
+      scale: {x: 1.0000004, y: 0.9999997, z: 1.0000001}
+      transformModified: 1
+    - name: ArmoredGolemRLeg1
+      position: {x: -0, y: -0.012700567, z: -0.28355804}
+      rotation: {x: -0.050841555, y: 0.9948664, z: 0.000025567075, w: -0.08749866}
+      scale: {x: 0.99999994, y: 1, z: 0.99999994}
+      transformModified: 1
+    - name: ArmoredGolemRLeg2
+      position: {x: -0.716523, y: 0, z: 0}
+      rotation: {x: -0.0034626438, y: -0.0590647, z: 0.11392668, w: 0.9917258}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: ArmoredGolemRLegAnkle
+      position: {x: -1.0480918, y: -0.000000011920928, z: -0.000000038146972}
+      rotation: {x: 0.018875852, y: -0.021124642, z: -0.7439347, w: 0.6676516}
+      scale: {x: 0.9999999, y: 1.0000001, z: 1}
+      transformModified: 1
+    - name: ArmoredGolemSpine1
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 2.3223405e-17, y: 0.000000014646474, z: 0.09712464, w: 0.9952722}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: ArmoredGolemSpine2
+      position: {x: -0.4268306, y: -0.000000038146972, z: 0}
+      rotation: {x: -4.395311e-15, y: 0.000000012537921, z: 0.08314221, w: 0.9965377}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: ArmoredGolemSpine3
+      position: {x: -0.42683074, y: -0.000000076293944, z: 1.4901161e-10}
+      rotation: {x: -8.249995e-16, y: -0.000000012537928, z: -0.08314224, w: 0.9965377}
+      scale: {x: 0.99999994, y: 0.99999994, z: 1}
+      transformModified: 1
+    - name: ArmoredGolemHub002
+      position: {x: -0.42683074, y: -0.000000038146972, z: 0}
+      rotation: {x: 3.785073e-15, y: -0.000000014646499, z: -0.097124614, w: 0.9952722}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1}
+      transformModified: 1
+    - name: ArmoredGolemLArmCollarbone
+      position: {x: -0, y: 0, z: 0.23211677}
+      rotation: {x: 3.0409042e-10, y: 0.7004579, z: -2.9844993e-10, w: 0.7136938}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: ArmoredGolemLArm1
+      position: {x: -0.3492794, y: 0, z: -0.00000030517577}
+      rotation: {x: 0.48554096, y: 0.026088709, z: -0.01936947, w: 0.87360984}
+      scale: {x: 0.99999976, y: 1, z: 1.0000002}
+      transformModified: 1
+    - name: ArmoredGolemLArm2
+      position: {x: -0.79713047, y: 0, z: 0.000000076293944}
+      rotation: {x: -0.024889171, y: -0.013122435, z: 0.0074603595, w: 0.99957633}
+      scale: {x: 0.9999989, y: 0.9999999, z: 1.000001}
+      transformModified: 1
+    - name: ArmoredGolemLArmPalm
+      position: {x: -0.8280158, y: 0, z: 0.00000015258789}
+      rotation: {x: 0.21788827, y: -0.09980178, z: -0.24071573, w: 0.9405425}
+      scale: {x: 0.99999756, y: 0.99999875, z: 1.0000039}
+      transformModified: 1
+    - name: ArmoredGolemNeck
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -1.6196192e-14, y: -0.000000022464139, z: -0.15060271, w: 0.98859435}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: ArmoredGolemHead
+      position: {x: -0.6282159, y: -0.000000076293944, z: 0}
+      rotation: {x: 1.4758677e-14, y: 0.000000022464135, z: 0.15060271, w: 0.98859435}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1}
+      transformModified: 1
+    - name: ArmoredGolemRArmCollarbone
+      position: {x: -0, y: 0, z: -0.23211677}
+      rotation: {x: 7.478501e-14, y: -0.7004579, z: 7.619816e-14, w: 0.71369374}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: ArmoredGolemRArm1
+      position: {x: -0.34927946, y: 0.000000019073486, z: 0.00000030517577}
+      rotation: {x: -0.48554102, y: -0.02608875, z: -0.019369444, w: 0.87360984}
+      scale: {x: 1.0000002, y: 0.99999994, z: 0.99999976}
+      transformModified: 1
+    - name: ArmoredGolemRArm2
+      position: {x: -0.7971306, y: 0, z: 0}
+      rotation: {x: 0.024889056, y: 0.013122488, z: 0.0074600778, w: 0.9995763}
+      scale: {x: 1.0000008, y: 1, z: 0.99999934}
+      transformModified: 1
+    - name: ArmoredGolemRArmPalm
+      position: {x: -0.82801557, y: 0.000000038146972, z: 0.00000015258789}
+      rotation: {x: -0.21788855, y: 0.099801965, z: -0.24071582, w: 0.94054246}
+      scale: {x: 1.0000018, y: 1.0000026, z: 0.999997}
+      transformModified: 1
+    - name: ArmoredGolemRLegPlatform
+      position: {x: 0.47107595, y: -2.6089108e-14, z: 0.19534405}
+      rotation: {x: 0.5, y: -0.5, z: -0.5, w: 0.5}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: Group1
+      position: {x: 0, y: 2.454931, z: -0.120917104}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: fbca3303d4a25ae4db13d4d19aac7ff7,
+    type: 3}
+  animationType: 3
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

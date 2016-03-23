@@ -31,43 +31,58 @@ public class PilotMechController : NetworkBehaviour
 	// Mech camera stuff
     private Vector3 camOffset;
 
+    // Game related info
+    [SyncVar]
+    public int ammo;
+    [SyncVar]
+    public int powerupType;
+    [SyncVar]
+    public int fuel;
+    private Vector3 lastPosition;
+
 	void Awake(){
+		rb = GetComponent<Rigidbody>();
 		gameManager = GameObject.Find ("GameManager");
-		serverData = GameObject.Find ("ServerData");
-		if(serverData == null){
-			Debug.Log ("ServerData not found");
-		}
 
 		// init team info on load
-		if(gameManager != null){
-			var gameData = gameManager.GetComponent<GameManager> ();
-			if(gameData != null){
+		if (gameManager != null) {
+			var gameData = GameManager.instance;
+			if (gameData != null) {
 				team = gameData.getTeamSelection ();
 				role = gameData.getRoleSelection ();
 			}
+		} else {
+			Debug.Log ("game manager not found");
 		}
 	}
 
 
     void Start () {
 		// set up physics
-        rb = GetComponent<Rigidbody>();
+     
 		statusTextOffset = transform.position - statusText.transform.position;
-
+        powerupType = 0;
 		// set up manager to pull data from game room
 
 		// test set up string
-		// statusText.GetComponent<TextMesh> ().text = GetComponent<Combat> ().health.ToString ();
-		loadStatusText ();
+		// set up name
+		statusText.GetComponent<TextMesh>().text = "<" + team+ ">:" + GetComponent<Combat>().health.ToString ();
 
 
+		lastPosition = rb.position;
+		// set up camera
         SetCamera();
     }
 
+	/*
 	public void loadStatusText(){
+		if (!isLocalPlayer)
+			return;
 		int health = GetComponent<Combat> ().health;
+		Debug.Log ("loaded health: " + health.ToString());
 		statusText.GetComponent<TextMesh> ().text = health.ToString();
-	}
+	}*/
+
     void Update () {
 		if(!isLocalPlayer)
 			return;
@@ -95,8 +110,16 @@ public class PilotMechController : NetworkBehaviour
     }
 
     private void Move () {
-        Vector3 movement = new Vector3(moveH, 0.0f, moveV);
-        rb.velocity = movement * speed;
+        if (lastPosition != rb.position) {
+            lastPosition = rb.position;
+            //fuel--;
+        }
+        if (fuel > 0) { 
+            Vector3 movement = new Vector3(moveH, 0.0f, moveV);
+            rb.velocity = movement * speed;
+        } else {
+            fuel = 0;
+        }
     }
 
     private void Turn () {
@@ -108,13 +131,16 @@ public class PilotMechController : NetworkBehaviour
 		
 	[Command]
 	void CmdFire(){
-		nextFire = Time.time + fireRate;
+        if (ammo != 0) { 
+		    nextFire = Time.time + fireRate;
+		    var b = (GameObject)Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
 
-		var b = (GameObject)Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
-
-		b.GetComponent<Rigidbody> ().velocity = transform.forward * speed;
-		NetworkServer.Spawn (b);
-		Destroy (b, 2.0f);
+		    b.GetComponent<Rigidbody> ().velocity = transform.forward * speed;
+			b.GetComponent<BulletBehaviour> ().shooter = this.team;
+		    NetworkServer.Spawn (b);
+		    Destroy (b, 2.0f);
+            ammo--;
+        }
 	}
 
     void Fire () {

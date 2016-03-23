@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: platform_mesh
+  m_Shader: {fileID: 4800000, guid: 5eed9a0f8d38d624f8d38cb377827b64, type: 3}
+  m_ShaderKeywords:
+  - _AOENABLED_ON
+  - _USEGLOSSMAP_ON
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 12e1f951c7ba7be44986034f0d938d6c, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _Reflection
+        second:
+          m_Texture: {fileID: 8900000, guid: 5d10db20c10e84806ba1e5d7bebde776, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: d7c2364e3e5de414c8e6981c94e6cd3b, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _CustomSpecular
+        second:
+          m_Texture: {fileID: 2800000, guid: 12e1f951c7ba7be44986034f0d938d6c, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _CustomGloss
+        second:
+          m_Texture: {fileID: 2800000, guid: 12e1f951c7ba7be44986034f0d938d6c, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _Illum
+        second:
+          m_Texture: {fileID: 2800000, guid: e115d3cc8b697d144ab80511e7b542ed, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _ReflectionMask
+        second:
+          m_Texture: {fileID: 2800000, guid: 12e1f951c7ba7be44986034f0d938d6c, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _AmbientOclusion
+        second:
+          m_Texture: {fileID: 2800000, guid: 12e1f951c7ba7be44986034f0d938d6c, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _SpecPower
+        second: 3.49000001
+      data:
+        first:
+          name: _CustomSpecMap
+        second: 0
+      data:
+        first:
+          name: _Shininess
+        second: .925328672
+      data:
+        first:
+          name: _UseGlossMap
+        second: 1
+      data:
+        first:
+          name: _IllumPower
+        second: 4.48000002
+      data:
+        first:
+          name: _ReflectionPower
+        second: 1
+      data:
+        first:
+          name: _AOEnabled
+        second: 1
+      data:
+        first:
+          name: _AOPower
+        second: .540000021
+      data:
+        first:
+          name: _EmissionLM
+        second: 0
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .5, g: .5, b: .5, a: 1}
+      data:
+        first:
+          name: _IllumColor
+        second: {r: .272058845, g: .487931043, b: 1, a: 1}
+      data:
+        first:
+          name: _ReflectionColor
+        second: {r: .5, g: .5, b: .5, a: 1}

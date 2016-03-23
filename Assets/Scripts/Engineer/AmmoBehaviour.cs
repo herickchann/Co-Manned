@@ -10,7 +10,7 @@ public class AmmoBehaviour : MonoBehaviour {
     Vector3 startPos;
     bool snapback;
     float nextSnapBack;
-    float snapBackDelay = (float)0.01;
+    float snapBackDelay = (float)0.02;
 
 
 	// Use this for initialization

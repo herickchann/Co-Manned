@@ -61,7 +61,7 @@ public class GameRoomScreenScript : MonoBehaviour {
 	public void setRoleScene (GameManager.Role role){
 		if (networkManager != null) {
 			string roleScene = (role == GameManager.Role.Engineer)?"engineer":"pilot";
-			networkManager.GetComponent<NetworkManagerScript>().onlineScene = roleScene;
+			//networkManager.GetComponent<NetworkManagerScript>().onlineScene = roleScene;
 		}
 	}
 
@@ -89,6 +89,7 @@ public class GameRoomScreenScript : MonoBehaviour {
 	public void selectBlueEngineer() {
 		GameManager.instance.teamSelection = GameManager.Team.Blue;
 		GameManager.instance.roleSelection = GameManager.Role.Engineer;
+		Debug.Log ("selectd blue engineer");
 		setRoleScene (GameManager.Role.Engineer);
 		updateButtonUIArray();
 	}

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - EnergyCell
   - Spawn
+  - PowerupSpawn
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - 
   - 
   - Player
-  - 
+  - engineer
   - 
   - 
   - 
@@ -42,4 +43,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: engineer
+    uniqueID: 3703401503
     locked: 0

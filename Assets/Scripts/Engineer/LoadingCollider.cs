@@ -15,12 +15,8 @@ public class LoadingCollider : MonoBehaviour {
         if (other.gameObject.tag == "EnergyCell")
         {
             cell = other.gameObject.GetComponent<AmmoBehaviour>();
-            if (!mech.AmmoFull())
-            {
-                //mech.AddAmmo(cell.GetValue());
-                mech.Load(cell.GetValue(),2);
-                Destroy(other.gameObject);
-            }
+            mech.Load(cell.GetValue(),2);
+            Destroy(other.gameObject);
         }
     }
 

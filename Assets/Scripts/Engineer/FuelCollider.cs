@@ -17,12 +17,8 @@ public class FuelCollider : MonoBehaviour
         if (other.gameObject.tag == "EnergyCell")
         {
             cell = other.gameObject.GetComponent<AmmoBehaviour>();
-            if (!mech.FuelFull())
-            {
-                //mech.AddFuel(cell.GetValue() * 25);
                 mech.Load(cell.GetValue(), 1);
                 Destroy(other.gameObject);
-            }
         }
     }
 
