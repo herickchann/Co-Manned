@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2da5b6dbabff32e4e8887b637d922537
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - ColorTexture: {instanceID: 0}
+  - ColorMaterial: {instanceID: 0}
+  - CharLight: {instanceID: 0}
+  - TextureIlum: {fileID: 2800000, guid: 6373b06807fdb704baf3f03f2c5d03d6, type: 3}
+  - TextureNoilum: {fileID: 2800000, guid: 95f399b4cd7c3664c95ad6e7c3dc890b, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
