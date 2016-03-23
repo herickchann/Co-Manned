@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Combat : NetworkBehaviour {
 	// wire up GameManager
 	GameObject gameManager;
+	GlobalGameDataScript gameData;
 	PilotMechController mechController;
 
 	public const int maxHealth = 50;
@@ -15,46 +16,36 @@ public class Combat : NetworkBehaviour {
 
 	void Awake(){
 		mechController = GetComponent<PilotMechController> ();
+		gameData = GameObject.Find ("GlobalGameData").GetComponent<GlobalGameDataScript> ();
 		health = maxHealth;
 	}
 
 	void Start(){
-		mechController.statusText.GetComponent<TextMesh>().text = health.ToString ();
-		/*
-		gameManager = GameObject.Find ("GameManager");
-		if (gameManager != null) {
-			var gameData = gameManager.GetComponent<GameManager> ();
-			if (gameData != null) {
-				GameManager.Team team = gameData.teamSelection;
-				health = gameData.getHealth(team);
-
-			} else {
-				Debug.Log ("fail to load game data");
-			}
-		} else {
-			Debug.Log ("fail to load game manager");
-		}*/
-
-
+		
 	}
 
 	[ClientRpc]
-	void RpcDamage(int amount){	
+	void RpcDamage(int amount){
 		var statusText = GetComponent<PilotMechController>().statusText;
-		Debug.Log ("updated health to: " + health.ToString ());
-		statusText.GetComponent<TextMesh> ().text = health.ToString ();
+		int blueHealth = gameData.getHealth (GameManager.Team.Blue);
+		int redHealth = gameData.getHealth (GameManager.Team.Red);
+		statusText.GetComponent<TextMesh> ().text = "R: " + redHealth.ToString () + " B: " + blueHealth.ToString ();
 	}
-		
 
-	public void TakeDamage(int amount){
+	public void TakeDamage(GameManager.Team team, int amount){
 		if (!isServer)
 			return;
 
 		health -= amount;
-		Debug.Log ("took damage, health is now: " + health.ToString());
-		//GameManager.Team team = GetComponent<PilotMechController> ().team;
-		//GameObject.Find ("GameManager").GetComponent<GameManager> ().ReduceHealth (team, amount);
+
+
+		//CmdNotifyHit (team);
+
+		gameData.CmdNotifyHit (team, amount);
 		RpcDamage (amount);
+
+		// also update its copy of global data
+
 
 		if (health <= 0)
 		{

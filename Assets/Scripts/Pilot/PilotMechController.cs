@@ -42,13 +42,11 @@ public class PilotMechController : NetworkBehaviour
 
 	void Awake(){
 		rb = GetComponent<Rigidbody>();
-		Debug.Log ("Mech awake status text: " + statusText.GetComponent<TextMesh>().text);
 		gameManager = GameObject.Find ("GameManager");
-
 
 		// init team info on load
 		if (gameManager != null) {
-			var gameData = gameManager.GetComponent<GameManager> ();
+			var gameData = GameManager.instance;
 			if (gameData != null) {
 				team = gameData.getTeamSelection ();
 				role = gameData.getRoleSelection ();
@@ -67,13 +65,13 @@ public class PilotMechController : NetworkBehaviour
 		// set up manager to pull data from game room
 
 		// test set up string
-		// statusText.GetComponent<TextMesh> ().text = GetComponent<Combat> ().health.ToString ();
-        lastPosition = rb.position;
+		// set up name
+		statusText.GetComponent<TextMesh>().text = "<" + team+ ">:" + GetComponent<Combat>().health.ToString ();
+
+
+		lastPosition = rb.position;
 		// set up camera
         SetCamera();
-
-		// check if health is right
-		Debug.Log("Mech start status text: " + statusText.GetComponent<TextMesh>().text);
     }
 
 	/*
@@ -138,6 +136,7 @@ public class PilotMechController : NetworkBehaviour
 		    var b = (GameObject)Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
 
 		    b.GetComponent<Rigidbody> ().velocity = transform.forward * speed;
+			b.GetComponent<BulletBehaviour> ().shooter = this.team;
 		    NetworkServer.Spawn (b);
 		    Destroy (b, 2.0f);
             ammo--;
