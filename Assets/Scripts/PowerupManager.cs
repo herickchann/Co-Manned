@@ -7,11 +7,9 @@ public class PowerupManager : MonoBehaviour {
     public int respawnTime;
     private float timer;
     private bool onCooldown;
-    private GameObject parent;
 	
     void Start () {
         onCooldown = false;
-        parent = transform.parent.gameObject;
     }
 
     void Update () {
@@ -37,10 +35,10 @@ public class PowerupManager : MonoBehaviour {
     }
 
     private void HidePowerup () {
-        parent.SetActive(false);
+		transform.gameObject.SetActive(false);
     }
     
     private void ShowPowerup () {
-        parent.SetActive(true);
+		transform.gameObject.SetActive(true);
     }
 }
