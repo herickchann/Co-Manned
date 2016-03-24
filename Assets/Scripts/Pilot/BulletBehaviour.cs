@@ -8,6 +8,7 @@ public class BulletBehaviour : MonoBehaviour {
 	private float lifeTime = 2.0f;
 	public GameObject globalData;
 	public GameManager.Team shooter;
+    public ParticleSystem explosion;
 
 	void Awake(){
 		globalData = GameObject.Find("GlobalGameData");
@@ -29,13 +30,19 @@ public class BulletBehaviour : MonoBehaviour {
 				Debug.Log (GameManager.teamString(shooter) + " shoots " + GameManager.teamString(hitMech.team));
 				// reduce health on server then replicate to client
 				combat.TakeDamage (hitMech.team, 10);
-				Destroy (gameObject); // delete bullet
 			} else {
 				Debug.Log ("Error: combat is null");
 			}
 		}
 
+        // Unparent the particles from the shell.
+        explosion.transform.parent = null;
 
+        // Play the particle system.
+        explosion.Play();
 
+        // Once the particles have finished, destroy the gameobject they are on.
+        Destroy (explosion.gameObject, explosion.duration);
+		Destroy (gameObject); // delete bullet
 	}
 }

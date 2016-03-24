@@ -43,6 +43,7 @@ public class PilotMechController : NetworkBehaviour
     public int fuel;
     private Vector3 lastPosition;
     private Combat combat;
+    private Light mechLight;
 
 	void Awake(){
 		rb = GetComponent<Rigidbody>();
@@ -61,11 +62,6 @@ public class PilotMechController : NetworkBehaviour
 	}
 
     void Start () {
-        //set up animations
-        anim = transform.GetComponent<Animator>();
-        //used for switching arms for shooting
-        altShoot = false;
-        combat = transform.GetComponent<Combat>();
         // set up physics
         statusTextOffset = transform.position - statusText.transform.position;
         powerupType = 0;
@@ -76,10 +72,18 @@ public class PilotMechController : NetworkBehaviour
 		statusText.GetComponent<TextMesh>().text = "<" + team+ ">:" + GetComponent<Combat>().health.ToString ();
 
 		lastPosition = rb.position;
-		// set up camera
-        SetCamera();
 
+        //used for switching arms for shooting
+        altShoot = false;
+        combat = transform.GetComponent<Combat>();
+		//set up camera
+        SetCamera();
+        //set up animations
+        anim = transform.GetComponent<Animator>();
+        //set up network animations
         GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
+        //get mech light
+        mechLight = GetComponentInChildren<Light>();
     }
 
     /*
@@ -105,7 +109,8 @@ public class PilotMechController : NetworkBehaviour
             Turn();
             Fire();
         } else {
-            //anim.CrossFade("Death");
+            anim.SetBool("death", true);
+            mechLight.intensity -= 0.1f;
         }
     }
 
@@ -128,9 +133,7 @@ public class PilotMechController : NetworkBehaviour
         }
         if (fuel > 0) {
             Vector3 movement = new Vector3(moveH, 0.0f, moveV);
-            //if (moveH != 0 || moveV != 0) {
-            //    anim.Play("Walking");
-            //}
+
             anim.SetFloat("inputH", moveH);
             anim.SetFloat("inputV", moveV);
 
@@ -159,7 +162,7 @@ public class PilotMechController : NetworkBehaviour
                 b = (GameObject)Instantiate(bullet, bulletSpawn2.position, bulletSpawn2.rotation);
                 altShoot = true;
             }
-
+            transform.Translate(new Vector3(0,0,-0.05f));
             b.GetComponent<Rigidbody> ().velocity = transform.forward * speed;
 			b.GetComponent<BulletBehaviour> ().shooter = this.team;
 		    NetworkServer.Spawn (b);

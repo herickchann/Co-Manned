@@ -79,6 +79,10 @@ ModelImporter:
     7400008: Shooting1
     7400010: Hit
     7400012: Shooting2
+    7400014: PrepareShoot
+    7400016: Shooting
+    7400018: FinishShooting
+    7400020: Recoil
     9500000: //RootNode
     11100000: //RootNode
     13700000: cgfxShader1
@@ -488,102 +492,6 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Shooting1
-      takeName: DefaultAnim
-      firstFrame: 525
-      lastFrame: 695
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask:
-      - path: 
-        weight: 1
-      - path: U3DRoot
-        weight: 1
-      - path: U3DRoot/cgfxShader1
-        weight: 1
-      - path: U3DRoot/RootNode
-        weight: 1
-      - path: U3DRoot/RootNode/COG
-        weight: 1
-      - path: U3DRoot/RootNode/COG/body
-        weight: 1
-      - path: U3DRoot/RootNode/COG/body/lf_shoulder
-        weight: 1
-      - path: U3DRoot/RootNode/COG/body/lf_shoulder/lf_elbow
-        weight: 1
-      - path: U3DRoot/RootNode/COG/body/lf_shoulder/lf_elbow/lf_wrist
-        weight: 1
-      - path: U3DRoot/RootNode/COG/body/rt_shoulder
-        weight: 1
-      - path: U3DRoot/RootNode/COG/body/rt_shoulder/rt_elbow
-        weight: 1
-      - path: U3DRoot/RootNode/COG/body/rt_shoulder/rt_elbow/rt_wrist
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/lf_hip
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle/lf_ball
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle/lf_ball/lf_backtoe_dn_aim
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle/lf_ball/lf_fronttoe_dn_aim
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_backtoe_up_aim
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_fronttoe_up_aim
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/rt_hip
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle/rt_ball
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle/rt_ball/rt_backtoe_dn_aim
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle/rt_ball/rt_fronttoe_dn_aim
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_backtoe_up_aim
-        weight: 1
-      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_fronttoe_up_aim
-        weight: 1
-      - path: U3DRoot/RootNode/robot02_lowpoly
-        weight: 1
-      maskType: 0
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
       name: Hit
       takeName: DefaultAnim
       firstFrame: 696
@@ -680,10 +588,298 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Shooting2
+      name: PrepareShoot
       takeName: DefaultAnim
       firstFrame: 420
+      lastFrame: 470
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: U3DRoot
+        weight: 1
+      - path: U3DRoot/cgfxShader1
+        weight: 1
+      - path: U3DRoot/RootNode
+        weight: 1
+      - path: U3DRoot/RootNode/COG
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/lf_shoulder
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/lf_shoulder/lf_elbow
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/lf_shoulder/lf_elbow/lf_wrist
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/rt_shoulder
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/rt_shoulder/rt_elbow
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/rt_shoulder/rt_elbow/rt_wrist
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle/lf_ball
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle/lf_ball/lf_backtoe_dn_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle/lf_ball/lf_fronttoe_dn_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_backtoe_up_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_fronttoe_up_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle/rt_ball
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle/rt_ball/rt_backtoe_dn_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle/rt_ball/rt_fronttoe_dn_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_backtoe_up_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_fronttoe_up_aim
+        weight: 1
+      - path: U3DRoot/RootNode/robot02_lowpoly
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Shooting
+      takeName: DefaultAnim
+      firstFrame: 470
+      lastFrame: 480
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: U3DRoot
+        weight: 1
+      - path: U3DRoot/cgfxShader1
+        weight: 1
+      - path: U3DRoot/RootNode
+        weight: 1
+      - path: U3DRoot/RootNode/COG
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/lf_shoulder
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/lf_shoulder/lf_elbow
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/lf_shoulder/lf_elbow/lf_wrist
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/rt_shoulder
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/rt_shoulder/rt_elbow
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/rt_shoulder/rt_elbow/rt_wrist
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle/lf_ball
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle/lf_ball/lf_backtoe_dn_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle/lf_ball/lf_fronttoe_dn_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_backtoe_up_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_fronttoe_up_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle/rt_ball
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle/rt_ball/rt_backtoe_dn_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle/rt_ball/rt_fronttoe_dn_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_backtoe_up_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_fronttoe_up_aim
+        weight: 1
+      - path: U3DRoot/RootNode/robot02_lowpoly
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: FinishShooting
+      takeName: DefaultAnim
+      firstFrame: 480
       lastFrame: 530
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: U3DRoot
+        weight: 1
+      - path: U3DRoot/cgfxShader1
+        weight: 1
+      - path: U3DRoot/RootNode
+        weight: 1
+      - path: U3DRoot/RootNode/COG
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/lf_shoulder
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/lf_shoulder/lf_elbow
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/lf_shoulder/lf_elbow/lf_wrist
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/rt_shoulder
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/rt_shoulder/rt_elbow
+        weight: 1
+      - path: U3DRoot/RootNode/COG/body/rt_shoulder/rt_elbow/rt_wrist
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle/lf_ball
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle/lf_ball/lf_backtoe_dn_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_ankle/lf_ball/lf_fronttoe_dn_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_backtoe_up_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/lf_hip/lf_hipEND/lf_thigh/lf_knee2/lf_fronttoe_up_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle/rt_ball
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle/rt_ball/rt_backtoe_dn_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_ankle/rt_ball/rt_fronttoe_dn_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_backtoe_up_aim
+        weight: 1
+      - path: U3DRoot/RootNode/COG/pelvis/rt_hip/rt_hipEND/rt_thigh/rt_knee2/rt_fronttoe_up_aim
+        weight: 1
+      - path: U3DRoot/RootNode/robot02_lowpoly
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Recoil
+      takeName: DefaultAnim
+      firstFrame: 696
+      lastFrame: 705
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

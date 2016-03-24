@@ -864,10 +864,26 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 185468, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 10878784, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 2}
       propertyPath: m_Intensity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 10878784, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 2}
+      propertyPath: m_Color.r
+      value: 0.050010815
+      objectReference: {fileID: 0}
+    - target: {fileID: 10878784, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 2}
+      propertyPath: m_Color.g
+      value: 0.050933685
+      objectReference: {fileID: 0}
+    - target: {fileID: 10878784, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 2}
+      propertyPath: m_Color.b
+      value: 0.18382353
+      objectReference: {fileID: 0}
+    - target: {fileID: 10878784, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 2}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
