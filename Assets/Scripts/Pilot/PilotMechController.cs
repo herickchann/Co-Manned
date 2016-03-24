@@ -21,8 +21,11 @@ public class PilotMechController : NetworkBehaviour
 	public GameObject bullet;
 	public GameObject statusText;
 	public Transform bulletSpawn;
+    public Transform bulletSpawn2;
 	public GameObject gameManager;
 	public GameObject serverData;
+    public Animator anim;
+    private bool altShoot;
 
 	// Mech team info
 	public GameManager.Team team;
@@ -39,6 +42,8 @@ public class PilotMechController : NetworkBehaviour
     [SyncVar]
     public int fuel;
     private Vector3 lastPosition;
+    private Combat combat;
+    private Light mechLight;
 
 	void Awake(){
 		rb = GetComponent<Rigidbody>();
@@ -56,11 +61,9 @@ public class PilotMechController : NetworkBehaviour
 		}
 	}
 
-
     void Start () {
-		// set up physics
-     
-		statusTextOffset = transform.position - statusText.transform.position;
+        // set up physics
+        statusTextOffset = transform.position - statusText.transform.position;
         powerupType = 0;
 		// set up manager to pull data from game room
 
@@ -68,13 +71,22 @@ public class PilotMechController : NetworkBehaviour
 		// set up name
 		statusText.GetComponent<TextMesh>().text = "<" + team+ ">:" + GetComponent<Combat>().health.ToString ();
 
-
 		lastPosition = rb.position;
-		// set up camera
+
+        //used for switching arms for shooting
+        altShoot = false;
+        combat = transform.GetComponent<Combat>();
+		//set up camera
         SetCamera();
+        //set up animations
+        anim = transform.GetComponent<Animator>();
+        //set up network animations
+        GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
+        //get mech light
+        mechLight = GetComponentInChildren<Light>();
     }
 
-	/*
+    /*
 	public void loadStatusText(){
 		if (!isLocalPlayer)
 			return;
@@ -92,9 +104,14 @@ public class PilotMechController : NetworkBehaviour
 		moveH = CnInputManager.GetAxis("Horizontal");
         moveV = CnInputManager.GetAxis("Vertical");
 
-        Move();
-        Turn();
-        Fire();
+        if(combat.health > 0) {
+            Move();
+            Turn();
+            Fire();
+        } else {
+            anim.SetBool("death", true);
+            mechLight.intensity -= 0.1f;
+        }
     }
 
     private void SetCamera () {
@@ -114,8 +131,12 @@ public class PilotMechController : NetworkBehaviour
             lastPosition = rb.position;
             //fuel--;
         }
-        if (fuel > 0) { 
+        if (fuel > 0) {
             Vector3 movement = new Vector3(moveH, 0.0f, moveV);
+
+            anim.SetFloat("inputH", moveH);
+            anim.SetFloat("inputV", moveV);
+
             rb.velocity = movement * speed;
         } else {
             fuel = 0;
@@ -133,9 +154,16 @@ public class PilotMechController : NetworkBehaviour
 	void CmdFire(){
         if (ammo != 0) { 
 		    nextFire = Time.time + fireRate;
-		    var b = (GameObject)Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
-
-		    b.GetComponent<Rigidbody> ().velocity = transform.forward * speed;
+            GameObject b;
+            if (altShoot) {
+		        b = (GameObject)Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
+                altShoot = false;
+            } else {
+                b = (GameObject)Instantiate(bullet, bulletSpawn2.position, bulletSpawn2.rotation);
+                altShoot = true;
+            }
+            transform.Translate(new Vector3(0,0,-0.05f));
+            b.GetComponent<Rigidbody> ().velocity = transform.forward * speed;
 			b.GetComponent<BulletBehaviour> ().shooter = this.team;
 		    NetworkServer.Spawn (b);
 		    Destroy (b, 2.0f);

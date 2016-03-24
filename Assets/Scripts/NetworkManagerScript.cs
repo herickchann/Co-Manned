@@ -34,10 +34,6 @@ public class NetworkManagerScript : NetworkManager {
         GameObject player = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
 		player.GetComponent<PilotMechController> ().team = teamToSpawn;
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
-
-        if (numPlayers > 1) {
-            SpawnPowerups();
-        }
     }
 
     public override void OnServerConnect (NetworkConnection conn) {
@@ -63,17 +59,6 @@ public class NetworkManagerScript : NetworkManager {
 		} else {
 			Debug.Log ("entered as pilot");
 		}
-
-
-    }
-    
-    private void SpawnPowerups() {
-        powerUps = Resources.LoadAll<GameObject>("Powerups");
-        Transform spawns = GameObject.Find("PowerupSpawnPoints").transform;
-        powerupSpawns = new Transform[spawns.childCount];
-        for (int i = 0; i < spawns.childCount; i++) {
-            powerupSpawns[i] = spawns.GetChild(i);
-        }
 
 
     }

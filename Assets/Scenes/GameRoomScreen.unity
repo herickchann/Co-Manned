@@ -1959,11 +1959,15 @@ MonoBehaviour:
   m_LogLevel: 2
   m_PlayerPrefab: {fileID: 141468, guid: c809a690d879b4824b8b8c650a1867e3, type: 2}
   m_AutoCreatePlayer: 1
-  m_PlayerSpawnMethod: 0
+  m_PlayerSpawnMethod: 1
   m_OfflineScene: GameRoomScreen
   m_OnlineScene: pilot
   m_SpawnPrefabs:
   - {fileID: 152828, guid: 0845020765c8443409b574fcc13a029c, type: 2}
+  - {fileID: 106378, guid: e4501109e8c5b304f90ed8eb7cb50fa4, type: 2}
+  - {fileID: 132772, guid: e6b638c37bc2a9d4ca45e7842c3a2bfb, type: 2}
+  - {fileID: 174584, guid: ddc557f5f8cedeb4fadc2d777c951d60, type: 2}
+  - {fileID: 177486, guid: 4f33beefcca46814db27f39e2c075972, type: 2}
   m_CustomConfig: 1
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -2003,6 +2007,7 @@ MonoBehaviour:
   matchMaker: {fileID: 0}
   matchName: default
   matchSize: 4
+  teamToSpawn: 0
   gameManager: {fileID: 0}
 --- !u!4 &1790996420
 Transform:
