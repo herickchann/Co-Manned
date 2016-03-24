@@ -19,14 +19,14 @@ public class AmmoBehaviour : MonoBehaviour {
         snapback = true;
         type = 1;
 	    t = GetComponent<Transform>();
-        startPos = t.position;
+        startPos = t.localPosition;
     }
 	
 	// Update is called once per frame
 	void Update () {
         if (snapback && Time.time > nextSnapBack)
         {
-            t.position = startPos;
+            t.localPosition = startPos;
         }
 	}
 

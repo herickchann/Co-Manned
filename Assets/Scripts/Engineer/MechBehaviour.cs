@@ -36,13 +36,14 @@ public class MechBehaviour : NetworkBehaviour
     float height;
     float width;
     int[] loaded = new int[3];
+    int[] boostLoaded = new int[3];
     float shieldTime = 0;
     float accelTime = 0;
     float attackTime = 0;
     public Text shieldText;
     public Text accelText;
     public Text attackText;
-
+    public Material[] mat;
 
     // Wire up game manager
     GameObject gameManager;
@@ -98,6 +99,30 @@ public class MechBehaviour : NetworkBehaviour
             AddAmmoIcon(x);
         }
         lastAmmoCount = ammoCount;
+
+        SetCamera();
+    }
+
+    void SetCamera()
+    {
+        //Camera.main.gameObject.SetActive(false);
+        int noCameras = Camera.allCamerasCount;
+        Camera[] allCameras= new Camera[noCameras];
+        Camera.GetAllCameras(allCameras);
+        for (int x=0; x<noCameras; x++)
+        {
+            Camera c = allCameras[x];
+            if (x!= noCameras - 1)
+            {
+                
+                allCameras[x].gameObject.SetActive(false);
+            }
+            else
+            {
+                allCameras[x].gameObject.SetActive(true);
+                GetComponent<Transform>().Find("Canvas").gameObject.GetComponent<Canvas>().worldCamera= allCameras[x];
+            }
+        }
     }
 
     void test(int f)
@@ -174,8 +199,27 @@ public class MechBehaviour : NetworkBehaviour
                 tmg.StartBar(x);
             }
         }
+        if (boostLoaded[0] > 0)
+        {
+            healthBayText.color = Color.red;
+        }
+        else { healthBayText.color = Color.black; }
         healthBayText.text = "" + loaded[0];
+        if (boostLoaded[1] > 0)
+        {
+            fuelBayText.color = Color.red;
+        }
+        else {
+            fuelBayText.color = Color.black;
+        }
         fuelBayText.text = "" + loaded[1];
+        if (boostLoaded[2] > 0)
+        {
+            ammoBayText.color = Color.red;
+        }
+        else {
+            ammoBayText.color = Color.black;
+        }
         ammoBayText.text = "" + loaded[2];
     }
 
@@ -197,15 +241,13 @@ public class MechBehaviour : NetworkBehaviour
         holdingBayArray[index] = type;
 
         GameObject temp = (GameObject)Instantiate(energyCell, holdingBay.position, holdingBay.rotation);
-        temp.GetComponent<Transform>().parent = null;
-        temp.GetComponent<Transform>().parent = holdingBay;
+        temp.GetComponent<Transform>().SetParent(holdingBay);
         temp.GetComponent<AmmoBehaviour>().index = index;
         temp.GetComponent<AmmoBehaviour>().mech = this;
-        //Vector3 pos = baseCellPosition;
         float w = holdingBay.localScale.x * holdingBay.gameObject.GetComponent<RectTransform>().rect.width;
         float h = holdingBay.localScale.y * holdingBay.gameObject.GetComponent<RectTransform>().rect.height;
-        Vector3 pos = new Vector3(-1 * w * (float)0.42, h * (float)0.25, 0);
-        Vector3 scale = new Vector3(energyCellScale.x, energyCellScale.y, energyCellScale.z);
+        Vector3 pos = new Vector3((-1 * w * (float)0.42), (h * (float)0.05), 0);
+        Vector3 scale = new Vector3((float)(energyCellScale.x/5), (float)(energyCellScale.y / 5), (float)(energyCellScale.z / 5));
         if (index < holdingBaySize / 2)
         {
             pos.x += (w / (holdingBaySize / 2) * ((holdingBaySize / 2) - index - 1));//2 * (index);
@@ -215,9 +257,11 @@ public class MechBehaviour : NetworkBehaviour
             pos.x += ((w / (holdingBaySize / 2)) * (index - (holdingBaySize / 2)));//2 * (index);
             pos.y -= ((h / (holdingBaySize / (holdingBaySize / 2))));//2 * (index);(float)2.2;
         }
-        temp.GetComponent<Transform>().localScale = scale;
+        
         temp.GetComponent<Transform>().localPosition = pos;
-
+         temp.GetComponent<Transform>().localScale = scale;
+        temp.GetComponent<Transform>().localEulerAngles = new Vector3(270,90,0);
+        temp.GetComponent<MeshRenderer>().material = mat[type];
         return temp;
     }
 
@@ -296,27 +340,33 @@ public class MechBehaviour : NetworkBehaviour
 
     public void Load(int val, int index)
     {
-        loaded[index] += val;
+            loaded[index] += 1;
+        if (val == index)
+        {
+            boostLoaded[index]+=1;
+        }
     }
 
     public void Convert(double healthMod, double fuelMod, double ammoMod)
     {
+
         if (healthMod == 2)
         {
-            shieldTime = Time.time + (float)(2*ammoMod) + (float)(2*fuelMod);
+            shieldTime = Time.time + (float)((boostLoaded[0]+1)*ammoMod) + (float)((boostLoaded[0] + 1) * fuelMod);
         }
         if (fuelMod == 2)
         {
-            accelTime = Time.time + (float)(2 * ammoMod) + (float)(2 * healthMod);
+            accelTime = Time.time + (float)((boostLoaded[1] + 1) * ammoMod) + (float)((boostLoaded[1] + 1) * healthMod);
         }
         if (ammoMod == 2)
         {
-            attackTime = Time.time + (float)(2 * healthMod) + (float)(2 * fuelMod);
+            attackTime = Time.time + (float)((boostLoaded[2] + 1) * healthMod) + (float)((boostLoaded[2] + 1) * fuelMod);
         }
         AddHealth((int)(loaded[0] * healthMod * 25));
         AddFuel((int)(loaded[1] * fuelMod * 25));
         AddAmmo((int)(loaded[2] *ammoMod));
         System.Array.Clear(loaded, 0, 3);
+        System.Array.Clear(boostLoaded, 0, 3);
     }
 
 }

@@ -7,6 +7,7 @@ TagManager:
   - EnergyCell
   - Spawn
   - PowerupSpawn
+  - Button
   layers:
   - Default
   - TransparentFX
