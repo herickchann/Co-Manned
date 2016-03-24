@@ -128,7 +128,11 @@ public class PilotMechController : NetworkBehaviour
         }
         if (fuel > 0) {
             Vector3 movement = new Vector3(moveH, 0.0f, moveV);
-            anim.Play("Walking");
+            //if (moveH != 0 || moveV != 0) {
+            //    anim.Play("Walking");
+            //}
+            anim.SetFloat("inputH", moveH);
+            anim.SetFloat("inputV", moveV);
 
             rb.velocity = movement * speed;
         } else {

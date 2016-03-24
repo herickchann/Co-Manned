@@ -300,8 +300,8 @@ ModelImporter:
     - serializedVersion: 16
       name: DefaultAnim0
       takeName: DefaultAnim
-      firstFrame: 0
-      lastFrame: 809
+      firstFrame: 46
+      lastFrame: 80
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
