@@ -1302,8 +1302,8 @@ MonoBehaviour:
   gameManager: {fileID: 0}
   serverData: {fileID: 0}
   anim: {fileID: 11100000, guid: 7c2d94ae752cfea41a408633caa4f066, type: 3}
-  team: 2
-  role: 2
+  team: 0
+  role: 0
   ammo: 100000000
   powerupType: 0
   fuel: 500
@@ -1548,6 +1548,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_RenderMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: team
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: role
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

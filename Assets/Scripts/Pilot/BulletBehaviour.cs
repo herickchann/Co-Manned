@@ -5,7 +5,6 @@ using UnityEngine.Networking;
 public class BulletBehaviour : MonoBehaviour {
 
 	public float speed;
-	private float lifeTime = 2.0f;
 	public GameObject globalData;
 	public GameManager.Team shooter;
     public ParticleSystem explosion;
@@ -16,10 +15,8 @@ public class BulletBehaviour : MonoBehaviour {
 	
 	void Start() {
 		GetComponent<Rigidbody> ().velocity = transform.forward * speed;
-		Destroy (gameObject, lifeTime);
 	}
 	
-
 	private void OnTriggerEnter (Collider other) {
 		var hit = other.gameObject;
 		var hitMech = hit.GetComponent<PilotMechController> ();

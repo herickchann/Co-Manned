@@ -5,33 +5,32 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class PilotMechController : NetworkBehaviour
-{
-	// Metch physics
+public class PilotMechController : NetworkBehaviour {
+    // Metch physics
     public float speed;
     private Rigidbody rb;
     private RectTransform joystickTrans;
-	private float moveH;
-	private float moveV;
-	private Vector3 statusTextOffset;
-	private float nextFire;
-	public float fireRate;
+    private float moveH;
+    private float moveV;
+    private Vector3 statusTextOffset;
+    private float nextFire;
+    public float fireRate;
 
-	// Mech related objects
-	public GameObject bullet;
-	public GameObject statusText;
-	public Transform bulletSpawn;
+    // Mech related objects
+    public GameObject bullet;
+    public GameObject statusText;
+    public Transform bulletSpawn;
     public Transform bulletSpawn2;
-	public GameObject gameManager;
-	public GameObject serverData;
+    public GameObject gameManager;
+    public GameObject serverData;
     public Animator anim;
     private bool altShoot;
 
-	// Mech team info
-	public GameManager.Team team;
-	public GameManager.Role role;
-	    
-	// Mech camera stuff
+    // Mech team info
+    public GameManager.Team team;
+    public GameManager.Role role;
+
+    // Mech camera stuff
     private Vector3 camOffset;
 
     // Game related info
@@ -41,42 +40,40 @@ public class PilotMechController : NetworkBehaviour
     public int powerupType;
     [SyncVar]
     public int fuel;
-    private Vector3 lastPosition;
     private Combat combat;
+    [SyncVar]
     private Light mechLight;
 
-	void Awake(){
-		rb = GetComponent<Rigidbody>();
-		gameManager = GameObject.Find ("GameManager");
+    void Awake () {
+        rb = GetComponent<Rigidbody>();
+        gameManager = GameObject.Find("GameManager");
 
-		// init team info on load
-		if (gameManager != null) {
-			var gameData = GameManager.instance;
-			if (gameData != null) {
-				team = gameData.getTeamSelection ();
-				role = gameData.getRoleSelection ();
-			}
-		} else {
-			Debug.Log ("game manager not found");
-		}
-	}
+        // init team info on load
+        if (gameManager != null) {
+            var gameData = GameManager.instance;
+            if (gameData != null) {
+                team = gameData.getTeamSelection();
+                role = gameData.getRoleSelection();
+            }
+        } else {
+            Debug.Log("game manager not found");
+        }
+    }
 
     void Start () {
         // set up physics
         statusTextOffset = transform.position - statusText.transform.position;
         powerupType = 0;
-		// set up manager to pull data from game room
+        // set up manager to pull data from game room
 
-		// test set up string
-		// set up name
-		statusText.GetComponent<TextMesh>().text = "<" + team+ ">:" + GetComponent<Combat>().health.ToString ();
-
-		lastPosition = rb.position;
+        // test set up string
+        // set up name
+        statusText.GetComponent<TextMesh>().text = "<" + team + ">:" + GetComponent<Combat>().health.ToString();
 
         //used for switching arms for shooting
         altShoot = false;
         combat = transform.GetComponent<Combat>();
-		//set up camera
+        //set up camera
         SetCamera();
         //set up animations
         anim = transform.GetComponent<Animator>();
@@ -96,26 +93,26 @@ public class PilotMechController : NetworkBehaviour
 	}*/
 
     void Update () {
-		if(!isLocalPlayer)
-			return;
+        if (!isLocalPlayer)
+            return;
 
-		statusText.transform.position = transform.position + statusTextOffset;
+        rb.isKinematic = true;
+        statusText.transform.position = transform.position + statusTextOffset;
 
-		moveH = CnInputManager.GetAxis("Horizontal");
+        moveH = CnInputManager.GetAxis("Horizontal");
         moveV = CnInputManager.GetAxis("Vertical");
 
-        if(combat.health > 0) {
+        if (combat.health > 0) {
             Move();
             Turn();
             Fire();
         } else {
             anim.SetBool("death", true);
-            mechLight.intensity -= 0.1f;
         }
     }
 
     private void SetCamera () {
-        if(isLocalPlayer) { 
+        if (isLocalPlayer) {
             Camera camera = Camera.main;
             if (camera != null) {
                 PilotCamera followScript = camera.GetComponent("PilotCamera") as PilotCamera;
@@ -127,16 +124,15 @@ public class PilotMechController : NetworkBehaviour
     }
 
     private void Move () {
-        if (lastPosition != rb.position) {
-            lastPosition = rb.position;
+        if (moveH != 0 || moveV != 0) {
+            rb.isKinematic = false;
             //fuel--;
         }
+
         if (fuel > 0) {
             Vector3 movement = new Vector3(moveH, 0.0f, moveV);
-
             anim.SetFloat("inputH", moveH);
             anim.SetFloat("inputV", moveV);
-
             rb.velocity = movement * speed;
         } else {
             fuel = 0;
@@ -149,42 +145,42 @@ public class PilotMechController : NetworkBehaviour
             rb.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
         }
     }
-		
-	[Command]
-	void CmdFire(){
-        if (ammo != 0) { 
-		    nextFire = Time.time + fireRate;
+
+    [Command]
+    void CmdFire () {
+        if (ammo != 0) {
+            nextFire = Time.time + fireRate;
             GameObject b;
             if (altShoot) {
-		        b = (GameObject)Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
+                b = (GameObject)Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
                 altShoot = false;
             } else {
                 b = (GameObject)Instantiate(bullet, bulletSpawn2.position, bulletSpawn2.rotation);
                 altShoot = true;
             }
-            transform.Translate(new Vector3(0,0,-0.05f));
-            b.GetComponent<Rigidbody> ().velocity = transform.forward * speed;
-			b.GetComponent<BulletBehaviour> ().shooter = this.team;
-		    NetworkServer.Spawn (b);
-		    Destroy (b, 2.0f);
+            //transform.Translate(new Vector3(0, 0, -0.05f));
+            b.GetComponent<Rigidbody>().velocity = transform.forward * speed;
+            b.GetComponent<BulletBehaviour>().shooter = this.team;
+            NetworkServer.Spawn(b);
+            Destroy(b, 2.0f);
             ammo--;
         }
-	}
+    }
 
     void Fire () {
-		// this is for touch
+        // this is for touch
         foreach (Touch touch in Input.touches) {
             if (touch.phase == TouchPhase.Began) {
                 if (touch.position.x > (Screen.width / 2) && Time.time > nextFire) {
-					CmdFire ();
+                    CmdFire();
                 }
             }
         }
 
-		// this is for mouse click
+        // this is for mouse click
         if (Input.GetMouseButtonDown(0)) {
             if (Input.mousePosition.x > (Screen.width / 2) && Time.time > nextFire) {
-				CmdFire ();
+                CmdFire();
             }
         }
     }
