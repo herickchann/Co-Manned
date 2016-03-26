@@ -14,24 +14,23 @@ public class GameRoomManager : NetworkBehaviour {
 		Debug.LogError("test has been changed to " + x);
 	}
 
-	[ClientRpc]
+	/*[ClientRpc]
 	public void RpcUpdate(string x) {
 		test = x;
-	}
+	}*/
 
-	[Command]
+	/*[Command]
 	public void CmdUpdate(string x) {
 		//netId.AssignClientAuthority(connectionToClient);
 		test = x;
 		Debug.LogError("cmd");
 		RpcUpdate(x);
 		//netId.RemoveClientAuthority(connectionToClient);
-	}
-		
+	}*/
 
 	public void updateTest(string x) {
-		if(!isLocalPlayer) return;
-		CmdUpdate(x);
+		test = x;
+		Debug.LogError("updateTest");
 	}
 
 	// Use this for initialization

@@ -123,9 +123,23 @@ public class GameRoomPlayer : NetworkBehaviour {
 			Debug.LogError("selection successful");
 		}
 	}
+
+	[Server]
+	public void updateSharedVar(string x) {
+		// only the server has authority to change the shared game room manager
+		this.GameRoomMgr.updateTest(x);
+	}
+
+	[Command]
+	public void CmdUpdateSharedVar(string x) {
+		updateSharedVar(x);
+	}
+
 	// selection functions
 	public void selectRedPilot() {
-		GameRoomMgr.updateTest(myUserName);
+		if(!isLocalPlayer) return;
+		Debug.Log("My username is " + myUserName);
+		this.CmdUpdateSharedVar(myUserName);
 		//selectTeamRole(GameManager.Team.Red, GameManager.Role.Pilot);
 	}
 
