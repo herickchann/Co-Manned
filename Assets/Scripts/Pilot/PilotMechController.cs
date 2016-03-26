@@ -21,13 +21,14 @@ public class PilotMechController : NetworkBehaviour {
     public GameObject statusText;
     public Transform bulletSpawn;
     public Transform bulletSpawn2;
-    public GameObject gameManager;
-    public GameObject serverData;
+
     public Animator anim;
     private bool altShoot;
 
     // Mech team info
+	[SyncVar]
     public GameManager.Team team;
+	[SyncVar]
     public GameManager.Role role;
 
     // Mech camera stuff
@@ -46,18 +47,6 @@ public class PilotMechController : NetworkBehaviour {
 
     void Awake () {
         rb = GetComponent<Rigidbody>();
-        gameManager = GameObject.Find("GameManager");
-
-        // init team info on load
-        if (gameManager != null) {
-            var gameData = GameManager.instance;
-            if (gameData != null) {
-                team = gameData.getTeamSelection();
-                role = gameData.getRoleSelection();
-            }
-        } else {
-            Debug.Log("game manager not found");
-        }
     }
 
     void Start () {
@@ -147,7 +136,7 @@ public class PilotMechController : NetworkBehaviour {
     }
 
     [Command]
-    void CmdFire () {
+	void CmdFire (GameManager.Team shooter) {
         if (ammo != 0) {
             nextFire = Time.time + fireRate;
             GameObject b;
@@ -160,19 +149,25 @@ public class PilotMechController : NetworkBehaviour {
             }
             //transform.Translate(new Vector3(0, 0, -0.05f));
             b.GetComponent<Rigidbody>().velocity = transform.forward * speed;
-            b.GetComponent<BulletBehaviour>().shooter = this.team;
+			RpcClienMessage (GameManager.teamString(shooter) + "shot a bullet");
+			b.GetComponent<BulletBehaviour> ().shooter = shooter;
             NetworkServer.Spawn(b);
             Destroy(b, 2.0f);
             ammo--;
         }
     }
 
+	[ClientRpc]
+	public void RpcClienMessage(string message){
+		Debug.Log (message);
+	}
+
     void Fire () {
         // this is for touch
         foreach (Touch touch in Input.touches) {
             if (touch.phase == TouchPhase.Began) {
                 if (touch.position.x > (Screen.width / 2) && Time.time > nextFire) {
-                    CmdFire();
+					CmdFire(this.team);
                 }
             }
         }
@@ -180,8 +175,13 @@ public class PilotMechController : NetworkBehaviour {
         // this is for mouse click
         if (Input.GetMouseButtonDown(0)) {
             if (Input.mousePosition.x > (Screen.width / 2) && Time.time > nextFire) {
-                CmdFire();
+				CmdFire(this.team);
             }
         }
     }
+
+	public void setTeam(GameManager.Team team){
+		Debug.Log ("Setting mech team to " + GameManager.teamString(team));
+		this.team = team;
+	}
 }

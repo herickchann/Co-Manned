@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Combat : NetworkBehaviour {
 	// wire up GameManager
 	GameObject gameManager;
-	GlobalGameDataScript gameData;
 	PilotMechController mechController;
 
 	public const int maxHealth = 50;
@@ -16,7 +15,6 @@ public class Combat : NetworkBehaviour {
 
 	void Awake(){
 		mechController = GetComponent<PilotMechController> ();
-		gameData = GameObject.Find ("GlobalGameData").GetComponent<GlobalGameDataScript> ();
 		health = maxHealth;
 	}
 
@@ -27,9 +25,6 @@ public class Combat : NetworkBehaviour {
 	[ClientRpc]
 	void RpcDamage(int amount){
 		var statusText = GetComponent<PilotMechController>().statusText;
-		int blueHealth = gameData.getHealth (GameManager.Team.Blue);
-		int redHealth = gameData.getHealth (GameManager.Team.Red);
-		statusText.GetComponent<TextMesh> ().text = "R: " + redHealth.ToString () + " B: " + blueHealth.ToString ();
 	}
 
 	public void TakeDamage(GameManager.Team team, int amount){
@@ -39,7 +34,6 @@ public class Combat : NetworkBehaviour {
 		health -= amount;
 		//CmdNotifyHit (team);
 
-		gameData.CmdNotifyHit (team, amount);
 		RpcDamage (amount);
 
 		// also update its copy of global data
