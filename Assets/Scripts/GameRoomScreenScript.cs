@@ -12,6 +12,7 @@ public class GameRoomScreenScript : MonoBehaviour {
 	public Button RedEngineer;
 	public Button BluePilot;
 	public Button BlueEngineer;
+	public NetworkLobbyPlayer lobbyPlayer;
 
 	private Button[,] teamRoles;
 
@@ -44,54 +45,31 @@ public class GameRoomScreenScript : MonoBehaviour {
 	
 	}
 
-	private void updateButtonUIArray() {
-		// reset all buttons to unselected state
-		foreach (Button button in this.teamRoles) {
-			button.enabled = true;
-			button.image.color = Color.white;
-		}
-		// darken just the user clicked button
-		GameManager.Team myTeam = GameManager.instance.teamSelection;
-		GameManager.Role myRole = GameManager.instance.roleSelection;
-		Button selectedButton = this.teamRoles[(int)myTeam,(int)myRole];
+	public void lockButton(GameManager.Team team, GameManager.Role role) {
+		Button selectedButton = this.teamRoles[(int)team,(int)role];
 		selectedButton.enabled = false;
-		selectedButton.image.color = Color.gray;
 	}
 
-	public void setRoleScene (GameManager.Role role){
-		if (networkManager != null) {
-			string roleScene = (role == GameManager.Role.Engineer)?"engineer":"pilot";
-			//networkManager.GetComponent<NetworkManagerScript>().onlineScene = roleScene;
-		}
+	public void unlockButton(GameManager.Team team, GameManager.Role role) {
+		Button selectedButton = this.teamRoles[(int)team,(int)role];
+		selectedButton.enabled = true;
 	}
 
+	// team info interaction for lobby player
 	public void selectRedPilot() {
-		GameManager.instance.teamSelection = GameManager.Team.Red;
-		GameManager.instance.roleSelection = GameManager.Role.Pilot;
-		setRoleScene (GameManager.Role.Pilot);
-		updateButtonUIArray();
+		lobbyPlayer.GetComponent<LobbyPlayerScript>().setTeamInfo (GameManager.Team.Red, GameManager.Role.Pilot);
 	}
 
 	public void selectRedEngineer() {
-		GameManager.instance.teamSelection = GameManager.Team.Red;
-		GameManager.instance.roleSelection = GameManager.Role.Engineer;
-		setRoleScene (GameManager.Role.Engineer);
-		updateButtonUIArray();
+		lobbyPlayer.GetComponent<LobbyPlayerScript>().setTeamInfo (GameManager.Team.Red, GameManager.Role.Engineer);
 	}
 
 	public void selectBluePilot() {
-		GameManager.instance.teamSelection = GameManager.Team.Blue;
-		GameManager.instance.roleSelection = GameManager.Role.Pilot;
-		setRoleScene (GameManager.Role.Pilot);
-		updateButtonUIArray();
+		lobbyPlayer.GetComponent<LobbyPlayerScript>().setTeamInfo (GameManager.Team.Blue, GameManager.Role.Pilot);
 	}
 
 	public void selectBlueEngineer() {
-		GameManager.instance.teamSelection = GameManager.Team.Blue;
-		GameManager.instance.roleSelection = GameManager.Role.Engineer;
-		Debug.Log ("selectd blue engineer");
-		setRoleScene (GameManager.Role.Engineer);
-		updateButtonUIArray();
+		lobbyPlayer.GetComponent<LobbyPlayerScript>().setTeamInfo (GameManager.Team.Blue, GameManager.Role.Engineer);
 	}
 
 	public void playerReady () {

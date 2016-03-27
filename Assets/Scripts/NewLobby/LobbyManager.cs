@@ -4,9 +4,6 @@ using UnityEngine.Networking;
 
 public class LobbyManager : NetworkLobbyManager {
 
-	// wire up lobby room ui
-	LobbyRoomScript lobby;
-
 	static public LobbyManager s_singleton;
 
 	void Awake(){
@@ -15,9 +12,6 @@ public class LobbyManager : NetworkLobbyManager {
 	void Start(){
 		// singleton
 		s_singleton = this;
-
-		// set up ui flow here
-		//lobby.togglePanel("HostJoinPanel");
 	}
 
 	// Use this for initialization
