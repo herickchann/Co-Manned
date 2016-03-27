@@ -2,15 +2,14 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class BulletBehaviour : MonoBehaviour {
+public class BulletBehaviour : NetworkBehaviour {
 
 	public float speed;
-	public GameObject globalData;
+	[SyncVar]
 	public GameManager.Team shooter;
     public ParticleSystem explosion;
 
 	void Awake(){
-		globalData = GameObject.Find("GlobalGameData");
 	}
 	
 	void Start() {
@@ -23,10 +22,16 @@ public class BulletBehaviour : MonoBehaviour {
 
 		if(hitMech != null){
 			var combat = hitMech.GetComponent<Combat> ();
+			var globalData = hitMech.GetComponent<GlobalData> ();
+
 			if (combat != null) {
-				Debug.Log (GameManager.teamString(shooter) + " shoots " + GameManager.teamString(hitMech.team));
+				Debug.Log (GameManager.teamString(this.shooter) + " shoots " + GameManager.teamString(hitMech.team));
+
 				// reduce health on server then replicate to client
-				combat.TakeDamage (hitMech.team, 10);
+				//combat.TakeDamage (hitMech.team, 10);
+				globalData.setHealth(hitMech.team, 10);
+
+
 			} else {
 				Debug.Log ("Error: combat is null");
 			}

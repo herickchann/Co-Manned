@@ -45,8 +45,11 @@ public class PilotMechController : NetworkBehaviour {
     [SyncVar]
     private Light mechLight;
 
+	private GlobalData globalData;
+
     void Awake () {
         rb = GetComponent<Rigidbody>();
+		globalData = GetComponent<GlobalData> ();
     }
 
     void Start () {
@@ -57,7 +60,10 @@ public class PilotMechController : NetworkBehaviour {
 
         // test set up string
         // set up name
-        statusText.GetComponent<TextMesh>().text = "<" + team + ">:" + GetComponent<Combat>().health.ToString();
+
+		int blue = globalData.getHealth (GameManager.Team.Blue); 
+		int red = globalData.getHealth (GameManager.Team.Red); 
+		statusText.GetComponent<TextMesh> ().text = "B:" + blue.ToString () + "R:" + red.ToString ();
 
         //used for switching arms for shooting
         altShoot = false;
@@ -70,18 +76,17 @@ public class PilotMechController : NetworkBehaviour {
         GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
         //get mech light
         mechLight = GetComponentInChildren<Light>();
+
     }
 
-    /*
-	public void loadStatusText(){
-		if (!isLocalPlayer)
-			return;
-		int health = GetComponent<Combat> ().health;
-		Debug.Log ("loaded health: " + health.ToString());
-		statusText.GetComponent<TextMesh> ().text = health.ToString();
-	}*/
+	public void updateStatusText(){
+		var globalData = GetComponent<GlobalData>();
+		int blue = globalData.getHealth (GameManager.Team.Blue); 
+		int red = globalData.getHealth (GameManager.Team.Red); 
+		statusText.GetComponent<TextMesh> ().text = "B:" + blue.ToString () + "R:" + red.ToString ();
+	}
 
-    void Update () {
+	void Update () {
         if (!isLocalPlayer)
             return;
 
@@ -91,7 +96,7 @@ public class PilotMechController : NetworkBehaviour {
         moveH = CnInputManager.GetAxis("Horizontal");
         moveV = CnInputManager.GetAxis("Vertical");
 
-        if (combat.health > 0) {
+		if (globalData.getHealth(this.team) > 0) {
             Move();
             Turn();
             Fire();
@@ -149,7 +154,7 @@ public class PilotMechController : NetworkBehaviour {
             }
             //transform.Translate(new Vector3(0, 0, -0.05f));
             b.GetComponent<Rigidbody>().velocity = transform.forward * speed;
-			RpcClienMessage (GameManager.teamString(shooter) + "shot a bullet");
+			RpcClienMessage (GameManager.teamString(shooter) + " shot a bullet");
 			b.GetComponent<BulletBehaviour> ().shooter = shooter;
             NetworkServer.Spawn(b);
             Destroy(b, 2.0f);
@@ -180,7 +185,7 @@ public class PilotMechController : NetworkBehaviour {
         }
     }
 
-	public void setTeam(GameManager.Team team){
+	public void setTeam(GameManager.Team team){		
 		Debug.Log ("Setting mech team to " + GameManager.teamString(team));
 		this.team = team;
 	}
