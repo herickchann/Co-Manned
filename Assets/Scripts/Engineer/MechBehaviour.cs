@@ -6,9 +6,12 @@ using System.Collections;
 public class MechBehaviour : NetworkBehaviour
 {
     public TimingMiniGameBehaviour tmg;
+    public Text[] boostText= new Text[3];
     public Text healthBayText;
     public Text ammoBayText;
     public Text fuelBayText;
+    public GameObject timingMiniGame;
+    public GameObject restartMiniGame;
     Object energyCell;
     GameObject ammoIcon;
     const int holdingBaySize = 12;
@@ -37,13 +40,10 @@ public class MechBehaviour : NetworkBehaviour
     float width;
     int[] loaded = new int[3];
     int[] boostLoaded = new int[3];
-    float shieldTime = 0;
-    float accelTime = 0;
-    float attackTime = 0;
-    public Text shieldText;
-    public Text accelText;
-    public Text attackText;
+    float[] boostTime = new float[3];
+    float[] boostEndTime = new float[3];
     public Material[] mat;
+    bool restart;
 
     // Wire up game manager
     GameObject gameManager;
@@ -100,35 +100,34 @@ public class MechBehaviour : NetworkBehaviour
         }
         lastAmmoCount = ammoCount;
 
+        restartMiniGame.gameObject.SetActive(false);
+        restart = false;
         SetCamera();
     }
 
     void SetCamera()
     {
         //Camera.main.gameObject.SetActive(false);
-        int noCameras = Camera.allCamerasCount;
-        Camera[] allCameras= new Camera[noCameras];
-        Camera.GetAllCameras(allCameras);
-        for (int x=0; x<noCameras; x++)
+        if (isLocalPlayer)
         {
-            Camera c = allCameras[x];
-            if (x!= noCameras - 1)
+            int noCameras = Camera.allCamerasCount;
+            Camera[] allCameras = new Camera[noCameras];
+            Camera.GetAllCameras(allCameras);
+            for (int x = 0; x < noCameras; x++)
             {
-                
-                allCameras[x].gameObject.SetActive(false);
-            }
-            else
-            {
-                allCameras[x].gameObject.SetActive(true);
-                GetComponent<Transform>().Find("Canvas").gameObject.GetComponent<Canvas>().worldCamera= allCameras[x];
+                Camera c = allCameras[x];
+                if (x != noCameras - 1)
+                {
+
+                    allCameras[x].gameObject.SetActive(false);
+                }
+                else
+                {
+                    allCameras[x].gameObject.SetActive(true);
+                    GetComponent<Transform>().Find("Canvas").gameObject.GetComponent<Canvas>().worldCamera = allCameras[x];
+                }
             }
         }
-    }
-
-    void test(int f)
-    {
-        fuel = f;
-
     }
 
     // Update is called once per frame
@@ -141,31 +140,35 @@ public class MechBehaviour : NetworkBehaviour
         fuelBar.fillAmount = (float)fuel / maxFuel;
         fuelBar.color = new Color(1, (float)fuel / maxFuel, 0);
 
-        if (shieldTime > Time.time)
+        if (fuel == 0 && restart == false)
         {
-            shieldText.text = ""+ System.Math.Round((shieldTime - Time.time),2);
-        }
-        else
-        {
-            shieldText.text = "";
-        }
-
-        if (accelTime > Time.time)
-        {
-            accelText.text = "" + System.Math.Round((accelTime - Time.time),2);
-        }
-        else
-        {
-            accelText.text = "";
+            restart = true;
+            foreach (int x in loaded)
+            {
+                if (x != 0) { restart = false; }
+            }
+            if (restart)
+            {
+                timingMiniGame.gameObject.SetActive(false);
+                restartMiniGame.gameObject.SetActive(true);
+                restartMiniGame.gameObject.GetComponent<RestartMiniGame>().Setup();
+            }
         }
 
-        if (attackTime > Time.time)
+        for (int x = 0; x< boostTime.Length; x++)
         {
-            attackText.text = "" + System.Math.Round((attackTime - Time.time),2);
-        }
-        else
-        {
-            attackText.text = "";
+            if (boostTime[x] > 0)
+            {
+                boostText[x].text = "" + System.Math.Round((boostTime[x]), 2);
+                if (boostEndTime[x] > Time.time)
+                {
+                    boostTime[x] = boostEndTime[x] - Time.time;
+                }
+            }
+            else
+            {
+                boostText[x].text = "";
+            }
         }
 
         if (((double)health / maxHealth) >= 0.50)
@@ -196,7 +199,8 @@ public class MechBehaviour : NetworkBehaviour
         {
             if (loaded[x] > 0)
             {
-                tmg.StartBar(x);
+                //tmg.StartBar(x);
+                timingMiniGame.GetComponent<TimingMiniGameBehaviour>().StartBar(x);
             }
         }
         if (boostLoaded[0] > 0)
@@ -352,21 +356,41 @@ public class MechBehaviour : NetworkBehaviour
 
         if (healthMod == 2)
         {
-            shieldTime = Time.time + (float)((boostLoaded[0]+1)*ammoMod) + (float)((boostLoaded[0] + 1) * fuelMod);
+            boostTime[0] += (float)((boostLoaded[0]+1)*ammoMod) + (float)((boostLoaded[0] + 1) * fuelMod);
         }
         if (fuelMod == 2)
         {
-            accelTime = Time.time + (float)((boostLoaded[1] + 1) * ammoMod) + (float)((boostLoaded[1] + 1) * healthMod);
+            boostTime[1] += (float)((boostLoaded[1] + 1) * ammoMod) + (float)((boostLoaded[1] + 1) * healthMod);
         }
         if (ammoMod == 2)
         {
-            attackTime = Time.time + (float)((boostLoaded[2] + 1) * healthMod) + (float)((boostLoaded[2] + 1) * fuelMod);
+            boostTime[2] += (float)((boostLoaded[2] + 1) * healthMod) + (float)((boostLoaded[2] + 1) * fuelMod);
         }
         AddHealth((int)(loaded[0] * healthMod * 25));
         AddFuel((int)(loaded[1] * fuelMod * 25));
         AddAmmo((int)(loaded[2] *ammoMod));
         System.Array.Clear(loaded, 0, 3);
         System.Array.Clear(boostLoaded, 0, 3);
+    }
+
+    public void reboot()
+    {
+        fuel = 10;
+        restart = false;
+        timingMiniGame.gameObject.SetActive(true);
+        restartMiniGame.gameObject.SetActive(false);
+    }
+
+    public void toggleBoost(int type)
+    {
+        if (boostEndTime[type] > Time.time)
+        {
+            boostEndTime[type] = Time.time;
+        }
+        else
+        {
+            boostEndTime[type] = Time.time+boostTime[type];
+        }
     }
 
 }
