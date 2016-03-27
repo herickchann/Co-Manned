@@ -77,6 +77,8 @@ public class PilotMechController : NetworkBehaviour {
         //get mech light
         mechLight = GetComponentInChildren<Light>();
 
+		if(isClient) CmdNotifyNewPlayer (team, role);
+
     }
 
 	public void updateStatusText(){
@@ -87,8 +89,18 @@ public class PilotMechController : NetworkBehaviour {
 	}
 
 	void Update () {
+
+		if(this.role == GameManager.Role.Engineer){
+			// TODO: do engineer view here
+			// hide the mech
+			gameObject.SetActive(false);
+
+			// do engineer stuff here
+		}
+			
         if (!isLocalPlayer)
             return;
+
 
         rb.isKinematic = true;
         statusText.transform.position = transform.position + statusTextOffset;
@@ -185,8 +197,20 @@ public class PilotMechController : NetworkBehaviour {
         }
     }
 
-	public void setTeam(GameManager.Team team){		
+	[Command]
+	public void CmdNotifyNewPlayer(GameManager.Team team, GameManager.Role role){
+		RpcNotifyNewPlayer (team, role);
+	}
+
+	[ClientRpc]
+	public void RpcNotifyNewPlayer(GameManager.Team team, GameManager.Role role){
+		Debug.Log (GameManager.teamString(team) + " " + GameManager.roleString(role) + " joined the game");
+	}
+
+	public void setTeamInfo(GameManager.Team team, GameManager.Role role){		
 		Debug.Log ("Setting mech team to " + GameManager.teamString(team));
 		this.team = team;
+		this.role = role;
 	}
+		
 }

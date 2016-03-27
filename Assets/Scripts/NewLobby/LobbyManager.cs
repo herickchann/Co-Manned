@@ -43,8 +43,7 @@ public class LobbyManager : NetworkLobbyManager {
 		Debug.Log ("passing information from lobby player to game player");
 		var cc = lobbyPlayer.GetComponent<LobbyPlayerScript>();
 		var player = gamePlayer.GetComponent<PilotMechController>();
-		player.setTeam (cc.team);
-		player.role = cc.role;
+		player.setTeamInfo (cc.team, cc.role);
 
 		return true;
 	}
