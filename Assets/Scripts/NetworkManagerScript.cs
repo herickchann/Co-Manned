@@ -30,11 +30,11 @@ public class NetworkManagerScript : NetworkManager {
     //    //Debug.Log(Time.deltaTime);
     //}
 
-    public override void OnServerAddPlayer (NetworkConnection conn, short playerControllerId) {
-        GameObject player = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-		player.GetComponent<PilotMechController> ().team = teamToSpawn;
-        NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
-    }
+  //  public override void OnServerAddPlayer (NetworkConnection conn, short playerControllerId) {
+  //      GameObject player = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+		//player.GetComponent<PilotMechController> ().team = teamToSpawn;
+  //      NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
+  //  }
 
     public override void OnServerConnect (NetworkConnection conn) {
 

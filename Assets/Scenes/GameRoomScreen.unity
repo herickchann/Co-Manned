@@ -827,6 +827,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2517ad96fa2f14d9293404dd2215804a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_LastSendTime: 0
+  m_SyncVarGuard: 0
+  m_MyView: {fileID: 0}
   blueHealth: 100
   redHealth: 100
   blueAmmo: 100
@@ -1959,7 +1962,7 @@ MonoBehaviour:
   m_LogLevel: 2
   m_PlayerPrefab: {fileID: 141468, guid: c809a690d879b4824b8b8c650a1867e3, type: 2}
   m_AutoCreatePlayer: 1
-  m_PlayerSpawnMethod: 1
+  m_PlayerSpawnMethod: 0
   m_OfflineScene: GameRoomScreen
   m_OnlineScene: pilot
   m_SpawnPrefabs:

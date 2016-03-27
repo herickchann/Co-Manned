@@ -288,6 +288,7 @@ GameObject:
   - 65: {fileID: 6594424}
   - 95: {fileID: 9523338}
   - 114: {fileID: 11473674}
+  - 114: {fileID: 11419626}
   m_Layer: 8
   m_Name: Mech
   m_TagString: Player
@@ -1250,6 +1251,20 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 1
+--- !u!114 &11419626
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66b5398b5217e44d285f50841ee31d9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  blueHealth: 70
+  redHealth: 80
 --- !u!114 &11437164
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1299,11 +1314,9 @@ MonoBehaviour:
   statusText: {fileID: 157992}
   bulletSpawn: {fileID: 450914}
   bulletSpawn2: {fileID: 414044}
-  gameManager: {fileID: 0}
-  serverData: {fileID: 0}
   anim: {fileID: 11100000, guid: 7c2d94ae752cfea41a408633caa4f066, type: 3}
-  team: 2
-  role: 2
+  team: 0
+  role: 0
   ammo: 100000000
   powerupType: 0
   fuel: 500
@@ -1548,6 +1561,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_RenderMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: team
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: role
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -106,7 +106,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &118526
 GameObject:
   m_ObjectHideFlags: 1
@@ -425,6 +425,7 @@ GameObject:
   - 65: {fileID: 6541224}
   - 95: {fileID: 9593756}
   - 114: {fileID: 11468066}
+  - 114: {fileID: 11443660}
   m_Layer: 8
   m_Name: Mech2
   m_TagString: Player
@@ -1190,7 +1191,7 @@ TextMesh:
   m_Anchor: 0
   m_Alignment: 0
   m_TabSize: 4
-  m_FontSize: 22
+  m_FontSize: 40
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
@@ -1279,14 +1280,26 @@ MonoBehaviour:
   statusText: {fileID: 117198}
   bulletSpawn: {fileID: 425008}
   bulletSpawn2: {fileID: 461388}
-  gameManager: {fileID: 0}
-  serverData: {fileID: 0}
   anim: {fileID: 11100000, guid: 7c2d94ae752cfea41a408633caa4f066, type: 3}
   team: 2
   role: 2
   ammo: 100000000
   powerupType: 0
   fuel: 500
+--- !u!114 &11443660
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66b5398b5217e44d285f50841ee31d9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  blueHealth: 70
+  redHealth: 80
 --- !u!114 &11465822
 MonoBehaviour:
   m_ObjectHideFlags: 1

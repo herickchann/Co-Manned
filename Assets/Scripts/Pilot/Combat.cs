@@ -6,8 +6,9 @@ using UnityEngine.UI;
 public class Combat : NetworkBehaviour {
 	// wire up GameManager
 	GameObject gameManager;
-	GlobalGameDataScript gameData;
-	PilotMechController mechController;
+
+	// wire up global game info
+	GlobalData globalData;
 
 	public const int maxHealth = 50;
 
@@ -15,8 +16,7 @@ public class Combat : NetworkBehaviour {
 	public int health = maxHealth;
 
 	void Awake(){
-		mechController = GetComponent<PilotMechController> ();
-		gameData = GameObject.Find ("GlobalGameData").GetComponent<GlobalGameDataScript> ();
+		globalData = GetComponent<GlobalData> ();
 		health = maxHealth;
 	}
 
@@ -25,25 +25,24 @@ public class Combat : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	void RpcDamage(int amount){
+	void RpcDamage(GameManager.Team whoGotHit, int amount){
 		var statusText = GetComponent<PilotMechController>().statusText;
-		int blueHealth = gameData.getHealth (GameManager.Team.Blue);
-		int redHealth = gameData.getHealth (GameManager.Team.Red);
-		statusText.GetComponent<TextMesh> ().text = "R: " + redHealth.ToString () + " B: " + blueHealth.ToString ();
+		Debug.Log (GameManager.teamString(whoGotHit) + " got hit" + amount.ToString());
 	}
 
-	public void TakeDamage(GameManager.Team team, int amount){
+	// server executes this: we know who got hit, and by how much
+	public void TakeDamage(GameManager.Team teamGotHit, int amount){
 		if (!isServer)
 			return;
 
+		// reduce health on the server first
 		health -= amount;
-		//CmdNotifyHit (team);
 
-		gameData.CmdNotifyHit (team, amount);
-		RpcDamage (amount);
+		// tell everyone who got hit
+		RpcDamage (teamGotHit, amount);
 
 		// also update its copy of global data
-		if (health <= 0)
+		if (globalData.getHealth(teamGotHit) <= 0)
 		{
 			health = 0;
 			Debug.Log("Dead!");
