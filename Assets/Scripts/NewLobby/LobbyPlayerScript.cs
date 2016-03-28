@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
-public class LobbyPlayerScript : NetworkBehaviour {
+public class LobbyPlayerScript : NetworkLobbyPlayer {
 
 	[SyncVar]
 	public GameManager.Team team;
@@ -24,21 +24,22 @@ public class LobbyPlayerScript : NetworkBehaviour {
 	void Start(){
 		// hook lobby player to room for interaction
 		if(isLocalPlayer){
+			Debug.Log("my lobby slot is " + slot.ToString());
 			CmdNewPlayer (GetComponent<NetworkIdentity>().netId.ToString());
-			GameObject.Find ("UIEmpty").GetComponent<GameRoomScreenScript>().lobbyPlayer = GetComponent<NetworkLobbyPlayer> ();
+			GameObject.Find ("GameRoomUIEmpty").GetComponent<GameRoomScreenScript>().lobbyPlayer = GetComponent<NetworkLobbyPlayer> ();
 		}
 	}
 
 	[ClientRpc]
 	public void RpcLockSelection(string id, GameManager.Team selectedTeam, GameManager.Role selectedRole){
 		Debug.Log ("CLIENT: user:[" + id +"] picked: " + GameManager.teamString(selectedTeam) + " " + GameManager.roleString(selectedRole));
-		GameObject.Find("UIEmpty").GetComponent<GameRoomScreenScript>().lockButton(selectedTeam, selectedRole);
+		GameObject.Find("GameRoomUIEmpty").GetComponent<GameRoomScreenScript>().lockButton(selectedTeam, selectedRole);
 	}
 
 	[ClientRpc]
 	public void RpcUnlockSelection(string id, GameManager.Team selectedTeam, GameManager.Role selectedRole) {
 		Debug.Log ("CLIENT: user:[" + id +"] released: " + GameManager.teamString(selectedTeam) + " " + GameManager.roleString(selectedRole));
-		GameObject.Find("UIEmpty").GetComponent<GameRoomScreenScript>().unlockButton(selectedTeam, selectedRole);
+		GameObject.Find("GameRoomUIEmpty").GetComponent<GameRoomScreenScript>().unlockButton(selectedTeam, selectedRole);
 	}
 
 	[Command]

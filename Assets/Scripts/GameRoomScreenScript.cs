@@ -16,18 +16,8 @@ public class GameRoomScreenScript : MonoBehaviour {
 
 	private Button[,] teamRoles;
 
-	// wire up network manager
-	public GameObject networkManager;
-
 	// Use this for initialization
 	void Start () {
-
-		// set up network manager
-		networkManager = GameObject.Find("NetworkManager");
-		if(networkManager == null){
-			Debug.Log ("Error: cannot find network manager");
-		}
-
 		RoomName.text = "Room: " + GameManager.instance.gameName;
 		// length-1 to account for None
 		int numTeams = System.Enum.GetValues(typeof(GameManager.Team)).Length - 1;
@@ -46,11 +36,15 @@ public class GameRoomScreenScript : MonoBehaviour {
 	}
 
 	public void lockButton(GameManager.Team team, GameManager.Role role) {
+		Debug.Assert(team != GameManager.Team.None, "Cannot get button with team None");
+		Debug.Assert(role != GameManager.Role.None, "Cannot get button with role None");
 		Button selectedButton = this.teamRoles[(int)team,(int)role];
 		selectedButton.enabled = false;
 	}
 
 	public void unlockButton(GameManager.Team team, GameManager.Role role) {
+		Debug.Assert(team != GameManager.Team.None, "Cannot get button with team None");
+		Debug.Assert(role != GameManager.Role.None, "Cannot get button with role None");
 		Button selectedButton = this.teamRoles[(int)team,(int)role];
 		selectedButton.enabled = true;
 	}
