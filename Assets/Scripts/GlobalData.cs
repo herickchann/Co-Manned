@@ -34,9 +34,24 @@ public class GlobalData : NetworkBehaviour {
 	[SyncVar]
 	public int redFuel;
 
+    [SyncVar]
+    public int blueDefBoost;
+    [SyncVar]
+    public int redDefBoost;
 
-	// list of params to be synched between engineers and pilots
-	public enum Param{Health, Ammo, PowerupType, Fuel};
+    [SyncVar]
+    public int blueSpdBoost;
+    [SyncVar]
+    public int redSpdBoost;
+
+    [SyncVar]
+    public int blueAtkBoost;
+    [SyncVar]
+    public int redAtkBoost;
+
+
+    // list of params to be synched between engineers and pilots
+    public enum Param{Health, Ammo, PowerupType, Fuel,DefBoost,SpdBoost,AtkBoost};
 
 
 	void Start(){
@@ -55,7 +70,13 @@ public class GlobalData : NetworkBehaviour {
 			return "health";
 		case Param.PowerupType:
 			return "powerup type";
-		default:
+        case Param.DefBoost:
+            return "defence boost";
+        case Param.SpdBoost:
+            return "speed boost";
+        case Param.AtkBoost:
+            return "attack boost";
+        default:
 			return "default";
 		}
 	}
@@ -107,7 +128,42 @@ public class GlobalData : NetworkBehaviour {
 			default:
 				return 0;
 			}
-		default:
+         case Param.DefBoost:
+			switch (team) {
+			case GameManager.Team.Blue:
+				return blueDefBoost;
+			case GameManager.Team.Red:
+				return redDefBoost;
+			case GameManager.Team.None:
+				return 0;
+			default:
+				return 0;
+			}
+        case Param.AtkBoost:
+            switch (team)
+            {
+                case GameManager.Team.Blue:
+                    return blueAtkBoost;
+                case GameManager.Team.Red:
+                    return redAtkBoost;
+                case GameManager.Team.None:
+                    return 0;
+                default:
+                    return 0;
+            }
+        case Param.SpdBoost:
+            switch (team)
+            {
+                case GameManager.Team.Blue:
+                    return blueSpdBoost;
+                case GameManager.Team.Red:
+                    return redSpdBoost;
+                case GameManager.Team.None:
+                    return 0;
+                default:
+                    return 0;
+            }
+            default:
 			return 0;
 		}
 
@@ -208,7 +264,58 @@ public class GlobalData : NetworkBehaviour {
 				break;
 			}
 			break;
-		default:
+        case Param.DefBoost:
+            switch (team)
+            {
+                case GameManager.Team.Blue:
+                    blueDefBoost = amount;
+                    newValue = blueDefBoost;
+                    break;
+                case GameManager.Team.Red:
+                    redDefBoost = amount;
+                    newValue = redDefBoost;
+                    break;
+                case GameManager.Team.None:
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case Param.SpdBoost:
+            switch (team)
+            {
+                case GameManager.Team.Blue:
+                    blueSpdBoost = amount;
+                    newValue = blueSpdBoost;
+                    break;
+                case GameManager.Team.Red:
+                    redSpdBoost = amount;
+                    newValue = redSpdBoost;
+                    break;
+                case GameManager.Team.None:
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case Param.AtkBoost:
+            switch (team)
+            {
+                case GameManager.Team.Blue:
+                    blueAtkBoost = amount;
+                    newValue = blueAtkBoost;
+                    break;
+                case GameManager.Team.Red:
+                    redAtkBoost = amount;
+                    newValue = redAtkBoost;
+                    break;
+                case GameManager.Team.None:
+                    break;
+                default:
+                    break;
+            }
+            break;
+            default:
 			break;
 		}
 			
