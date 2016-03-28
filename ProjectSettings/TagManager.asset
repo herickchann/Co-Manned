@@ -8,6 +8,7 @@ TagManager:
   - Spawn
   - PowerupSpawn
   - Button
+  - Engineer
   layers:
   - Default
   - TransparentFX

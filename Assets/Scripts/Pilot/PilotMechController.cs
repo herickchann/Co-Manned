@@ -53,6 +53,13 @@ public class PilotMechController : NetworkBehaviour {
     }
 
     void Start () {
+        if (this.role == GameManager.Role.Engineer) {
+            Camera.main.gameObject.SetActive(false);
+        }
+        else {
+            GameObject.FindGameObjectWithTag("Engineer").SetActive(false);
+        }
+
         // set up physics
         statusTextOffset = transform.position - statusText.transform.position;
         powerupType = 0;
@@ -89,18 +96,8 @@ public class PilotMechController : NetworkBehaviour {
 	}
 
 	void Update () {
-
-		if(this.role == GameManager.Role.Engineer){
-			// TODO: do engineer view here
-			// hide the mech
-			gameObject.SetActive(false);
-
-			// do engineer stuff here
-		}
-			
         if (!isLocalPlayer)
             return;
-
 
         rb.isKinematic = true;
         statusText.transform.position = transform.position + statusTextOffset;

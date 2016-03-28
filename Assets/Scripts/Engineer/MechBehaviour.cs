@@ -102,7 +102,7 @@ public class MechBehaviour : NetworkBehaviour
 
         restartMiniGame.gameObject.SetActive(false);
         restart = false;
-        SetCamera();
+//        SetCamera();
     }
 
     void SetCamera()
