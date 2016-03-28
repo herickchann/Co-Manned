@@ -26,9 +26,10 @@ public class PowerupManager : MonoBehaviour {
     private void OnTriggerEnter (Collider other) {
         var hit = other.gameObject;
 		var hitMech = hit.GetComponent<PilotMechController> ();
+        var globalData = hit.GetComponent<GlobalData>();
         Debug.Log("POWERUP HIT");
         if(hitMech != null && !onCooldown) {
-            hitMech.powerupType = type;
+            globalData.setParam(hitMech.team, GlobalData.Param.PowerupType, type);
             HidePowerup();
             onCooldown = true;
         }

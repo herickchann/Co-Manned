@@ -1290,8 +1290,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  maxFuel: 100
   blueHealth: 70
   redHealth: 80
+  blueAmmo: 100
+  redAmmo: 100
+  bluePowerupType: 0
+  redPowerupType: 0
+  blueFuel: 100
+  redFuel: 100
 --- !u!114 &11437164
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1344,9 +1351,6 @@ MonoBehaviour:
   anim: {fileID: 11100000, guid: 7c2d94ae752cfea41a408633caa4f066, type: 3}
   team: 0
   role: 0
-  ammo: 100000000
-  powerupType: 0
-  fuel: 500
 --- !u!114 &11465308
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1596,6 +1600,22 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: role
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: blueFuel
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: redFuel
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: blueAmmo
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: redAmmo
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

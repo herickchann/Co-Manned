@@ -7,47 +7,48 @@ using UnityEngine.Networking;
 public class GlobalData : NetworkBehaviour {
 
 	// health information
-	public int maxHealth = 100;
-	public int maxFuel = 100;
+	private const int maxHealth = 100;
+	private const int maxFuel = 100;
+    private const int maxAmmo = 25;
 
-	// Health
+    // Health
+    [SyncVar]
+	private int blueHealth = maxHealth;
 	[SyncVar]
-	public int blueHealth = 70;
-	[SyncVar]
-	public int redHealth = 80;
+	private int redHealth = maxHealth;
 
 	// Ammo
 	[SyncVar]
-	public int blueAmmo;
+	private int blueAmmo = maxAmmo;
 	[SyncVar]
-	public int redAmmo;
+	private int redAmmo = maxAmmo;
 
 	// Powerup type
 	[SyncVar]
-	public int bluePowerupType;
+	private int bluePowerupType;
 	[SyncVar]
-	public int redPowerupType;
+	private int redPowerupType;
 
 	// Fuel
 	[SyncVar]
-	public int blueFuel;
+	private int blueFuel = maxFuel;
 	[SyncVar]
-	public int redFuel;
+	private int redFuel = maxFuel;
 
     [SyncVar]
-    public int blueDefBoost;
+    private int blueDefBoost;
     [SyncVar]
-    public int redDefBoost;
+    private int redDefBoost;
 
     [SyncVar]
-    public int blueSpdBoost;
+    private int blueSpdBoost;
     [SyncVar]
-    public int redSpdBoost;
+    private int redSpdBoost;
 
     [SyncVar]
-    public int blueAtkBoost;
+    private int blueAtkBoost;
     [SyncVar]
-    public int redAtkBoost;
+    private int redAtkBoost;
 
 
     // list of params to be synched between engineers and pilots
