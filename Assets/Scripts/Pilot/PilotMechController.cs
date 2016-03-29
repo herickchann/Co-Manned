@@ -49,10 +49,10 @@ public class PilotMechController : NetworkBehaviour {
 
     void Start () {
         if (this.role == GameManager.Role.Engineer) {
-            Camera.main.gameObject.SetActive(false);
-            GameObject.Find("ControllerCanvas").SetActive(false);
+            //Camera.main.gameObject.SetActive(false);
+            //GameObject.Find("ControllerCanvas").SetActive(false);
         } else {
-            GameObject.FindGameObjectWithTag("Engineer").SetActive(false);
+            //GameObject.FindGameObjectWithTag("Engineer").SetActive(false);
             //globalData.setParam(this.team, GlobalData.Param.Fuel, globalData.maxFuel);
             // set up physics
             statusTextOffset = transform.position - statusText.transform.position;
@@ -127,7 +127,7 @@ public class PilotMechController : NetworkBehaviour {
     private void Move () {
         if (moveH != 0 || moveV != 0) {
             rb.isKinematic = false;
-            globalData.setParam(this.team, GlobalData.Param.Fuel, fuel - 1);
+            //globalData.setParam(this.team, GlobalData.Param.Fuel, fuel - 1);
         }
 
         if (fuel > 0) {
