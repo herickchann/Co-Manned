@@ -5,13 +5,27 @@ using UnityEngine.Networking;
 public class LobbyManager : NetworkLobbyManager {
 
 	static public LobbyManager s_singleton;
+	private NewDiscoveryScript discovery;
+	RoomInfoScript roomInfo;
 
 	void Awake(){
+		discovery = GetComponent<NewDiscoveryScript> ();
 	}
 
 	void Start(){
 		// singleton
 		s_singleton = this;
+
+		roomInfo = GameObject.Find ("RoomInfo").GetComponent<RoomInfoScript>();
+		if(roomInfo.role == RoomInfoScript.Role.Host){
+			this.Host ();
+		}
+		else if(roomInfo.role == RoomInfoScript.Role.Player){
+			this.networkAddress = roomInfo.address;
+			this.networkPort = roomInfo.port;
+			this.Join ();
+		}
+
 	}
 
 	// Use this for initialization
@@ -23,13 +37,34 @@ public class LobbyManager : NetworkLobbyManager {
 		StartClient ();
 	}
 
+	public override void OnStartHost ()
+	{
+		discovery.Initialize ();
+		//string addressInfo = string.Format("{0}:{1}", this.networkAddress, this.networkPort.ToString()); 
+		discovery.broadcastData = this.networkPort.ToString();
+		discovery.StartAsServer ();
+	}
+
+//	public override void OnStartClient(NetworkClient client){
+//		discovery.Initialize ();
+//		discovery.StartAsClient ();
+//		// TODO: hide UI stuff here
+//	}
+
+	public override void OnStopHost(){
+		discovery.StopBroadcast ();
+	}
+//	public override void OnStopClient()
+//	{
+//		discovery.StopBroadcast();
+//		// TODO: show ui stuff here
+//	}
 
 	// client stuff
 	public override void OnLobbyClientEnter ()
 	{
 		Debug.Log ("client enterred");
 		// hide host here
-
 	}
 
 	public override void OnLobbyClientConnect (NetworkConnection conn)
