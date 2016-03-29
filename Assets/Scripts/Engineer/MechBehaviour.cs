@@ -28,17 +28,15 @@ public class MechBehaviour : NetworkBehaviour
     int fuel;
     //[SyncVar(hook = "test")]
     int health;
-    const int maxHealth = 100;
-    const int maxFuel = 100;
+    //const int maxHealth = 100;
+    //const int maxFuel = 100;
     Vector3 baseCellPosition;
     //[SyncVar]
     int ammoCount;
-    const int maxAmmoCount = 25;
-    GameObject[] ammoIcons = new GameObject[maxAmmoCount];
+    //const int maxAmmoCount = 25;
+    GameObject[] ammoIcons = new GameObject[GlobalData.maxAmmo];
     int lastAmmoCount;
-    float height;
-    float width;
-    int[] loaded = new int[3];
+     int[] loaded = new int[3];
     int[] boostLoaded = new int[3];
     float[] boostTime = new float[3];
     float[] boostEndTime = new float[3];
@@ -47,18 +45,21 @@ public class MechBehaviour : NetworkBehaviour
 
     // Wire up game manager
     GameObject gameManager;
-    public GameObject serverData;
+   // public GameObject serverData;
     public GameManager.Team team;
     public GameManager.Role role;
 
+    private GlobalData globalData;
+
     void Awake()
     {
+        globalData = GetComponent<GlobalData>();
         gameManager = GameObject.Find("GameManager");
-        serverData = GameObject.Find("ServerData");
+       /* serverData = GameObject.Find("ServerData");
         if (serverData == null)
         {
             Debug.Log("ServerData not found");
-        }
+        }*/
 
         // init team info on load
         if (gameManager != null)
@@ -89,11 +90,12 @@ public class MechBehaviour : NetworkBehaviour
         baseCellPosition.y -= (float)-1;
         for (int x = 0; x < holdingBaySize; x++)
         {
-            CreateEnergyCell(1);
+            CreateEnergyCell(0);
         }
-        health = maxHealth * 3 / 5;
-        fuel = maxFuel * 3 / 5;
-        ammoCount = maxAmmoCount-1;
+        ///health = globalData.getParam("");
+        health = GlobalData.maxHealth;//maxHealth * 3 / 5;
+        fuel = GlobalData.maxFuel;//maxFuel * 3 / 5;
+        ammoCount = GlobalData.maxAmmo;//maxAmmoCount-1;
         for (int x = 0; x < ammoCount; x++)
         {
             AddAmmoIcon(x);
@@ -133,12 +135,14 @@ public class MechBehaviour : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        health = globalData.getParam(team,GlobalData.Param.Health);
+        fuel = globalData.getParam(team, GlobalData.Param.Fuel);
+        ammoCount = globalData.getParam(team, GlobalData.Param.Ammo);
         healthText.text = "Health: " + health + "/100";
         fuelText.text = "Fuel: " + fuel + "/100";
-        healthBar.fillAmount = (float)health / maxHealth;
-        fuelBar.fillAmount = (float)fuel / maxFuel;
-        fuelBar.color = new Color(1, (float)fuel / maxFuel, 0);
+        healthBar.fillAmount = (float)health / GlobalData.maxHealth;
+        fuelBar.fillAmount = (float)fuel / GlobalData.maxFuel;
+        fuelBar.color = new Color(1, (float)fuel / GlobalData.maxFuel, 0);
 
         if (fuel == 0 && restart == false)
         {
@@ -164,6 +168,10 @@ public class MechBehaviour : NetworkBehaviour
                 {
                     boostTime[x] = boostEndTime[x] - Time.time;
                 }
+                else
+                {
+                    toggleBoost(x);
+                }
             }
             else
             {
@@ -171,14 +179,16 @@ public class MechBehaviour : NetworkBehaviour
             }
         }
 
-        if (((double)health / maxHealth) >= 0.50)
+        if (((double)health / GlobalData.maxHealth) >= 0.50)
         {
-            healthBar.color = new Color(1 - ((float)health / maxHealth) / (float)2.5, 1, 0);
+            healthBar.color = new Color(1 - ((float)health / GlobalData.maxHealth) / (float)2.5, 1, 0);
         }
         else
         {
-            healthBar.color = new Color(1, (float)health / maxHealth, 0);
+            healthBar.color = new Color(1, (float)health / GlobalData.maxHealth, 0);
         }
+
+        //Updates the ammo display
         if (ammoCount > lastAmmoCount)
         {
             for (int x = lastAmmoCount; x < ammoCount; x++)
@@ -225,6 +235,14 @@ public class MechBehaviour : NetworkBehaviour
             ammoBayText.color = Color.black;
         }
         ammoBayText.text = "" + loaded[2];
+
+        int newCellType = globalData.getParam(team, GlobalData.Param.PowerupType);
+        if (newCellType != 0)
+        {
+            CreateEnergyCell(newCellType);
+            globalData.setParam(team, GlobalData.Param.PowerupType,0);
+        }
+
     }
 
     GameObject CreateEnergyCell(int type)
@@ -242,7 +260,7 @@ public class MechBehaviour : NetworkBehaviour
         {
             return null;
         }
-        holdingBayArray[index] = type;
+        holdingBayArray[index] = 1;
 
         GameObject temp = (GameObject)Instantiate(energyCell, holdingBay.position, holdingBay.rotation);
         temp.GetComponent<Transform>().SetParent(holdingBay);
@@ -300,46 +318,52 @@ public class MechBehaviour : NetworkBehaviour
 
     public bool AmmoFull()
     {
-        return ammoCount == maxAmmoCount;
+        return ammoCount == GlobalData.maxAmmo;
     }
 
     public void AddAmmo(int val)
     {
+
         ammoCount += val;
-        if (ammoCount > maxAmmoCount)
-            ammoCount = maxAmmoCount;
+        if (ammoCount > GlobalData.maxAmmo)
+            ammoCount = GlobalData.maxAmmo;
+
+        globalData.setParam(team, GlobalData.Param.Ammo,ammoCount);
     }
 
     public bool HealthFull()
     {
-        return health == maxHealth;
+        return health == GlobalData.maxHealth;
     }
 
     public void AddHealth(int val)
     {
         health += val;
-        if (health > maxHealth)
-            health = maxHealth;
+        if (health > GlobalData.maxHealth)
+            health = GlobalData.maxHealth;
         if (health < 0)
         {
             health = 0;
         }
+
+        globalData.setParam(team, GlobalData.Param.Health, health);
     }
 
     public bool FuelFull()
     {
-        return fuel == maxFuel;
+        return fuel == GlobalData.maxFuel;
     }
 
     public void AddFuel(int val)
     {
         fuel += val;
-        if (fuel > maxFuel)
-            fuel = maxFuel;
+        if (fuel > GlobalData.maxFuel)
+            fuel = GlobalData.maxFuel;
         if (fuel < 0)
         {
             fuel = 0;
         }
+        globalData.setParam(team, GlobalData.Param.Fuel, fuel);
     }
 
     public void Load(int val, int index)
@@ -366,16 +390,16 @@ public class MechBehaviour : NetworkBehaviour
         {
             boostTime[2] += (float)((boostLoaded[2] + 1) * healthMod) + (float)((boostLoaded[2] + 1) * fuelMod);
         }
-        AddHealth((int)(loaded[0] * healthMod * 25));
-        AddFuel((int)(loaded[1] * fuelMod * 25));
-        AddAmmo((int)(loaded[2] *ammoMod));
+        AddHealth((int)(loaded[0] * healthMod * GlobalData.maxHealth / 5));
+        AddFuel((int)(loaded[1] * fuelMod * GlobalData.maxFuel / 5));
+        AddAmmo((int)(loaded[2] *ammoMod* GlobalData.maxAmmo / 5));
         System.Array.Clear(loaded, 0, 3);
         System.Array.Clear(boostLoaded, 0, 3);
     }
 
     public void reboot()
     {
-        fuel = 10;
+        fuel = GlobalData.maxFuel / 10;
         restart = false;
         timingMiniGame.gameObject.SetActive(true);
         restartMiniGame.gameObject.SetActive(false);
@@ -383,6 +407,7 @@ public class MechBehaviour : NetworkBehaviour
 
     public void toggleBoost(int type)
     {
+        int isActive = 0;
         if (boostEndTime[type] > Time.time)
         {
             boostEndTime[type] = Time.time;
@@ -390,6 +415,20 @@ public class MechBehaviour : NetworkBehaviour
         else
         {
             boostEndTime[type] = Time.time+boostTime[type];
+            isActive = 1;
+        }
+
+        if (type == 0)
+        {
+            globalData.setParam(team, GlobalData.Param.DefBoost, isActive);
+        }
+        else if (type == 1)
+        {
+            globalData.setParam(team, GlobalData.Param.SpdBoost, isActive);
+        }
+        else
+        {
+            globalData.setParam(team, GlobalData.Param.AtkBoost, isActive);
         }
     }
 

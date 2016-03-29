@@ -7,9 +7,9 @@ using UnityEngine.Networking;
 public class GlobalData : NetworkBehaviour {
 
 	// health information
-	private const int maxHealth = 100;
-	private const int maxFuel = 100;
-    private const int maxAmmo = 25;
+	public const int maxHealth = 100;
+	public const int maxFuel = 100;
+    public const int maxAmmo = 25;
 
     // Health
     [SyncVar]
