@@ -20,8 +20,14 @@ public class RoomInfoScript : MonoBehaviour {
 	// Protocol: address:port
 	public void parseAddressInfo(string info){
 		string[] data = info.Split (':');
-		this.address = data[0];
-		this.port = int.Parse (data [1]);
+
+		string address = "";
+		// handle different version of ips, last portion will always be the port
+		for(int i=0; i<data.Length-2; ++i){
+			address += data [i];
+		}
+		this.address = address;
+		this.port = int.Parse (data [data.Length-1]);
 		Debug.Log ("parsed: " + address + " " + port.ToString());
 	}
 }
