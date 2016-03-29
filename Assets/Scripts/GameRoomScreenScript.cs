@@ -12,75 +12,58 @@ public class GameRoomScreenScript : MonoBehaviour {
 	public Button RedEngineer;
 	public Button BluePilot;
 	public Button BlueEngineer;
-	public NetworkLobbyPlayer lobbyPlayer;
 
-	private Button[,] teamRoles;
-
-	// wire up network manager
-	public GameObject networkManager;
+	private Button[] teamRoleButtons;
+	private string [] roleNameArray;
+	public string[] unameArray; // gets push to by lobby player
 
 	// Use this for initialization
 	void Start () {
-
-		// set up network manager
-		networkManager = GameObject.Find("NetworkManager");
-		if(networkManager == null){
-			Debug.Log ("Error: cannot find network manager");
-		}
-
 		RoomName.text = "Room: " + GameManager.instance.gameName;
-		// length-1 to account for None
-		int numTeams = System.Enum.GetValues(typeof(GameManager.Team)).Length - 1;
-		int numRoles = System.Enum.GetValues(typeof(GameManager.Role)).Length - 1;
-		this.teamRoles = new Button[numTeams, numRoles];
-		// access via this.teamRoles[team, role]
-		this.teamRoles[(int)GameManager.Team.Red, (int)GameManager.Role.Pilot] = RedPilot;
-		this.teamRoles[(int)GameManager.Team.Red, (int)GameManager.Role.Engineer] = RedEngineer;
-		this.teamRoles[(int)GameManager.Team.Blue,(int)GameManager.Role.Pilot] = BluePilot;
-		this.teamRoles[(int)GameManager.Team.Blue,(int)GameManager.Role.Engineer] = BlueEngineer;
+
+		// access team role buttons by index
+		teamRoleButtons = new Button[4];
+		teamRoleButtons[0] = RedPilot;
+		teamRoleButtons[1] = RedEngineer;
+		teamRoleButtons[2] = BluePilot;
+		teamRoleButtons[3] = BlueEngineer;
+
+		// the roles to diplay on buttons
+		roleNameArray = new string[4];
+		roleNameArray[0] = "Red Pilot";
+		roleNameArray[1] = "Red Engineer";
+		roleNameArray[2] = "Blue Pilot";
+		roleNameArray[3] = "Blue Engineer";
+
+		unameArray = new string[4];
+		for(int idx = 0; idx < GameRoomSlots.maxPlayers; idx++) {
+			unameArray[idx] = "";
+		}
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-	
+		// constantly update the UI based on the state of the game room
+		for(int idx = 0; idx < GameRoomSlots.maxPlayers; idx++) {
+			Button curButton = this.teamRoleButtons[idx];
+			if (unameArray[idx] == "") {
+				buttonAvailable(curButton, roleNameArray[idx] + "\n-----");
+			} else {
+				buttonBooked(curButton, roleNameArray[idx] + "\n" + unameArray[idx]);
+			}
+		}
 	}
 
-	public void lockButton(GameManager.Team team, GameManager.Role role) {
-		Button selectedButton = this.teamRoles[(int)team,(int)role];
-		selectedButton.enabled = false;
+	public void buttonAvailable(Button b, string label) {
+		b.enabled = true;
+		Text btex = b.GetComponentInChildren<Text>();
+		btex.text = label;
 	}
 
-	public void unlockButton(GameManager.Team team, GameManager.Role role) {
-		Button selectedButton = this.teamRoles[(int)team,(int)role];
-		selectedButton.enabled = true;
-	}
-
-	// team info interaction for lobby player
-	public void selectRedPilot() {
-		lobbyPlayer.GetComponent<LobbyPlayerScript>().setTeamInfo (GameManager.Team.Red, GameManager.Role.Pilot);
-	}
-
-	public void selectRedEngineer() {
-		lobbyPlayer.GetComponent<LobbyPlayerScript>().setTeamInfo (GameManager.Team.Red, GameManager.Role.Engineer);
-	}
-
-	public void selectBluePilot() {
-		lobbyPlayer.GetComponent<LobbyPlayerScript>().setTeamInfo (GameManager.Team.Blue, GameManager.Role.Pilot);
-	}
-
-	public void selectBlueEngineer() {
-		lobbyPlayer.GetComponent<LobbyPlayerScript>().setTeamInfo (GameManager.Team.Blue, GameManager.Role.Engineer);
-	}
-
-	public void playerReady () {
-		GameManager.Role myRole = GameManager.instance.roleSelection;
-		if (myRole == GameManager.Role.Pilot) {
-			Debug.Log("Loading pilot mode...");
-			SceneManager.LoadScene("pilot");
-		} else if (myRole == GameManager.Role.Engineer) {
-			Debug.Log("Loading engineer mode...");
-			SceneManager.LoadScene("engineer");
-		} // None selection does nothing
+	public void buttonBooked(Button b, string label) {
+		b.enabled = false;
+		Text btex = b.GetComponentInChildren<Text>();
+		btex.text = label;
 	}
 
 	// returns to lobby screen

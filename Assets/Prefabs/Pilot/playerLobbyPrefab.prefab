@@ -10,8 +10,7 @@ GameObject:
   - 4: {fileID: 401330}
   - 114: {fileID: 11417402}
   - 114: {fileID: 11461746}
-  - 114: {fileID: 11417958}
-  - 114: {fileID: 11474088}
+  - 114: {fileID: 11402472}
   m_Layer: 0
   m_Name: playerLobbyPrefab
   m_TagString: Untagged
@@ -67,20 +66,7 @@ Transform:
   - {fileID: 22426486}
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11417402
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111196}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 949c5e1f22ebe405fbef1a06f3b38a0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  team: 0
-  role: 1
---- !u!114 &11417958
+--- !u!114 &11402472
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -92,6 +78,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowLobbyGUI: 1
+--- !u!114 &11417402
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 111196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 949c5e1f22ebe405fbef1a06f3b38a0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameRoomUI: {fileID: 0}
+  roomSlots: {fileID: 0}
+  myUserName: 
+  myPid: 
+  team: 0
+  role: 1
 --- !u!114 &11421744
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -207,36 +210,24 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 9
-    i1: 72
-    i2: 80
-    i3: 30
-    i4: 85
-    i5: 214
-    i6: 196
-    i7: 21
-    i8: 233
-    i9: 148
-    i10: 217
-    i11: 38
-    i12: 13
-    i13: 92
-    i14: 22
-    i15: 251
+    i0: 45
+    i1: 230
+    i2: 7
+    i3: 16
+    i4: 209
+    i5: 128
+    i6: 52
+    i7: 140
+    i8: 235
+    i9: 240
+    i10: 146
+    i11: 149
+    i12: 196
+    i13: 104
+    i14: 114
+    i15: 173
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
---- !u!114 &11474088
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111196}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f62a655c68954baab307fbd68a48844, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playersInLobby: 0
 --- !u!222 &22249900
 CanvasRenderer:
   m_ObjectHideFlags: 1
