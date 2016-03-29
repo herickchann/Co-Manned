@@ -4,7 +4,13 @@ using UnityEngine.SceneManagement;
 
 public class TitleScreenScript : MonoBehaviour {
 
+	public float gearRotationSpeed = 2f;
+	public Transform gearTransform;
 	private string username = "";
+
+	void Update () {
+		gearTransform.Rotate(Vector3.back, gearRotationSpeed * Time.deltaTime);
+	}
 
 	// loads the lobby screen
 	public void joinLobby () {
@@ -16,7 +22,7 @@ public class TitleScreenScript : MonoBehaviour {
 		}
 		// do not commit username until they hit the join lobby button
 		GameManager.instance.userName = this.username;
-		SceneManager.LoadScene("GameLobbyScreen");
+		SceneManager.LoadScene("GameRoomScreen");
 	}
 
 	public void setUsername (string input) {
