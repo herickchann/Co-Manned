@@ -7,6 +7,14 @@ public class LobbyManager : NetworkLobbyManager {
 	static public LobbyManager s_singleton;
 	private NewDiscoveryScript discovery;
 	RoomInfoScript roomInfo;
+	// default address and port ensures we will not be hosting with the wrong info after being a client
+	private string defaultAddress;
+	private int defaultPort;
+	public string gameName = "";
+	public string gamePass = ""; // just broadcast true/false, not the actual password
+	public int curNumPlayers = 0;
+	public const int playerLimit = 4;
+	public string passwordRequired = "false";
 
 	void Awake(){
 		discovery = GetComponent<NewDiscoveryScript> ();
@@ -16,8 +24,19 @@ public class LobbyManager : NetworkLobbyManager {
 		// singleton
 		s_singleton = this;
 
+		this.defaultAddress = this.networkAddress;
+		this.defaultPort = this.networkPort;
+
 		roomInfo = GameObject.Find ("RoomInfo").GetComponent<RoomInfoScript>();
+		Debug.Assert(roomInfo, "RoomeInfo not found");
 		if(roomInfo.role == RoomInfoScript.Role.Host){
+			this.networkAddress = this.defaultAddress;
+			this.networkPort = this.defaultPort;
+			this.curNumPlayers = 1; // 1 for the host's player
+			this.gameName = roomInfo.gamename;
+			this.gamePass = roomInfo.password;
+			this.passwordRequired = (this.gamePass == "" ? "false" : "true");
+			Debug.LogError("broadcasting game " + this.gameName);
 			this.Host ();
 		}
 		else if(roomInfo.role == RoomInfoScript.Role.Player){
@@ -37,11 +56,20 @@ public class LobbyManager : NetworkLobbyManager {
 		StartClient ();
 	}
 
+	private void updateBroadcastMessage() {
+		// NetworkManager|host|port|gameName|password?|numPlayers|playerLimit
+		// gameName is last in case user input messes with colon delimiter
+		string message = string.Format("Comanned|{0}|{1}|{2}|{3}|{4}|{5}",
+			networkAddress, networkPort.ToString(), this.gameName, passwordRequired, 
+			curNumPlayers.ToString(), playerLimit.ToString());
+		discovery.broadcastData = message;
+	}
+
 	public override void OnStartHost ()
 	{
 		discovery.Initialize ();
 		//string addressInfo = string.Format("{0}:{1}", this.networkAddress, this.networkPort.ToString()); 
-		discovery.broadcastData = this.networkPort.ToString();
+		updateBroadcastMessage();
 		discovery.StartAsServer ();
 	}
 
@@ -53,6 +81,9 @@ public class LobbyManager : NetworkLobbyManager {
 
 	public override void OnStopHost(){
 		discovery.StopBroadcast ();
+		this.gameName = "";
+		this.gamePass = "";
+		base.OnStopHost();
 	}
 //	public override void OnStopClient()
 //	{
@@ -72,8 +103,20 @@ public class LobbyManager : NetworkLobbyManager {
 		Debug.Log ("client connected");
 	}
 
+	public override void OnServerConnect(NetworkConnection conn) {
+		Debug.Log ("a player has connected");
+		this.curNumPlayers++;
+		updateBroadcastMessage();
+		base.OnServerConnect(conn);
+	}
+
 	public override void OnServerDisconnect(NetworkConnection conn) {
 		Debug.LogError("player with connectionId " + conn.connectionId.ToString() + " disconnected");
+		// update the room count
+		this.curNumPlayers--;
+		updateBroadcastMessage();
+
+		// update the room slots
 		GameObject GameRoomObj =  GameObject.Find("/GameRoomSlots");
 		if (GameRoomObj == null) return; // not in game room, do nothing
 		GameRoomSlots gameRoomSlots = GameRoomObj.GetComponent<GameRoomSlots>();

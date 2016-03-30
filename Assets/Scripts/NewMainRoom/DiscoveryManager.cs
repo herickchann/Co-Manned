@@ -19,22 +19,14 @@ public class DiscoveryManager : NetworkManager {
 		discovery.StartAsClient ();
 	}
 
-	// this function is called assuming that an address is picked
-	// pick a location and transition to game room scene
-	public void PickedLocation(){
-		// pause the broadcast
+	// this function is calld assuming the roomInfo has been set
+	// transition to the game room scene - the lobby manager will handle whatever is in the roomInfo
+	public void startGame() {
+		// stop broadcast
 		discovery.StopBroadcast ();
-
-		// set the room info
-		roomInfo.role = RoomInfoScript.Role.Player;
-		roomInfo.parseAddressInfo (discovery.getRoom());
-
-		SceneManager.LoadScene ("GameRoomScreen");
-	}
-
-	public void CreateRoom(){
-		discovery.StopBroadcast ();
-		roomInfo.role = RoomInfoScript.Role.Host;
+		// check that the room info has been assigned (if not, this means the room info has not been set)
+		Debug.Assert(roomInfo.role != RoomInfoScript.Role.None, "Room Info Role not set");
+		// load the next scene
 		SceneManager.LoadScene ("GameRoomScreen");
 	}
 	

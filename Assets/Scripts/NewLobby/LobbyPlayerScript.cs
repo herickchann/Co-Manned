@@ -20,8 +20,8 @@ public class LobbyPlayerScript : NetworkBehaviour {
 		Debug.Log("Lobby Player spawned");
 		// set up player identifiers
 		this.myUserName = GameManager.instance.userName;
-		// for dev purposes, if no username exists, use "me"
-		if (this.myUserName == "") {this.myUserName = "me";} 
+		// for dev purposes, if no username exists, use "dev"
+		if (this.myUserName == "") {this.myUserName = "dev";} 
 		this.myPid = netId.ToString();
 		setTeamInfo(GameManager.Team.None, GameManager.Role.None);
 
