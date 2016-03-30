@@ -50,6 +50,8 @@ public class LobbyPlayerScript : NetworkBehaviour {
 		for(int idx = 0; idx < GameRoomSlots.maxPlayers; idx++ ){
 			GameRoomUI.unameArray[idx] = roomSlots.unameList[idx];
 		}
+		GameRoomUI.myTeam = team;
+		GameRoomUI.myRole = role;
 	}
 
 	// hardcode index mappings for now
