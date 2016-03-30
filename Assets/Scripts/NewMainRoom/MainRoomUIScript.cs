@@ -7,6 +7,7 @@ using AssemblyCSharp;
 public class MainRoomUIScript : MonoBehaviour {
 
 	public Text UserName;
+	public Button JoinButton;
 	// popup components
 	public CanvasGroup GamePopupCanvas;
 	public Text GamePopupTitleText;
@@ -14,6 +15,7 @@ public class MainRoomUIScript : MonoBehaviour {
 	public InputField GamePopupGamePassword;
 	// lobby listing
 	public GridLayoutGroup gameListing;
+	public Scrollbar listingScrollbar;
 	// discovery related
 	public DiscoveryManager discoMan;
 	public RoomInfoScript roomInfo;
@@ -34,8 +36,12 @@ public class MainRoomUIScript : MonoBehaviour {
 	public Button buttonPrefab;
 	public bool deleteDemoGameList = true;
 
+	private float nextTimeToRefresh; // used to space out the listing refreshes
+
 	void Start () {
+		if (GameManager.instance.userName == "") {GameManager.instance.userName = "dev";} // for dev purposes
 		UserName.text = "Username: " + GameManager.instance.userName;
+		listingScrollbar.value = 1; // scroll bar annoying starts at 0 if not explicitly set to 1
 		hideGameInfoPopup(); // ensure the Join Game popup is out of the way
 		this.gameInfoDict = new Dictionary<string, DiscoveredGameInfo>();
 		this.selectionButtonsDict = new Dictionary<string, Button> ();
@@ -48,22 +54,23 @@ public class MainRoomUIScript : MonoBehaviour {
 		GameObject roomInfoObj = GameObject.Find("RoomInfo");
 		Debug.Assert(roomInfoObj);
 		roomInfo = roomInfoObj.GetComponent<RoomInfoScript>();
+		// set the time for the list refresher
+		nextTimeToRefresh = Time.time;
 	}
-		
-	// Update is called once per frame
+
+	private float refreshPeriod = 1f; // seconds til listing refresh
 	void Update () {
-		// not allowed to modify dictionary during iteration, must use key list
-		List<string> gameKeys = new List<string>(this.gameInfoDict.Keys);
-		foreach(string gameKey in gameKeys) {
-			DiscoveredGameInfo gameInfo = this.gameInfoDict[gameKey];
-			if (isGameInfoExpired(gameInfo)) {
-				this.gameInfoDict.Remove(gameKey); // remove outdated info records
-				Button buttonToRemove = this.selectionButtonsDict[gameKey];
-				Destroy(buttonToRemove.gameObject); // delete button
-				this.selectionButtonsDict.Remove(gameKey); // remove button reference
-				Debug.Log("Removed game key: " + gameKey);
-			}
-		} // TODO: can call this less than once per frame
+		// refresh listings once in a while, not every frame
+		if (Time.time > nextTimeToRefresh) {
+			removeExpiredListings();
+			nextTimeToRefresh += refreshPeriod;
+		}
+		// join button is clickable only when a selection is made
+		if (selectedHostKey == "") {
+			JoinButton.interactable = false;
+		} else {
+			JoinButton.interactable = true;
+		}
 	}
 
 	private void removeExpiredListings() {
@@ -76,6 +83,7 @@ public class MainRoomUIScript : MonoBehaviour {
 				Button buttonToRemove = this.selectionButtonsDict[gameKey];
 				Destroy(buttonToRemove.gameObject); // delete button
 				this.selectionButtonsDict.Remove(gameKey); // remove button reference
+				if (selectedHostKey == gameKey) selectedHostKey = ""; // invalidate selection
 				Debug.Log("Removed game key: " + gameKey);
 			}
 		}
@@ -137,12 +145,14 @@ public class MainRoomUIScript : MonoBehaviour {
 	public void selectGame (string hostKey) {
 		// called button listing
 		Debug.Log("hostKey: " + hostKey + " was selected.");
-		//this.selectionButtonsDict[hostKey].enabled = false; // do not disable to allow double-click
-		this.selectionButtonsDict[hostKey].image.color = Color.gray;
 		if (this.selectedHostKey == hostKey) { // if selection clicked a second time
 			joinGame();
 		} else { // else update hostKey selection
-			this.selectedHostKey = hostKey; 
+			if (hostKey != "" && this.selectionButtonsDict.ContainsKey(hostKey)) { // show unselection in UI
+				this.selectionButtonsDict[hostKey].image.color = Color.white;
+			}
+			this.selectedHostKey = hostKey;
+			this.selectionButtonsDict[hostKey].image.color = Color.green;
 		}
 	}
 
