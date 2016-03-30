@@ -12,10 +12,15 @@ public class GameRoomScreenScript : MonoBehaviour {
 	public Button RedEngineer;
 	public Button BluePilot;
 	public Button BlueEngineer;
+	public CanvasGroup PilotPanel;
+	public CanvasGroup EngineerPanel;
+	public Text RoleText;
 
 	private Button[] teamRoleButtons;
 	private string [] roleNameArray;
 	public string[] unameArray; // gets push to by lobby player
+	public GameManager.Team myTeam;
+	public GameManager.Role myRole;
 
 	// Use this for initialization
 	void Start () {
@@ -39,6 +44,9 @@ public class GameRoomScreenScript : MonoBehaviour {
 		for(int idx = 0; idx < GameRoomSlots.maxPlayers; idx++) {
 			unameArray[idx] = "";
 		}
+
+		myTeam = GameManager.Team.None;
+		myRole = GameManager.Role.None;
 	}
 
 	// Update is called once per frame
@@ -51,6 +59,43 @@ public class GameRoomScreenScript : MonoBehaviour {
 			} else {
 				buttonBooked(curButton, roleNameArray[idx] + "\n" + unameArray[idx]);
 			}
+		}
+		// show selection
+		Color teamColour;
+		string teamRoleString = "";
+		if (myTeam == GameManager.Team.Red) {
+			teamColour = new Color(1f, 0.125f, 0f, 1f);
+			teamRoleString += "Red ";
+		} else if (myTeam == GameManager.Team.Blue) {
+			teamColour = new Color(0f, 0.5f, 1f, 1f);
+			teamRoleString += "Blue ";
+		} else {
+			teamColour = Color.white;
+		}
+			
+		if (myRole == GameManager.Role.Pilot) {
+			foreach (Image img in PilotPanel.GetComponentsInChildren<Image>()) {
+				img.color = teamColour;
+			}
+			PilotPanel.alpha = 1;
+			EngineerPanel.alpha = 0;
+			teamRoleString += "Pilot";
+		} else if (myRole == GameManager.Role.Engineer) {
+			foreach (Image img in EngineerPanel.GetComponentsInChildren<Image>()) {
+				img.color = teamColour;
+			}
+			PilotPanel.alpha = 0;
+			EngineerPanel.alpha = 1;
+			teamRoleString += "Engineer";
+		} else {
+			PilotPanel.alpha = 0;
+			EngineerPanel.alpha = 0;
+		}
+
+		if (teamRoleString == "") {
+			RoleText.text = "Please select a team / role";
+		} else {
+			RoleText.text = "Playing as " + teamRoleString;
 		}
 	}
 
