@@ -35,10 +35,15 @@ public class PilotMechController : NetworkBehaviour {
     private Vector3 camOffset;
 
     // Game related info
-    private int ammo;
-    private int fuel;
-    private int health;
+    [SyncVar]
+    public int ammo;
+    [SyncVar]
+    public int powerupType;
+    [SyncVar]
+    public int fuel;
     private Combat combat;
+    [SyncVar]
+    private Light mechLight;
 
 	private GlobalData globalData;
 
@@ -48,33 +53,30 @@ public class PilotMechController : NetworkBehaviour {
     }
 
     void Start () {
-        if (this.role == GameManager.Role.Engineer) {
-            //Camera.main.gameObject.SetActive(false);
-            //GameObject.Find("ControllerCanvas").SetActive(false);
-        } else {
-            //GameObject.FindGameObjectWithTag("Engineer").SetActive(false);
-            //globalData.setParam(this.team, GlobalData.Param.Fuel, globalData.maxFuel);
-            // set up physics
-            statusTextOffset = transform.position - statusText.transform.position;
-            // set up manager to pull data from game room
+        // set up physics
+        statusTextOffset = transform.position - statusText.transform.position;
+        powerupType = 0;
+        // set up manager to pull data from game room
 
-            // test set up string
-            // set up name
+        // test set up string
+        // set up name
 
-            int blue = globalData.getHealth(GameManager.Team.Blue);
-            int red = globalData.getHealth(GameManager.Team.Red);
-            statusText.GetComponent<TextMesh>().text = "B:" + blue.ToString() + "R:" + red.ToString();
+		int blue = globalData.getHealth (GameManager.Team.Blue); 
+		int red = globalData.getHealth (GameManager.Team.Red); 
+		statusText.GetComponent<TextMesh> ().text = "B:" + blue.ToString () + "R:" + red.ToString ();
 
-            //used for switching arms for shooting
-            altShoot = false;
-            combat = transform.GetComponent<Combat>();
-            //set up camera
-            SetCamera();
-            //set up animations
-            anim = transform.GetComponent<Animator>();
-            //set up network animations
-            GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
-        }
+        //used for switching arms for shooting
+        altShoot = false;
+        combat = transform.GetComponent<Combat>();
+        //set up camera
+        SetCamera();
+        //set up animations
+        anim = transform.GetComponent<Animator>();
+        //set up network animations
+        GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
+        //get mech light
+        mechLight = GetComponentInChildren<Light>();
+
 		if(isClient) CmdNotifyNewPlayer (team, role);
 
     }
@@ -87,28 +89,31 @@ public class PilotMechController : NetworkBehaviour {
 	}
 
 	void Update () {
+
+		if(this.role == GameManager.Role.Engineer){
+			// TODO: do engineer view here
+			// hide the mech
+			gameObject.SetActive(false);
+
+			// do engineer stuff here
+		}
+			
         if (!isLocalPlayer)
             return;
 
-        if (this.role == GameManager.Role.Pilot) {
-            fuel = globalData.getParam(this.team, GlobalData.Param.Fuel);
-            health = globalData.getParam(this.team, GlobalData.Param.Health);
-            ammo = globalData.getParam(this.team, GlobalData.Param.Ammo);
 
-            rb.isKinematic = true;
-            statusText.transform.position = transform.position + statusTextOffset;
+        rb.isKinematic = true;
+        statusText.transform.position = transform.position + statusTextOffset;
 
-            moveH = CnInputManager.GetAxis("Horizontal");
-            moveV = CnInputManager.GetAxis("Vertical");
+        moveH = CnInputManager.GetAxis("Horizontal");
+        moveV = CnInputManager.GetAxis("Vertical");
 
-            if (health > 0) {
-                Move();
-                Turn();
-                Fire();
-            }
-            else {
-                anim.SetBool("death", true);
-            }
+		if (globalData.getHealth(this.team) > 0) {
+            Move();
+            Turn();
+            Fire();
+        } else {
+            anim.SetBool("death", true);
         }
     }
 
@@ -127,7 +132,7 @@ public class PilotMechController : NetworkBehaviour {
     private void Move () {
         if (moveH != 0 || moveV != 0) {
             rb.isKinematic = false;
-            //globalData.setParam(this.team, GlobalData.Param.Fuel, fuel - 1);
+            //fuel--;
         }
 
         if (fuel > 0) {
