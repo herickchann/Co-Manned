@@ -55,13 +55,13 @@ public class GameRoomScreenScript : MonoBehaviour {
 	}
 
 	public void buttonAvailable(Button b, string label) {
-		b.enabled = true;
+		b.interactable = true;
 		Text btex = b.GetComponentInChildren<Text>();
 		btex.text = label;
 	}
 
 	public void buttonBooked(Button b, string label) {
-		b.enabled = false;
+		b.interactable = false;
 		Text btex = b.GetComponentInChildren<Text>();
 		btex.text = label;
 	}
