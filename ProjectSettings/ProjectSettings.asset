@@ -173,7 +173,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 787ebf055d68242108d3d158db00298d, type: 3}
       m_Width: 128
       m_Height: 128
   m_BuildTargetBatching: []
@@ -330,7 +330,8 @@ PlayerSettings:
   psp2InfoBarColor: 0
   psmSplashimage: {fileID: 0}
   spritePackerPolicy: 
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    1: 
   metroPackageName: co-manned
   metroPackageVersion: 
   metroCertificatePath: 
