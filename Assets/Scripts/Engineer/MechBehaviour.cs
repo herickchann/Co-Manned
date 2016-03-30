@@ -6,7 +6,10 @@ using System.Collections;
 public class MechBehaviour : NetworkBehaviour
 {
     public TimingMiniGameBehaviour tmg;
-    public Text[] boostText= new Text[3];
+    private const int noBoosts = 3; 
+    public Text[] boostText= new Text[noBoosts];
+    public Button[] boostButtons = new Button[noBoosts];
+    private Color[] BaseColors = new Color[noBoosts];
     public Text healthBayText;
     public Text ammoBayText;
     public Text fuelBayText;
@@ -102,7 +105,11 @@ public class MechBehaviour : NetworkBehaviour
         }
         lastAmmoCount = ammoCount;
 
-        restartMiniGame.gameObject.SetActive(false);
+        for (int x = 0; x < noBoosts; x++)
+        {
+            BaseColors[x] = boostButtons[x].colors.normalColor;
+        }
+            restartMiniGame.gameObject.SetActive(false);
         restart = false;
 //        SetCamera();
     }
@@ -217,14 +224,14 @@ public class MechBehaviour : NetworkBehaviour
         {
             healthBayText.color = Color.red;
         }
-        else { healthBayText.color = Color.black; }
+        else { healthBayText.color = Color.white; }
         healthBayText.text = "" + loaded[0];
         if (boostLoaded[1] > 0)
         {
             fuelBayText.color = Color.red;
         }
         else {
-            fuelBayText.color = Color.black;
+            fuelBayText.color = Color.white;
         }
         fuelBayText.text = "" + loaded[1];
         if (boostLoaded[2] > 0)
@@ -232,7 +239,7 @@ public class MechBehaviour : NetworkBehaviour
             ammoBayText.color = Color.red;
         }
         else {
-            ammoBayText.color = Color.black;
+            ammoBayText.color = Color.white;
         }
         ammoBayText.text = "" + loaded[2];
 
@@ -411,16 +418,23 @@ public class MechBehaviour : NetworkBehaviour
         if (boostEndTime[type] > Time.time)
         {
             boostEndTime[type] = Time.time;
+            var cb = boostButtons[type].colors;
+            cb.normalColor = BaseColors[type];
+            boostButtons[type].colors = cb;
         }
         else
         {
             boostEndTime[type] = Time.time+boostTime[type];
             isActive = 1;
+            var cb = boostButtons[type].colors;
+            cb.normalColor = Color.red;
+            boostButtons[type].colors = cb;
         }
 
         if (type == 0)
         {
             globalData.setParam(team, GlobalData.Param.DefBoost, isActive);
+
         }
         else if (type == 1)
         {
