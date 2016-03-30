@@ -21,8 +21,8 @@ public class LobbyPlayerScript : NetworkBehaviour {
 		// set up player identifiers
 		this.myUserName = GameManager.instance.userName;
 		// for dev purposes, if no username exists, use "dev"
-		if (this.myUserName == "") {this.myUserName = "dev";} 
-		this.myPid = netId.ToString();
+		if (this.myUserName == "") {this.myUserName = "dev";}
+		this.myPid = playerControllerId.ToString();
 		setTeamInfo(GameManager.Team.None, GameManager.Role.None);
 
 		// attach to UI
