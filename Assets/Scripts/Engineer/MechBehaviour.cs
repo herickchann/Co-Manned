@@ -54,11 +54,11 @@ public class MechBehaviour : NetworkBehaviour
 	public GameManager.Team team;
 	public GameManager.Role role;
 
-	private GlobalData globalData;
+	private GlobalDataHook globalData;
 
 	void Awake()
 	{
-		globalData = GetComponent<GlobalData>();
+		globalData = GetComponent<GlobalDataHook>();
 		gameManager = GameObject.Find("GameManager");
 		/* serverData = GameObject.Find("ServerData");
         if (serverData == null)
