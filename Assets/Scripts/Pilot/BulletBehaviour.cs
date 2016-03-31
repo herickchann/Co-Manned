@@ -28,8 +28,8 @@ public class BulletBehaviour : NetworkBehaviour {
 				Debug.Log (GameManager.teamString(this.shooter) + " shoots " + GameManager.teamString(hitMech.team));
 
 				// reduce health on server then replicate to client
-				//combat.TakeDamage (hitMech.team, 10);
-				globalData.setParam(hitMech.team, GlobalDataController.Param.Health, 10);
+				combat.TakeDamage (hitMech.team, 10);
+				//globalData.setParam(hitMech.team, GlobalDataController.Param.Health, 10);
 
 
 			} else {

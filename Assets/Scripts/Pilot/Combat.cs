@@ -35,8 +35,9 @@ public class Combat : NetworkBehaviour {
 		if (!isServer)
 			return;
 
+        health = globalDataHook.getParam(teamGotHit, GlobalDataController.Param.Health);
 		// reduce health on the server first
-		health -= amount;
+        globalDataHook.setParam(teamGotHit, GlobalDataController.Param.Health, health-amount);
 
 		// tell everyone who got hit
 		RpcDamage (teamGotHit, amount);
@@ -44,7 +45,7 @@ public class Combat : NetworkBehaviour {
 		// also update its copy of global data
 		if (globalDataHook.getParam(teamGotHit, GlobalDataController.Param.Health) <= 0)
 		{
-			health = 0;
+			globalDataHook.setParam(teamGotHit, GlobalDataController.Param.Health, 0);
 			Debug.Log("Dead!");
 		}
 	}
