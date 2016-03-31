@@ -12,13 +12,11 @@ public class PilotMechController : NetworkBehaviour {
     private RectTransform joystickTrans;
     private float moveH;
     private float moveV;
-    private Vector3 statusTextOffset;
     private float nextFire;
     public float fireRate;
 
     // Mech related objects
     public GameObject bullet;
-    public GameObject statusText;
     public Transform bulletSpawn;
     public Transform bulletSpawn2;
 
@@ -35,9 +33,13 @@ public class PilotMechController : NetworkBehaviour {
     private Vector3 camOffset;
 
     // Game related info
-    public int ammo;
-    public int powerupType;
-    public int fuel;
+    private int health;
+    private int ammo;
+    private int powerupType;
+    private int fuel;
+    private int defBoost;
+    private int speedBoost;
+    private int atkBoost;
     private Combat combat;
 	private GlobalDataHook globalData;
 
@@ -48,16 +50,7 @@ public class PilotMechController : NetworkBehaviour {
 
     void Start () {
         // set up physics
-        statusTextOffset = transform.position - statusText.transform.position;
         powerupType = 0;
-        // set up manager to pull data from game room
-
-        // test set up string
-        // set up name
-
-		//int blue = globalData.getParam (GameManager.Team.Blue); 
-		//int red = globalData.getParam (GameManager.Team.Red); 
-		//statusText.GetComponent<TextMesh> ().text = "B:" + blue.ToString () + "R:" + red.ToString ();
 
         //used for switching arms for shooting
         altShoot = false;
@@ -72,17 +65,11 @@ public class PilotMechController : NetworkBehaviour {
 
     }
 
-	public void updateStatusText(){
-		var globalData = GetComponent<GlobalDataHook>();
-		int blue = globalData.getParam (GameManager.Team.Blue, GlobalDataController.Param.Health); 
-		int red = globalData.getParam (GameManager.Team.Red, GlobalDataController.Param.Health); 
-		statusText.GetComponent<TextMesh> ().text = "B:" + blue.ToString () + "R:" + red.ToString ();
-	}
-
 	void Update () {
         if (!isLocalPlayer)
             return;
-
+        
+        // Deactivate objects depending on role
         if (role == GameManager.Role.Pilot) { 
             var eng = GameObject.Find("Engineer camera");
             if (eng != null) {
@@ -99,13 +86,14 @@ public class PilotMechController : NetworkBehaviour {
             }
         }
 
-        rb.isKinematic = true;
-        statusText.transform.position = transform.position + statusTextOffset;
-
+        //rb.isKinematic = true;
         moveH = CnInputManager.GetAxis("Horizontal");
         moveV = CnInputManager.GetAxis("Vertical");
 
-		if (globalData.getParam(team, GlobalDataController.Param.Health) > 0) {
+        health = globalData.getParam(team, GlobalDataController.Param.Health);
+        fuel = globalData.getParam (team, GlobalDataController.Param.Fuel); 
+
+		if (health > 0 && fuel > 0) {
             Move();
             Turn();
             Fire();
@@ -128,20 +116,13 @@ public class PilotMechController : NetworkBehaviour {
 
     private void Move () {
         if (moveH != 0 || moveV != 0) {
-            rb.isKinematic = false;
+            //rb.isKinematic = false;
             globalData.setParam (team, GlobalDataController.Param.Fuel, fuel-1); 
         }
-        fuel = globalData.getParam (team, GlobalDataController.Param.Fuel); 
-
-        if (fuel > 0) {
-            Vector3 movement = new Vector3(moveH, 0.0f, moveV);
-            anim.SetFloat("inputH", moveH);
-            anim.SetFloat("inputV", moveV);
-            rb.velocity = movement * speed;
-        } else {
-            fuel = 0;
-            globalData.setParam (team, GlobalDataController.Param.Fuel, 0); 
-        }
+        Vector3 movement = new Vector3(moveH, 0.0f, moveV);
+        anim.SetFloat("inputH", moveH);
+        anim.SetFloat("inputV", moveV);
+        rb.velocity = movement * speed;
     }
 
     private void Turn () {

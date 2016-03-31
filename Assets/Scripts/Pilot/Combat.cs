@@ -26,7 +26,6 @@ public class Combat : NetworkBehaviour {
 
 	[ClientRpc]
 	void RpcDamage(GameManager.Team whoGotHit, int amount){
-		var statusText = GetComponent<PilotMechController>().statusText;
 		Debug.Log (GameManager.teamString(whoGotHit) + " got hit" + amount.ToString());
 	}
 
