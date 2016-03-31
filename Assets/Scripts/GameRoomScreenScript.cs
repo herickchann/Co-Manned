@@ -12,6 +12,7 @@ public class GameRoomScreenScript : MonoBehaviour {
 	public Button RedEngineer;
 	public Button BluePilot;
 	public Button BlueEngineer;
+	public Button ClearSelection;
 	public CanvasGroup PilotPanel;
 	public CanvasGroup EngineerPanel;
 	public Text RoleText;
@@ -21,6 +22,9 @@ public class GameRoomScreenScript : MonoBehaviour {
 	public string[] unameArray; // gets push to by lobby player
 	public GameManager.Team myTeam;
 	public GameManager.Role myRole;
+
+	Color redColour = new Color(1f, 0.125f, 0f, 1f);
+	Color blueColour = new Color(0f, 0.5f, 1f, 1f);
 
 	// Use this for initialization
 	void Start () {
@@ -44,9 +48,6 @@ public class GameRoomScreenScript : MonoBehaviour {
 		for(int idx = 0; idx < GameRoomSlots.maxPlayers; idx++) {
 			unameArray[idx] = "";
 		}
-
-		myTeam = GameManager.Team.None;
-		myRole = GameManager.Role.None;
 	}
 
 	// Update is called once per frame
@@ -60,27 +61,30 @@ public class GameRoomScreenScript : MonoBehaviour {
 				buttonBooked(curButton, roleNameArray[idx] + "\n" + unameArray[idx]);
 			}
 		}
+	}
+
+	public void updateImage(GameManager.Team team, GameManager.Role role){
 		// show selection
 		Color teamColour;
 		string teamRoleString = "";
-		if (myTeam == GameManager.Team.Red) {
-			teamColour = new Color(1f, 0.125f, 0f, 1f);
+		if (team == GameManager.Team.Red) {
+			teamColour = redColour;
 			teamRoleString += "Red ";
-		} else if (myTeam == GameManager.Team.Blue) {
-			teamColour = new Color(0f, 0.5f, 1f, 1f);
+		} else if (team == GameManager.Team.Blue) {
+			teamColour = blueColour;
 			teamRoleString += "Blue ";
 		} else {
 			teamColour = Color.white;
 		}
-			
-		if (myRole == GameManager.Role.Pilot) {
+
+		if (role == GameManager.Role.Pilot) {
 			foreach (Image img in PilotPanel.GetComponentsInChildren<Image>()) {
 				img.color = teamColour;
 			}
 			PilotPanel.alpha = 1;
 			EngineerPanel.alpha = 0;
 			teamRoleString += "Pilot";
-		} else if (myRole == GameManager.Role.Engineer) {
+		} else if (role == GameManager.Role.Engineer) {
 			foreach (Image img in EngineerPanel.GetComponentsInChildren<Image>()) {
 				img.color = teamColour;
 			}
@@ -97,6 +101,22 @@ public class GameRoomScreenScript : MonoBehaviour {
 		} else {
 			RoleText.text = "Playing as " + teamRoleString;
 		}
+	}
+
+	public void showRedPilot() {
+		updateImage(GameManager.Team.Red, GameManager.Role.Pilot);
+	}
+	public void showRedEngineer() {
+		updateImage(GameManager.Team.Red, GameManager.Role.Engineer);
+	}
+	public void showBluePilot() {
+		updateImage(GameManager.Team.Blue, GameManager.Role.Pilot);
+	}
+	public void showBlueEngineer() {
+		updateImage(GameManager.Team.Blue, GameManager.Role.Engineer);
+	}
+	public void showNone() {
+		updateImage(GameManager.Team.None, GameManager.Role.None);
 	}
 
 	public void buttonAvailable(Button b, string label) {
@@ -120,4 +140,5 @@ public class GameRoomScreenScript : MonoBehaviour {
 		SceneManager.LoadScene("GameLobbyScreen");
 		// detach from game instance
 	}
+
 }

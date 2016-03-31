@@ -109,8 +109,8 @@ public class MainRoomUIScript : MonoBehaviour {
 
 	private string formatGameInfo(DiscoveredGameInfo gameInfo) {
 		string yesOrNo = (gameInfo.passwordProtected) ? "Yes" : "No ";
-		string formattedInfo = string.Format("{0,-32} | {1,-32} | {2}/{3} ",
-			"  " + gameInfo.gameName, yesOrNo, gameInfo.numPlayers, gameInfo.playerLimit);
+		string formattedInfo = string.Format("{0,-32} | {1,-32} | {2}",///{3} ",
+			"  " + gameInfo.gameName, yesOrNo, "Normal");//gameInfo.numPlayers, gameInfo.playerLimit);
 		return formattedInfo;
 	}
 
