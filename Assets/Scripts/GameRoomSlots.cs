@@ -62,6 +62,35 @@ public class GameRoomSlots : NetworkBehaviour {
 		Debug.LogError("user " + uname + " with pid " + pid + " updated slot " + idx.ToString());
 	}
 
+	public void lookupTeamRole(short pControlId, out GameManager.Team team, out GameManager.Role role) {
+		// team and role none by default
+		team = GameManager.Team.None;
+		role = GameManager.Role.None;
+		for(int idx=0; idx<maxPlayers; idx++) { // iterate through the list until we find the id we want
+			if (pidList[idx] == pControlId.ToString()) {
+				switch(idx) { // depending on slot idx, return the team and role
+				case 0:
+					team = GameManager.Team.Red;
+					role = GameManager.Role.Pilot;
+					break;
+				case 1:
+					team = GameManager.Team.Red;
+					role = GameManager.Role.Engineer;
+					break;
+				case 2:
+					team = GameManager.Team.Blue;
+					role = GameManager.Role.Pilot;
+					break;
+				case 3:
+					team = GameManager.Team.Blue;
+					role = GameManager.Role.Engineer;
+					break;
+				}
+				return; // found it! exit loop
+			}
+		}
+	}
+
 	// Update is called once per frame
 	void Update () {
 	
