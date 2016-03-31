@@ -29,8 +29,8 @@ public class GameRoomSlots : NetworkBehaviour {
 		if (pidList.Count != maxPlayers) { // if list is not initialized
 			for(int i=0;i<maxPlayers;i++) { pidList.Add(""); } // create 4 empty slots
 		}
-		unameList.Callback = OnUnameListChanged; // attach unameList callback
-		pidList.Callback = OnPidListChanged; // attach pidList callback
+		//unameList.Callback = OnUnameListChanged; // attach unameList callback
+		//pidList.Callback = OnPidListChanged; // attach pidList callback
 		Debug.Log("Game Room Slots created");
 	}
 
@@ -52,7 +52,7 @@ public class GameRoomSlots : NetworkBehaviour {
 		unameList.Dirty(idx);
 		pidList[idx] = "";
 		pidList.Dirty(idx);
-		Debug.LogError("user released slot " + idx.ToString());
+		//Debug.LogError("user released slot " + idx.ToString());
 	}
 
 	public void takeSlot(int idx, string uname, string pid) {
@@ -61,7 +61,7 @@ public class GameRoomSlots : NetworkBehaviour {
 		unameList.Dirty(idx);
 		pidList[idx] = pid;
 		pidList.Dirty(idx);
-		Debug.LogError("user " + uname + " with pid " + pid + " updated slot " + idx.ToString());
+		//Debug.LogError("user " + uname + " with pid " + pid + " updated slot " + idx.ToString());
 	}
 
 	public void lookupTeamRole(string pid, out GameManager.Team team, out GameManager.Role role) {

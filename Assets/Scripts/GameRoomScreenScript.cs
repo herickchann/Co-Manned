@@ -13,6 +13,7 @@ public class GameRoomScreenScript : MonoBehaviour {
 	public Button BluePilot;
 	public Button BlueEngineer;
 	public Button ClearSelection;
+	public Button PlayButton;
 	public CanvasGroup PilotPanel;
 	public CanvasGroup EngineerPanel;
 	public Text RoleText;
@@ -20,8 +21,6 @@ public class GameRoomScreenScript : MonoBehaviour {
 	private Button[] teamRoleButtons;
 	private string [] roleNameArray;
 	public string[] unameArray; // gets push to by lobby player
-	public GameManager.Team myTeam;
-	public GameManager.Role myRole;
 
 	Color redColour = new Color(1f, 0.125f, 0f, 1f);
 	Color blueColour = new Color(0f, 0.5f, 1f, 1f);
@@ -48,6 +47,8 @@ public class GameRoomScreenScript : MonoBehaviour {
 		for(int idx = 0; idx < GameRoomSlots.maxPlayers; idx++) {
 			unameArray[idx] = "";
 		}
+
+		updateImage(GameManager.Team.None, GameManager.Role.None);
 	}
 
 	// Update is called once per frame

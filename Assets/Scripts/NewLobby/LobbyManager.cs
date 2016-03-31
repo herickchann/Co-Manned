@@ -50,6 +50,12 @@ public class LobbyManager : NetworkLobbyManager {
 
 	}
 
+	public void Update() {
+		if (Input.GetKeyDown(KeyCode.Space)) { // for dev purposes, hitting space will start the game
+			ServerChangeScene("pilot");
+		}
+	}
+
 	// Use this for initialization
 	public void Host(){
 		StartHost ();
@@ -57,6 +63,11 @@ public class LobbyManager : NetworkLobbyManager {
 
 	public void Join(){
 		StartClient ();
+	}
+
+	public void startGame() {
+		CheckReadyToBegin(); // starts if all clients are ready - does not work
+		//ServerChangeScene("pilot");
 	}
 
 	private void updateBroadcastMessage() {
