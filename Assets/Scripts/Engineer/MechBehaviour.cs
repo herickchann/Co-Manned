@@ -191,7 +191,7 @@ public class MechBehaviour : NetworkBehaviour
                     restartMiniGame.gameObject.GetComponent<RestartMiniGame>().Setup();
                 }
             }
-            else if (restart == false)
+            else if (fuel != 0)
             {
                 timingMiniGame.gameObject.SetActive(true);
                 restartMiniGame.gameObject.SetActive(false);
