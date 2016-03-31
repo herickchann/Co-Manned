@@ -12,7 +12,6 @@ public class LobbyManager : NetworkLobbyManager {
 	private int defaultPort;
 	public string gameName = "";
 	public string gamePass = ""; // just broadcast true/false, not the actual password
-	public int curNumPlayers = 0;
 	public const int playerLimit = 4;
 	public string passwordRequired = "false";
 
@@ -34,7 +33,6 @@ public class LobbyManager : NetworkLobbyManager {
 		if(roomInfo.role == RoomInfoScript.Role.Host){
 			this.networkAddress = this.defaultAddress;
 			this.networkPort = this.defaultPort;
-			this.curNumPlayers = 1; // 1 for the host's player
 			this.gameName = roomInfo.gamename;
 			this.gamePass = roomInfo.password;
 			this.passwordRequired = (this.gamePass == "" ? "false" : "true");
@@ -63,7 +61,7 @@ public class LobbyManager : NetworkLobbyManager {
 		// gameName is last in case user input messes with colon delimiter
 		string message = string.Format("Comanned|{0}|{1}|{2}|{3}|{4}|{5}",
 			networkAddress, networkPort.ToString(), this.gameName, passwordRequired, 
-			curNumPlayers.ToString(), playerLimit.ToString());
+			Network.connections.Length.ToString(), playerLimit.ToString());
 		discovery.broadcastData = message;
 	}
 
@@ -110,16 +108,13 @@ public class LobbyManager : NetworkLobbyManager {
 
 	public override void OnServerConnect(NetworkConnection conn) {
 		Debug.Log ("a player has connected");
-		this.curNumPlayers++;
-		updateBroadcastMessage();
+		//updateBroadcastMessage();
 		base.OnServerConnect(conn);
 	}
 
 	public override void OnServerDisconnect(NetworkConnection conn) {
 		Debug.LogError("player with connectionId " + conn.connectionId.ToString() + " disconnected");
-		// update the room count
-		this.curNumPlayers--;
-		updateBroadcastMessage();
+		//updateBroadcastMessage();
 
 		// update the room slots
 		GameObject GameRoomObj =  GameObject.Find("/GameRoomSlots");
