@@ -50,8 +50,8 @@ public class LobbyPlayerScript : NetworkBehaviour {
 		for(int idx = 0; idx < GameRoomSlots.maxPlayers; idx++ ){
 			GameRoomUI.unameArray[idx] = roomSlots.unameList[idx];
 		}
-		GameRoomUI.myTeam = team;
-		GameRoomUI.myRole = role;
+		//GameRoomUI.myTeam = team;
+		//GameRoomUI.myRole = role;
 	}
 
 	// hardcode index mappings for now
@@ -111,15 +111,19 @@ public class LobbyPlayerScript : NetworkBehaviour {
 	// selection functions
 	public void selectRedPilot() {
 		selectTeamRole(GameManager.Team.Red, GameManager.Role.Pilot);
+		GameRoomUI.showRedPilot();
 	}
 	public void selectRedEngineer() {
 		selectTeamRole(GameManager.Team.Red, GameManager.Role.Engineer);
+		GameRoomUI.showRedEngineer();
 	}
 	public void selectBluePilot() {
 		selectTeamRole(GameManager.Team.Blue, GameManager.Role.Pilot);
+		GameRoomUI.showBluePilot();
 	}
 	public void selectBlueEngineer() {
 		selectTeamRole(GameManager.Team.Blue, GameManager.Role.Engineer);
+		GameRoomUI.showBlueEngineer();
 	}
 
 	public override void OnStartClient() {
