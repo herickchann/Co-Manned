@@ -45,11 +45,13 @@ public class MechBehaviour : NetworkBehaviour
 	int[] boostLoaded = new int[3];
 	float[] boostTime = new float[3];
 	float[] boostEndTime = new float[3];
+    bool[] boostUp = new bool[3];
 	public Material[] mat;
 	bool restart;
     float updateTime;
     const float updateInterval = (float)0.2;
     public Sprite BlueBackground;
+    bool isInitialized;
 
 	// Wire up game manager
 	GameObject gameManager;
@@ -84,19 +86,20 @@ public class MechBehaviour : NetworkBehaviour
 		{
 			CreateEnergyCell(0);
 		}*/
-        for (int x = 0; x < 4; x++)
+        /*for (int x = 0; x < 4; x++)
         {
             CreateEnergyCell(x);
-        }
+        }*/
         ///health = globalData.getParam("");
         health = GlobalDataController.maxHealth;//maxHealth * 3 / 5;
 		fuel = GlobalDataController.maxFuel;//maxFuel * 3 / 5;
 		ammoCount = GlobalDataController.maxAmmo;//maxAmmoCount-1;
-		for (int x = 0; x < ammoCount; x++)
-		{
-			AddAmmoIcon(x);
-		}
-		lastAmmoCount = ammoCount;
+        /*for (int x = 0; x < ammoCount; x++)
+        {
+            AddAmmoIcon(x);
+        }
+        lastAmmoCount = ammoCount;*/
+        lastAmmoCount = 0;
 
 		for (int x = 0; x < noBoosts; x++)
 		{
@@ -133,6 +136,8 @@ public class MechBehaviour : NetworkBehaviour
 		}
 	}
 
+
+
 	// Update is called once per frame
 	void Update()
 	{
@@ -154,11 +159,20 @@ public class MechBehaviour : NetworkBehaviour
                 }
             }
 
+            if (!isInitialized)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    CreateEnergyCell(x);
+                }
+                isInitialized = true;
+            }
+
             health = globalData.getParam(team, GlobalDataController.Param.Health);
             fuel = globalData.getParam(team, GlobalDataController.Param.Fuel);
             ammoCount = globalData.getParam(team, GlobalDataController.Param.Ammo);
-            healthText.text = "Health: " + health + "/100";
-            fuelText.text = "Fuel: " + fuel + "/100";
+            healthText.text = "Health: " + health + "/" + GlobalDataController.maxHealth;
+            fuelText.text = "Fuel: " + fuel + "/" + GlobalDataController.maxFuel ;
             healthBar.fillAmount = (float)health / GlobalDataController.maxHealth;
             fuelBar.fillAmount = (float)fuel / GlobalDataController.maxFuel;
             fuelBar.color = new Color(1, (float)fuel / GlobalDataController.maxFuel, 0);
@@ -183,18 +197,21 @@ public class MechBehaviour : NetworkBehaviour
                 if (boostTime[x] > 0)
                 {
                     boostText[x].text = "" + System.Math.Round((boostTime[x]), 2);
-                    if (boostEndTime[x] > Time.time)
+                    if (boostUp[x])
                     {
-                        boostTime[x] = boostEndTime[x] - Time.time;
-                    }
-                    else
-                    {
-                        toggleBoost(x);
+                        if (boostEndTime[x] > Time.time)
+                        {
+                            boostTime[x] = boostEndTime[x] - Time.time;
+                        }
+                        else
+                        {
+                            toggleBoost(x);
+                        }
                     }
                 }
                 else
                 {
-                    boostText[x].text = "";
+                    boostText[x].text = "0";
                 }
             }
 
@@ -258,8 +275,8 @@ public class MechBehaviour : NetworkBehaviour
             int newCellType = globalData.getParam(team, GlobalDataController.Param.PowerupType);
             if (newCellType != 0)
             {
-                CreateEnergyCell(newCellType-1);
                 globalData.setParam(team, GlobalDataController.Param.PowerupType, 0);
+                CreateEnergyCell(newCellType-1);
             }
             updateTime += updateInterval;
         }
@@ -402,15 +419,15 @@ public class MechBehaviour : NetworkBehaviour
 
 		if (healthMod == 2)
 		{
-			boostTime[0] += (float)((boostLoaded[0]+1)*ammoMod) + (float)((boostLoaded[0] + 1) * fuelMod);
+			boostTime[0] += (float)((boostLoaded[0]+5)*ammoMod) + (float)((boostLoaded[0] + 5) * fuelMod);
 		}
 		if (fuelMod == 2)
 		{
-			boostTime[1] += (float)((boostLoaded[1] + 1) * ammoMod) + (float)((boostLoaded[1] + 1) * healthMod);
+			boostTime[1] += (float)((boostLoaded[1] + 5) * ammoMod) + (float)((boostLoaded[1] + 5) * healthMod);
 		}
 		if (ammoMod == 2)
 		{
-			boostTime[2] += (float)((boostLoaded[2] + 1) * healthMod) + (float)((boostLoaded[2] + 1) * fuelMod);
+			boostTime[2] += (float)((boostLoaded[2] + 5) * healthMod) + (float)((boostLoaded[2] + 5) * fuelMod);
 		}
 		AddHealth((int)(loaded[0] * healthMod * GlobalDataController.maxHealth / 5));
 		AddFuel((int)(loaded[1] * fuelMod * GlobalDataController.maxFuel / 5));
@@ -449,7 +466,7 @@ public class MechBehaviour : NetworkBehaviour
 			cb.normalColor = BaseColors[type];
 			boostButtons[type].colors = cb;
 		}
-		else
+		else if (boostTime[type]>0)
 		{
 			boostEndTime[type] = Time.time+boostTime[type];
 			isActive = 1;
@@ -457,6 +474,12 @@ public class MechBehaviour : NetworkBehaviour
 			cb.normalColor = Color.red;
 			boostButtons[type].colors = cb;
 		}
+        else
+        {
+            return;
+        }
+
+        boostUp[type] = isActive==1;
 
 		if (type == 0)
 		{
