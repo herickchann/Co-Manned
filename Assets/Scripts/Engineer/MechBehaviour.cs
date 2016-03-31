@@ -209,7 +209,7 @@ public class MechBehaviour : NetworkBehaviour
 		{
 			for (int x = lastAmmoCount; x > ammoCount; x--)
 			{
-				DeleteAmmoIcon(x);
+				DeleteAmmoIcon(x-1);
 			}
 		}
 		lastAmmoCount = ammoCount;
