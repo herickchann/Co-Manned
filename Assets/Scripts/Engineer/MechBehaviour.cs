@@ -191,6 +191,11 @@ public class MechBehaviour : NetworkBehaviour
                     restartMiniGame.gameObject.GetComponent<RestartMiniGame>().Setup();
                 }
             }
+            else if (restart == false)
+            {
+                timingMiniGame.gameObject.SetActive(true);
+                restartMiniGame.gameObject.SetActive(false);
+            }
 
             for (int x = 0; x < boostTime.Length; x++)
             {
@@ -439,9 +444,9 @@ public class MechBehaviour : NetworkBehaviour
 
 	public void reboot()
 	{
-		fuel = GlobalDataController.maxFuel / 10;
-        globalData.setParam(team, GlobalDataController.Param.Fuel, fuel);
+		fuel = GlobalDataController.maxFuel / 3;
         restart = false;
+        globalData.setParam(team, GlobalDataController.Param.Fuel, fuel);
 		timingMiniGame.gameObject.SetActive(true);
 		restartMiniGame.gameObject.SetActive(false);
 		restorationSounds.PlayOneShot(soundEffects[3], 1);
