@@ -10,6 +10,8 @@ public class MechBehaviour : NetworkBehaviour
     public Text[] boostText= new Text[noBoosts];
     public Button[] boostButtons = new Button[noBoosts];
     private Color[] BaseColors = new Color[noBoosts];
+    public AudioSource restorationSounds;
+    public AudioClip[] soundEffects = new AudioClip[4];
     public Text healthBayText;
     public Text ammoBayText;
     public Text fuelBayText;
@@ -376,6 +378,7 @@ public class MechBehaviour : NetworkBehaviour
     public void Load(int val, int index)
     {
             loaded[index] += 1;
+        restorationSounds.PlayOneShot(soundEffects[index], 1);
         if (val == index)
         {
             boostLoaded[index]+=1;
@@ -402,6 +405,7 @@ public class MechBehaviour : NetworkBehaviour
         AddAmmo((int)(loaded[2] *ammoMod* GlobalData.maxAmmo / 5));
         System.Array.Clear(loaded, 0, 3);
         System.Array.Clear(boostLoaded, 0, 3);
+        restorationSounds.PlayOneShot(soundEffects[3], 1);
     }
 
     public void reboot()
@@ -410,6 +414,17 @@ public class MechBehaviour : NetworkBehaviour
         restart = false;
         timingMiniGame.gameObject.SetActive(true);
         restartMiniGame.gameObject.SetActive(false);
+        restorationSounds.PlayOneShot(soundEffects[3], 1);
+    }
+
+    public void PlaySound(int index)
+    {
+        restorationSounds.PlayOneShot(soundEffects[index], 1);
+    }
+
+    public void PlaySound(int index, float volume)
+    {
+        restorationSounds.PlayOneShot(soundEffects[index], volume);
     }
 
     public void toggleBoost(int type)
@@ -445,5 +460,4 @@ public class MechBehaviour : NetworkBehaviour
             globalData.setParam(team, GlobalData.Param.AtkBoost, isActive);
         }
     }
-
 }
