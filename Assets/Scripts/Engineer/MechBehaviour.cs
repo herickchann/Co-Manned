@@ -39,7 +39,7 @@ public class MechBehaviour : NetworkBehaviour
 	//[SyncVar]
 	int ammoCount;
 	//const int maxAmmoCount = 25;
-	GameObject[] ammoIcons = new GameObject[GlobalDataHook.maxAmmo];
+	GameObject[] ammoIcons = new GameObject[GlobalDataController.maxAmmo];
 	int lastAmmoCount;
 	int[] loaded = new int[3];
 	int[] boostLoaded = new int[3];
@@ -98,9 +98,9 @@ public class MechBehaviour : NetworkBehaviour
 			CreateEnergyCell(0);
 		}
 		///health = globalData.getParam("");
-		health = GlobalDataHook.maxHealth;//maxHealth * 3 / 5;
-		fuel = GlobalDataHook.maxFuel;//maxFuel * 3 / 5;
-		ammoCount = GlobalDataHook.maxAmmo;//maxAmmoCount-1;
+		health = GlobalDataController.maxHealth;//maxHealth * 3 / 5;
+		fuel = GlobalDataController.maxFuel;//maxFuel * 3 / 5;
+		ammoCount = GlobalDataController.maxAmmo;//maxAmmoCount-1;
 		for (int x = 0; x < ammoCount; x++)
 		{
 			AddAmmoIcon(x);
@@ -144,14 +144,14 @@ public class MechBehaviour : NetworkBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		health = globalData.getParam(team,GlobalDataHook.Param.Health);
-		fuel = globalData.getParam(team, GlobalDataHook.Param.Fuel);
-		ammoCount = globalData.getParam(team, GlobalDataHook.Param.Ammo);
+		health = globalData.getParam(team,GlobalDataController.Param.Health);
+		fuel = globalData.getParam(team, GlobalDataController.Param.Fuel);
+		ammoCount = globalData.getParam(team, GlobalDataController.Param.Ammo);
 		healthText.text = "Health: " + health + "/100";
 		fuelText.text = "Fuel: " + fuel + "/100";
-		healthBar.fillAmount = (float)health / GlobalDataHook.maxHealth;
-		fuelBar.fillAmount = (float)fuel / GlobalDataHook.maxFuel;
-		fuelBar.color = new Color(1, (float)fuel / GlobalDataHook.maxFuel, 0);
+		healthBar.fillAmount = (float)health / GlobalDataController.maxHealth;
+		fuelBar.fillAmount = (float)fuel / GlobalDataController.maxFuel;
+		fuelBar.color = new Color(1, (float)fuel / GlobalDataController.maxFuel, 0);
 
 		if (fuel == 0 && restart == false)
 		{
@@ -188,13 +188,13 @@ public class MechBehaviour : NetworkBehaviour
 			}
 		}
 
-		if (((double)health / GlobalDataHook.maxHealth) >= 0.50)
+		if (((double)health / GlobalDataController.maxHealth) >= 0.50)
 		{
-			healthBar.color = new Color(1 - ((float)health / GlobalDataHook.maxHealth) / (float)2.5, 1, 0);
+			healthBar.color = new Color(1 - ((float)health / GlobalDataController.maxHealth) / (float)2.5, 1, 0);
 		}
 		else
 		{
-			healthBar.color = new Color(1, (float)health / GlobalDataHook.maxHealth, 0);
+			healthBar.color = new Color(1, (float)health / GlobalDataController.maxHealth, 0);
 		}
 
 		//Updates the ammo display
@@ -245,11 +245,11 @@ public class MechBehaviour : NetworkBehaviour
 		}
 		ammoBayText.text = "" + loaded[2];
 
-		int newCellType = globalData.getParam(team, GlobalDataHook.Param.PowerupType);
+		int newCellType = globalData.getParam(team, GlobalDataController.Param.PowerupType);
 		if (newCellType != 0)
 		{
 			CreateEnergyCell(newCellType);
-			globalData.setParam(team, GlobalDataHook.Param.PowerupType,0);
+			globalData.setParam(team, GlobalDataController.Param.PowerupType,0);
 		}
 
 	}
@@ -327,52 +327,52 @@ public class MechBehaviour : NetworkBehaviour
 
 	public bool AmmoFull()
 	{
-		return ammoCount == GlobalDataHook.maxAmmo;
+		return ammoCount == GlobalDataController.maxAmmo;
 	}
 
 	public void AddAmmo(int val)
 	{
 
 		ammoCount += val;
-		if (ammoCount > GlobalDataHook.maxAmmo)
-			ammoCount = GlobalDataHook.maxAmmo;
+		if (ammoCount > GlobalDataController.maxAmmo)
+			ammoCount = GlobalDataController.maxAmmo;
 
-		globalData.setParam(team, GlobalDataHook.Param.Ammo,ammoCount);
+		globalData.setParam(team, GlobalDataController.Param.Ammo,ammoCount);
 	}
 
 	public bool HealthFull()
 	{
-		return health == GlobalDataHook.maxHealth;
+		return health == GlobalDataController.maxHealth;
 	}
 
 	public void AddHealth(int val)
 	{
 		health += val;
-		if (health > GlobalDataHook.maxHealth)
-			health = GlobalDataHook.maxHealth;
+		if (health > GlobalDataController.maxHealth)
+			health = GlobalDataController.maxHealth;
 		if (health < 0)
 		{
 			health = 0;
 		}
 
-		globalData.setParam(team, GlobalDataHook.Param.Health, health);
+		globalData.setParam(team, GlobalDataController.Param.Health, health);
 	}
 
 	public bool FuelFull()
 	{
-		return fuel == GlobalDataHook.maxFuel;
+		return fuel == GlobalDataController.maxFuel;
 	}
 
 	public void AddFuel(int val)
 	{
 		fuel += val;
-		if (fuel > GlobalDataHook.maxFuel)
-			fuel = GlobalDataHook.maxFuel;
+		if (fuel > GlobalDataController.maxFuel)
+			fuel = GlobalDataController.maxFuel;
 		if (fuel < 0)
 		{
 			fuel = 0;
 		}
-		globalData.setParam(team, GlobalDataHook.Param.Fuel, fuel);
+		globalData.setParam(team, GlobalDataController.Param.Fuel, fuel);
 	}
 
 	public void Load(int val, int index)
@@ -400,9 +400,9 @@ public class MechBehaviour : NetworkBehaviour
 		{
 			boostTime[2] += (float)((boostLoaded[2] + 1) * healthMod) + (float)((boostLoaded[2] + 1) * fuelMod);
 		}
-		AddHealth((int)(loaded[0] * healthMod * GlobalDataHook.maxHealth / 5));
-		AddFuel((int)(loaded[1] * fuelMod * GlobalDataHook.maxFuel / 5));
-		AddAmmo((int)(loaded[2] *ammoMod* GlobalDataHook.maxAmmo / 5));
+		AddHealth((int)(loaded[0] * healthMod * GlobalDataController.maxHealth / 5));
+		AddFuel((int)(loaded[1] * fuelMod * GlobalDataController.maxFuel / 5));
+		AddAmmo((int)(loaded[2] *ammoMod* GlobalDataController.maxAmmo / 5));
 		System.Array.Clear(loaded, 0, 3);
 		System.Array.Clear(boostLoaded, 0, 3);
 		restorationSounds.PlayOneShot(soundEffects[3], 1);
@@ -410,7 +410,7 @@ public class MechBehaviour : NetworkBehaviour
 
 	public void reboot()
 	{
-		fuel = GlobalDataHook.maxFuel / 10;
+		fuel = GlobalDataController.maxFuel / 10;
 		restart = false;
 		timingMiniGame.gameObject.SetActive(true);
 		restartMiniGame.gameObject.SetActive(false);
@@ -448,16 +448,16 @@ public class MechBehaviour : NetworkBehaviour
 
 		if (type == 0)
 		{
-			globalData.setParam(team, GlobalDataHook.Param.DefBoost, isActive);
+			globalData.setParam(team, GlobalDataController.Param.DefBoost, isActive);
 
 		}
 		else if (type == 1)
 		{
-			globalData.setParam(team, GlobalDataHook.Param.SpdBoost, isActive);
+			globalData.setParam(team, GlobalDataController.Param.SpdBoost, isActive);
 		}
 		else
 		{
-			globalData.setParam(team, GlobalDataHook.Param.AtkBoost, isActive);
+			globalData.setParam(team, GlobalDataController.Param.AtkBoost, isActive);
 		}
 	}
 }
