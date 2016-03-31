@@ -19,7 +19,7 @@ EditorBuildSettings:
     path: Assets/Scenes/NewLobby.unity
   - enabled: 1
     path: Assets/Scenes/pilot.unity
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/engineer.unity
   - enabled: 0
     path: Assets/Scenes/Engineer2.unity

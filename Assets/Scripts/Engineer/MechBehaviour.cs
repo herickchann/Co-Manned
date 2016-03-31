@@ -47,6 +47,9 @@ public class MechBehaviour : NetworkBehaviour
 	float[] boostEndTime = new float[3];
 	public Material[] mat;
 	bool restart;
+    float updateTime;
+    const float updateInterval = (float)0.2;
+    public Sprite BlueBackground;
 
 	// Wire up game manager
 	GameObject gameManager;
@@ -77,12 +80,16 @@ public class MechBehaviour : NetworkBehaviour
 		baseCellPosition = holdingBay.position;
 		baseCellPosition.x -= (float)5;
 		baseCellPosition.y -= (float)-1;
-		for (int x = 0; x < holdingBaySize; x++)
+		/*for (int x = 0; x < holdingBaySize; x++)
 		{
 			CreateEnergyCell(0);
-		}
-		///health = globalData.getParam("");
-		health = GlobalDataController.maxHealth;//maxHealth * 3 / 5;
+		}*/
+        for (int x = 0; x < 4; x++)
+        {
+            CreateEnergyCell(x);
+        }
+        ///health = globalData.getParam("");
+        health = GlobalDataController.maxHealth;//maxHealth * 3 / 5;
 		fuel = GlobalDataController.maxFuel;//maxFuel * 3 / 5;
 		ammoCount = GlobalDataController.maxAmmo;//maxAmmoCount-1;
 		for (int x = 0; x < ammoCount; x++)
@@ -97,6 +104,7 @@ public class MechBehaviour : NetworkBehaviour
 		}
 		restartMiniGame.gameObject.SetActive(false);
 		restart = false;
+        updateTime = Time.time;
 		//        SetCamera();
 	}
 
@@ -128,127 +136,133 @@ public class MechBehaviour : NetworkBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-        if (!isLocalPlayer)
-            return;
-        if (role == GameManager.Role.Engineer) {
-            var controllerCanvas = GameObject.Find("ControllerCanvas");
-            var cameraRig = GameObject.Find("CameraRig");
-            if (controllerCanvas != null) {
-                controllerCanvas.SetActive(false);
+        if (updateTime < Time.time)
+        {
+            if (!isLocalPlayer)
+                return;
+            if (role == GameManager.Role.Engineer)
+            {
+                var controllerCanvas = GameObject.Find("ControllerCanvas");
+                var cameraRig = GameObject.Find("CameraRig");
+                if (controllerCanvas != null)
+                {
+                    controllerCanvas.SetActive(false);
+                }
+                if (cameraRig != null)
+                {
+                    cameraRig.SetActive(false);
+                }
             }
-            if (cameraRig != null) {
-                cameraRig.SetActive(false);
+
+            health = globalData.getParam(team, GlobalDataController.Param.Health);
+            fuel = globalData.getParam(team, GlobalDataController.Param.Fuel);
+            ammoCount = globalData.getParam(team, GlobalDataController.Param.Ammo);
+            healthText.text = "Health: " + health + "/100";
+            fuelText.text = "Fuel: " + fuel + "/100";
+            healthBar.fillAmount = (float)health / GlobalDataController.maxHealth;
+            fuelBar.fillAmount = (float)fuel / GlobalDataController.maxFuel;
+            fuelBar.color = new Color(1, (float)fuel / GlobalDataController.maxFuel, 0);
+
+            if (fuel == 0 && restart == false)
+            {
+                restart = true;
+                foreach (int x in loaded)
+                {
+                    if (x != 0) { restart = false; }
+                }
+                if (restart)
+                {
+                    timingMiniGame.gameObject.SetActive(false);
+                    restartMiniGame.gameObject.SetActive(true);
+                    restartMiniGame.gameObject.GetComponent<RestartMiniGame>().Setup();
+                }
             }
+
+            for (int x = 0; x < boostTime.Length; x++)
+            {
+                if (boostTime[x] > 0)
+                {
+                    boostText[x].text = "" + System.Math.Round((boostTime[x]), 2);
+                    if (boostEndTime[x] > Time.time)
+                    {
+                        boostTime[x] = boostEndTime[x] - Time.time;
+                    }
+                    else
+                    {
+                        toggleBoost(x);
+                    }
+                }
+                else
+                {
+                    boostText[x].text = "";
+                }
+            }
+
+            if (((double)health / GlobalDataController.maxHealth) >= 0.50)
+            {
+                healthBar.color = new Color(1 - ((float)health / GlobalDataController.maxHealth) / (float)2.5, 1, 0);
+            }
+            else
+            {
+                healthBar.color = new Color(1, (float)health / GlobalDataController.maxHealth, 0);
+            }
+
+            //Updates the ammo display
+            if (ammoCount > lastAmmoCount)
+            {
+                for (int x = lastAmmoCount; x < ammoCount; x++)
+                {
+                    AddAmmoIcon(x);
+                }
+            }
+            else if (ammoCount < lastAmmoCount)
+            {
+                for (int x = lastAmmoCount; x > ammoCount; x--)
+                {
+                    DeleteAmmoIcon(x - 1);
+                }
+            }
+            lastAmmoCount = ammoCount;
+
+            for (int x = 0; x < loaded.Length; x++)
+            {
+                if (loaded[x] > 0)
+                {
+                    //tmg.StartBar(x);
+                    timingMiniGame.GetComponent<TimingMiniGameBehaviour>().StartBar(x);
+                }
+            }
+            if (boostLoaded[0] > 0)
+            {
+                healthBayText.color = Color.red;
+            }
+            else { healthBayText.color = Color.white; }
+            healthBayText.text = "" + loaded[0];
+            if (boostLoaded[1] > 0)
+            {
+                fuelBayText.color = Color.red;
+            }
+            else {
+                fuelBayText.color = Color.white;
+            }
+            fuelBayText.text = "" + loaded[1];
+            if (boostLoaded[2] > 0)
+            {
+                ammoBayText.color = Color.red;
+            }
+            else {
+                ammoBayText.color = Color.white;
+            }
+            ammoBayText.text = "" + loaded[2];
+
+            int newCellType = globalData.getParam(team, GlobalDataController.Param.PowerupType);
+            if (newCellType != 0)
+            {
+                CreateEnergyCell(newCellType-1);
+                globalData.setParam(team, GlobalDataController.Param.PowerupType, 0);
+            }
+            updateTime += updateInterval;
         }
-
-		health = globalData.getParam(team,GlobalDataController.Param.Health);
-		fuel = globalData.getParam(team, GlobalDataController.Param.Fuel);
-		ammoCount = globalData.getParam(team, GlobalDataController.Param.Ammo);
-		healthText.text = "Health: " + health + "/100";
-		fuelText.text = "Fuel: " + fuel + "/100";
-		healthBar.fillAmount = (float)health / GlobalDataController.maxHealth;
-		fuelBar.fillAmount = (float)fuel / GlobalDataController.maxFuel;
-		fuelBar.color = new Color(1, (float)fuel / GlobalDataController.maxFuel, 0);
-
-		if (fuel == 0 && restart == false)
-		{
-			restart = true;
-			foreach (int x in loaded)
-			{
-				if (x != 0) { restart = false; }
-			}
-			if (restart)
-			{
-				timingMiniGame.gameObject.SetActive(false);
-				restartMiniGame.gameObject.SetActive(true);
-				restartMiniGame.gameObject.GetComponent<RestartMiniGame>().Setup();
-			}
-		}
-
-		for (int x = 0; x< boostTime.Length; x++)
-		{
-			if (boostTime[x] > 0)
-			{
-				boostText[x].text = "" + System.Math.Round((boostTime[x]), 2);
-				if (boostEndTime[x] > Time.time)
-				{
-					boostTime[x] = boostEndTime[x] - Time.time;
-				}
-				else
-				{
-					toggleBoost(x);
-				}
-			}
-			else
-			{
-				boostText[x].text = "";
-			}
-		}
-
-		if (((double)health / GlobalDataController.maxHealth) >= 0.50)
-		{
-			healthBar.color = new Color(1 - ((float)health / GlobalDataController.maxHealth) / (float)2.5, 1, 0);
-		}
-		else
-		{
-			healthBar.color = new Color(1, (float)health / GlobalDataController.maxHealth, 0);
-		}
-
-		//Updates the ammo display
-		if (ammoCount > lastAmmoCount)
-		{
-			for (int x = lastAmmoCount; x < ammoCount; x++)
-			{
-				AddAmmoIcon(x);
-			}
-		}
-		else if (ammoCount < lastAmmoCount)
-		{
-			for (int x = lastAmmoCount; x > ammoCount; x--)
-			{
-				DeleteAmmoIcon(x-1);
-			}
-		}
-		lastAmmoCount = ammoCount;
-
-		for (int x = 0; x < loaded.Length; x++)
-		{
-			if (loaded[x] > 0)
-			{
-				//tmg.StartBar(x);
-				timingMiniGame.GetComponent<TimingMiniGameBehaviour>().StartBar(x);
-			}
-		}
-		if (boostLoaded[0] > 0)
-		{
-			healthBayText.color = Color.red;
-		}
-		else { healthBayText.color = Color.white; }
-		healthBayText.text = "" + loaded[0];
-		if (boostLoaded[1] > 0)
-		{
-			fuelBayText.color = Color.red;
-		}
-		else {
-			fuelBayText.color = Color.white;
-		}
-		fuelBayText.text = "" + loaded[1];
-		if (boostLoaded[2] > 0)
-		{
-			ammoBayText.color = Color.red;
-		}
-		else {
-			ammoBayText.color = Color.white;
-		}
-		ammoBayText.text = "" + loaded[2];
-
-		int newCellType = globalData.getParam(team, GlobalDataController.Param.PowerupType);
-		if (newCellType != 0)
-		{
-			CreateEnergyCell(newCellType);
-			globalData.setParam(team, GlobalDataController.Param.PowerupType,0);
-		}
-
 	}
 
 	GameObject CreateEnergyCell(int type)
@@ -290,6 +304,7 @@ public class MechBehaviour : NetworkBehaviour
 		temp.GetComponent<Transform>().localScale = scale;
 		temp.GetComponent<Transform>().localEulerAngles = new Vector3(270,90,0);
 		temp.GetComponent<MeshRenderer>().material = mat[type];
+        temp.GetComponent<AmmoBehaviour>().setType(type);
 		return temp;
 	}
 
@@ -462,5 +477,9 @@ public class MechBehaviour : NetworkBehaviour
 		Debug.Log ("Setting mech team to " + GameManager.teamString(team));
 		this.team = team;
 		this.role = role;
+        if (this.team == GameManager.Team.Blue && this.role == GameManager.Role.Engineer)
+        {
+            GetComponent<Transform>().Find("Canvas").gameObject.GetComponent<Image>().sprite = BlueBackground;
+        }
 	}
 }

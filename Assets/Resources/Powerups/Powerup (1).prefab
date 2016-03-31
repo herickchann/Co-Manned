@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b67f29fd587624c438d12b516aff82c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
+  type: 1
   respawnTime: 0
 --- !u!136 &13696136
 CapsuleCollider:
@@ -238,6 +238,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Height
       value: 12.42719
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: type
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

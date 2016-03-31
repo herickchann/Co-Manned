@@ -1749,7 +1749,7 @@ AudioSource:
   m_GameObject: {fileID: 178456}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300001, guid: 7c4811fbebdd4469c9e424de2ba4823d,
+  OutputAudioMixerGroup: {fileID: 24340168, guid: 7c4811fbebdd4469c9e424de2ba4823d,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: f93b9a9cc36014efaa4da61d5e4feab4, type: 3}
   m_PlayOnAwake: 1
@@ -2923,10 +2923,11 @@ MonoBehaviour:
   timingMiniGame: {fileID: 120526}
   restartMiniGame: {fileID: 182814}
   mat:
-  - {fileID: 2100000, guid: 9a96fb19838d47a4aa48e3293607e468, type: 2}
   - {fileID: 2100000, guid: 54d7768f7fcae054ab7c83d6323b0a3b, type: 2}
   - {fileID: 2100000, guid: d0a419c4378ee504c80ebd0da38a07ec, type: 2}
+  - {fileID: 2100000, guid: 9a96fb19838d47a4aa48e3293607e468, type: 2}
   - {fileID: 2100000, guid: 3d40a2178bd17b9419e2268d3c2419f7, type: 2}
+  BlueBackground: {fileID: 21300000, guid: 2b988a7ccbeae29478a9eaf64b86fbfd, type: 3}
   team: 0
   role: 0
 --- !u!114 &11442224
