@@ -39,7 +39,7 @@ public class MechBehaviour : NetworkBehaviour
 	//[SyncVar]
 	int ammoCount;
 	//const int maxAmmoCount = 25;
-	GameObject[] ammoIcons = new GameObject[GlobalData.maxAmmo];
+	GameObject[] ammoIcons = new GameObject[GlobalDataHook.maxAmmo];
 	int lastAmmoCount;
 	int[] loaded = new int[3];
 	int[] boostLoaded = new int[3];
@@ -98,9 +98,9 @@ public class MechBehaviour : NetworkBehaviour
 			CreateEnergyCell(0);
 		}
 		///health = globalData.getParam("");
-		health = GlobalData.maxHealth;//maxHealth * 3 / 5;
-		fuel = GlobalData.maxFuel;//maxFuel * 3 / 5;
-		ammoCount = GlobalData.maxAmmo;//maxAmmoCount-1;
+		health = GlobalDataHook.maxHealth;//maxHealth * 3 / 5;
+		fuel = GlobalDataHook.maxFuel;//maxFuel * 3 / 5;
+		ammoCount = GlobalDataHook.maxAmmo;//maxAmmoCount-1;
 		for (int x = 0; x < ammoCount; x++)
 		{
 			AddAmmoIcon(x);
@@ -144,14 +144,14 @@ public class MechBehaviour : NetworkBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		health = globalData.getParam(team,GlobalData.Param.Health);
-		fuel = globalData.getParam(team, GlobalData.Param.Fuel);
-		ammoCount = globalData.getParam(team, GlobalData.Param.Ammo);
+		health = globalData.getParam(team,GlobalDataHook.Param.Health);
+		fuel = globalData.getParam(team, GlobalDataHook.Param.Fuel);
+		ammoCount = globalData.getParam(team, GlobalDataHook.Param.Ammo);
 		healthText.text = "Health: " + health + "/100";
 		fuelText.text = "Fuel: " + fuel + "/100";
-		healthBar.fillAmount = (float)health / GlobalData.maxHealth;
-		fuelBar.fillAmount = (float)fuel / GlobalData.maxFuel;
-		fuelBar.color = new Color(1, (float)fuel / GlobalData.maxFuel, 0);
+		healthBar.fillAmount = (float)health / GlobalDataHook.maxHealth;
+		fuelBar.fillAmount = (float)fuel / GlobalDataHook.maxFuel;
+		fuelBar.color = new Color(1, (float)fuel / GlobalDataHook.maxFuel, 0);
 
 		if (fuel == 0 && restart == false)
 		{
@@ -188,13 +188,13 @@ public class MechBehaviour : NetworkBehaviour
 			}
 		}
 
-		if (((double)health / GlobalData.maxHealth) >= 0.50)
+		if (((double)health / GlobalDataHook.maxHealth) >= 0.50)
 		{
-			healthBar.color = new Color(1 - ((float)health / GlobalData.maxHealth) / (float)2.5, 1, 0);
+			healthBar.color = new Color(1 - ((float)health / GlobalDataHook.maxHealth) / (float)2.5, 1, 0);
 		}
 		else
 		{
-			healthBar.color = new Color(1, (float)health / GlobalData.maxHealth, 0);
+			healthBar.color = new Color(1, (float)health / GlobalDataHook.maxHealth, 0);
 		}
 
 		//Updates the ammo display
@@ -245,11 +245,11 @@ public class MechBehaviour : NetworkBehaviour
 		}
 		ammoBayText.text = "" + loaded[2];
 
-		int newCellType = globalData.getParam(team, GlobalData.Param.PowerupType);
+		int newCellType = globalData.getParam(team, GlobalDataHook.Param.PowerupType);
 		if (newCellType != 0)
 		{
 			CreateEnergyCell(newCellType);
-			globalData.setParam(team, GlobalData.Param.PowerupType,0);
+			globalData.setParam(team, GlobalDataHook.Param.PowerupType,0);
 		}
 
 	}
@@ -327,52 +327,52 @@ public class MechBehaviour : NetworkBehaviour
 
 	public bool AmmoFull()
 	{
-		return ammoCount == GlobalData.maxAmmo;
+		return ammoCount == GlobalDataHook.maxAmmo;
 	}
 
 	public void AddAmmo(int val)
 	{
 
 		ammoCount += val;
-		if (ammoCount > GlobalData.maxAmmo)
-			ammoCount = GlobalData.maxAmmo;
+		if (ammoCount > GlobalDataHook.maxAmmo)
+			ammoCount = GlobalDataHook.maxAmmo;
 
-		globalData.setParam(team, GlobalData.Param.Ammo,ammoCount);
+		globalData.setParam(team, GlobalDataHook.Param.Ammo,ammoCount);
 	}
 
 	public bool HealthFull()
 	{
-		return health == GlobalData.maxHealth;
+		return health == GlobalDataHook.maxHealth;
 	}
 
 	public void AddHealth(int val)
 	{
 		health += val;
-		if (health > GlobalData.maxHealth)
-			health = GlobalData.maxHealth;
+		if (health > GlobalDataHook.maxHealth)
+			health = GlobalDataHook.maxHealth;
 		if (health < 0)
 		{
 			health = 0;
 		}
 
-		globalData.setParam(team, GlobalData.Param.Health, health);
+		globalData.setParam(team, GlobalDataHook.Param.Health, health);
 	}
 
 	public bool FuelFull()
 	{
-		return fuel == GlobalData.maxFuel;
+		return fuel == GlobalDataHook.maxFuel;
 	}
 
 	public void AddFuel(int val)
 	{
 		fuel += val;
-		if (fuel > GlobalData.maxFuel)
-			fuel = GlobalData.maxFuel;
+		if (fuel > GlobalDataHook.maxFuel)
+			fuel = GlobalDataHook.maxFuel;
 		if (fuel < 0)
 		{
 			fuel = 0;
 		}
-		globalData.setParam(team, GlobalData.Param.Fuel, fuel);
+		globalData.setParam(team, GlobalDataHook.Param.Fuel, fuel);
 	}
 
 	public void Load(int val, int index)
@@ -400,9 +400,9 @@ public class MechBehaviour : NetworkBehaviour
 		{
 			boostTime[2] += (float)((boostLoaded[2] + 1) * healthMod) + (float)((boostLoaded[2] + 1) * fuelMod);
 		}
-		AddHealth((int)(loaded[0] * healthMod * GlobalData.maxHealth / 5));
-		AddFuel((int)(loaded[1] * fuelMod * GlobalData.maxFuel / 5));
-		AddAmmo((int)(loaded[2] *ammoMod* GlobalData.maxAmmo / 5));
+		AddHealth((int)(loaded[0] * healthMod * GlobalDataHook.maxHealth / 5));
+		AddFuel((int)(loaded[1] * fuelMod * GlobalDataHook.maxFuel / 5));
+		AddAmmo((int)(loaded[2] *ammoMod* GlobalDataHook.maxAmmo / 5));
 		System.Array.Clear(loaded, 0, 3);
 		System.Array.Clear(boostLoaded, 0, 3);
 		restorationSounds.PlayOneShot(soundEffects[3], 1);
@@ -410,7 +410,7 @@ public class MechBehaviour : NetworkBehaviour
 
 	public void reboot()
 	{
-		fuel = GlobalData.maxFuel / 10;
+		fuel = GlobalDataHook.maxFuel / 10;
 		restart = false;
 		timingMiniGame.gameObject.SetActive(true);
 		restartMiniGame.gameObject.SetActive(false);
@@ -448,16 +448,16 @@ public class MechBehaviour : NetworkBehaviour
 
 		if (type == 0)
 		{
-			globalData.setParam(team, GlobalData.Param.DefBoost, isActive);
+			globalData.setParam(team, GlobalDataHook.Param.DefBoost, isActive);
 
 		}
 		else if (type == 1)
 		{
-			globalData.setParam(team, GlobalData.Param.SpdBoost, isActive);
+			globalData.setParam(team, GlobalDataHook.Param.SpdBoost, isActive);
 		}
 		else
 		{
-			globalData.setParam(team, GlobalData.Param.AtkBoost, isActive);
+			globalData.setParam(team, GlobalDataHook.Param.AtkBoost, isActive);
 		}
 	}
 }
