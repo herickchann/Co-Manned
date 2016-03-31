@@ -7,7 +7,7 @@ public class GlobalDataController : NetworkBehaviour {
 
 	// health information
 	public const int maxHealth = 100;
-	public const int maxFuel = 100;
+	public const int maxFuel = 1000;
 	public const int maxAmmo = 25;
 
 	// Health
