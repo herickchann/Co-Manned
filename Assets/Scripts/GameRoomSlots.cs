@@ -62,12 +62,12 @@ public class GameRoomSlots : NetworkBehaviour {
 		Debug.LogError("user " + uname + " with pid " + pid + " updated slot " + idx.ToString());
 	}
 
-	public void lookupTeamRole(short pControlId, out GameManager.Team team, out GameManager.Role role) {
+	public void lookupTeamRole(string pid, out GameManager.Team team, out GameManager.Role role) {
 		// team and role none by default
 		team = GameManager.Team.None;
 		role = GameManager.Role.None;
 		for(int idx=0; idx<maxPlayers; idx++) { // iterate through the list until we find the id we want
-			if (pidList[idx] == pControlId.ToString()) {
+			if (pidList[idx] == pid) {
 				switch(idx) { // depending on slot idx, return the team and role
 				case 0:
 					team = GameManager.Team.Red;
