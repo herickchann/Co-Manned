@@ -129,6 +129,15 @@ MonoBehaviour:
   m_OnlineScene: 
   m_SpawnPrefabs:
   - {fileID: 152828, guid: 0845020765c8443409b574fcc13a029c, type: 2}
+  - {fileID: 106378, guid: e4501109e8c5b304f90ed8eb7cb50fa4, type: 2}
+  - {fileID: 132772, guid: e6b638c37bc2a9d4ca45e7842c3a2bfb, type: 2}
+  - {fileID: 174584, guid: ddc557f5f8cedeb4fadc2d777c951d60, type: 2}
+  - {fileID: 177486, guid: 4f33beefcca46814db27f39e2c075972, type: 2}
+  - {fileID: 141468, guid: c809a690d879b4824b8b8c650a1867e3, type: 2}
+  - {fileID: 172752, guid: 2c9a3401b860ab342b9a4f031edfd338, type: 2}
+  - {fileID: 138116, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
+  - {fileID: 184660, guid: 8312b97ba5cab75408953ca254a0dd4f, type: 2}
+  - {fileID: 191450, guid: 03ccd177b8db04f449baa7177a646414, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -180,8 +189,10 @@ MonoBehaviour:
   lobbySlots: []
   gameName: 
   gamePass: 
-  curNumPlayers: 0
   passwordRequired: false
+  redMech: {fileID: 141468, guid: c809a690d879b4824b8b8c650a1867e3, type: 2}
+  blueMech: {fileID: 172752, guid: 2c9a3401b860ab342b9a4f031edfd338, type: 2}
+  engineer: {fileID: 138116, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
 --- !u!4 &94311613
 Transform:
   m_ObjectHideFlags: 0

@@ -106,7 +106,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &118526
 GameObject:
   m_ObjectHideFlags: 1
@@ -1297,9 +1297,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66b5398b5217e44d285f50841ee31d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  blueHealth: 70
-  redHealth: 80
 --- !u!114 &11465822
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1441,7 +1438,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 172752}

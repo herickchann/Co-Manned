@@ -14,6 +14,9 @@ public class LobbyManager : NetworkLobbyManager {
 	public string gamePass = ""; // just broadcast true/false, not the actual password
 	public const int playerLimit = 4;
 	public string passwordRequired = "false";
+    public GameObject redMech;
+    public GameObject blueMech;
+    public GameObject engineer;
 
 	public NetworkInstanceId globalDataId;
 
@@ -128,15 +131,44 @@ public class LobbyManager : NetworkLobbyManager {
 		}
 		base.OnServerDisconnect(conn);
 	}
-		
-	// for users to apply settings from their lobby player object to their in-game player object
-	public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
-	{
-		Debug.Log ("passing information from lobby player to game player");
-		var cc = lobbyPlayer.GetComponent<LobbyPlayerScript>();
-		var player = gamePlayer.GetComponent<PilotMechController>();
-		player.setTeamInfo (cc.team, cc.role);
 
-		return true;
-	}
+    // for users to apply settings from their lobby player object to their in-game player object
+    public override bool OnLobbyServerSceneLoadedForPlayer (GameObject lobbyPlayer, GameObject gamePlayer) {
+        Debug.Log("passing information from lobby player to game player");
+        var cc = lobbyPlayer.GetComponent<LobbyPlayerScript>();
+        if (cc.role == GameManager.Role.Pilot) { 
+            var player = gamePlayer.GetComponent<PilotMechController>();
+            player.setTeamInfo(cc.team, cc.role);
+        } else {
+            var player = gamePlayer.GetComponent<MechBehaviour>();
+            player.setTeamInfo(cc.team, cc.role);
+        }
+        return true;
+    }
+
+    public override GameObject OnLobbyServerCreateGamePlayer(NetworkConnection conn, short playerControllerId)
+    {
+        var startPos = startPositions;
+        int rand = Random.Range(0, startPos.Count);
+        Transform pos = startPos[rand];
+        GameObject newGamePlayer = null;
+        GameManager.Team team = GameManager.Team.None;
+        GameManager.Role role = GameManager.Role.None;
+
+        foreach(NetworkInstanceId netiid in conn.clientOwnedObjects) {
+            GameObject gameRoomSlots = GameObject.Find("GameRoomSlots");
+			gameRoomSlots.GetComponent<GameRoomSlots>().lookupTeamRole(netiid.Value.ToString(), out team, out role);
+		}
+
+        if (GameManager.teamString(team) == "red" && GameManager.roleString(role) == "pilot") {
+            newGamePlayer = (GameObject) Instantiate(redMech, new Vector3(19, 0, 24), pos.rotation);
+        } else if (GameManager.teamString(team) == "blue" && GameManager.roleString(role) == "pilot") {
+            newGamePlayer = (GameObject) Instantiate(blueMech, new Vector3(19, 0, -40), pos.rotation);
+        } else if (GameManager.teamString(team) == "red" && GameManager.roleString(role) == "engineer") { 
+            newGamePlayer = (GameObject) Instantiate(engineer, new Vector3(-200, -202, -200), Quaternion.identity);
+        } else if (GameManager.teamString(team) == "blue" && GameManager.roleString(role) == "engineer") { 
+            newGamePlayer = (GameObject) Instantiate(engineer, new Vector3(200, -202, -200), Quaternion.identity);
+        } 
+        return newGamePlayer;
+    }
 }

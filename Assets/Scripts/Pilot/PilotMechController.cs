@@ -83,6 +83,22 @@ public class PilotMechController : NetworkBehaviour {
         if (!isLocalPlayer)
             return;
 
+        if (role == GameManager.Role.Pilot) { 
+            var eng = GameObject.Find("Engineer camera");
+            if (eng != null) {
+                eng.SetActive(false);
+            }
+        } else if (role == GameManager.Role.Engineer) {
+            var controllerCanvas = GameObject.Find("ControllerCanvas");
+            var cameraRig = GameObject.Find("CameraRig");
+            if (controllerCanvas != null) {
+                controllerCanvas.SetActive(false);
+            }
+            if (cameraRig != null) {
+                cameraRig.SetActive(false);
+            }
+        }
+
         rb.isKinematic = true;
         statusText.transform.position = transform.position + statusTextOffset;
 
@@ -113,8 +129,9 @@ public class PilotMechController : NetworkBehaviour {
     private void Move () {
         if (moveH != 0 || moveV != 0) {
             rb.isKinematic = false;
-            //fuel--;
+            globalData.setParam (team, GlobalDataController.Param.Fuel, fuel-1); 
         }
+        fuel = globalData.getParam (team, GlobalDataController.Param.Fuel); 
 
         if (fuel > 0) {
             Vector3 movement = new Vector3(moveH, 0.0f, moveV);
@@ -123,6 +140,7 @@ public class PilotMechController : NetworkBehaviour {
             rb.velocity = movement * speed;
         } else {
             fuel = 0;
+            globalData.setParam (team, GlobalDataController.Param.Fuel, 0); 
         }
     }
 

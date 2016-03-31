@@ -60,22 +60,6 @@ public class MechBehaviour : NetworkBehaviour
 	{
 		globalData = GetComponent<GlobalDataHook>();
 		gameManager = GameObject.Find("GameManager");
-		/* serverData = GameObject.Find("ServerData");
-        if (serverData == null)
-        {
-            Debug.Log("ServerData not found");
-        }*/
-
-		// init team info on load
-		if (gameManager != null)
-		{
-			var gameData = gameManager.GetComponent<GameManager>();
-			if (gameData != null)
-			{
-				team = gameData.getTeamSelection();
-				role = gameData.getRoleSelection();
-			}
-		}
 	}
 
 	void Start()
@@ -144,6 +128,19 @@ public class MechBehaviour : NetworkBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+        if (!isLocalPlayer)
+            return;
+        if (role == GameManager.Role.Engineer) {
+            var controllerCanvas = GameObject.Find("ControllerCanvas");
+            var cameraRig = GameObject.Find("CameraRig");
+            if (controllerCanvas != null) {
+                controllerCanvas.SetActive(false);
+            }
+            if (cameraRig != null) {
+                cameraRig.SetActive(false);
+            }
+        }
+
 		health = globalData.getParam(team,GlobalDataController.Param.Health);
 		fuel = globalData.getParam(team, GlobalDataController.Param.Fuel);
 		ammoCount = globalData.getParam(team, GlobalDataController.Param.Ammo);
@@ -459,5 +456,11 @@ public class MechBehaviour : NetworkBehaviour
 		{
 			globalData.setParam(team, GlobalDataController.Param.AtkBoost, isActive);
 		}
+	}
+
+    public void setTeamInfo(GameManager.Team team, GameManager.Role role){		
+		Debug.Log ("Setting mech team to " + GameManager.teamString(team));
+		this.team = team;
+		this.role = role;
 	}
 }

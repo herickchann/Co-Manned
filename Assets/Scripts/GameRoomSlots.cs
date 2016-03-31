@@ -18,7 +18,9 @@ public class GameRoomSlots : NetworkBehaviour {
 	public void OnPidListChanged(SyncListString.Operation op, int index) {
 		Debug.LogError("list op " + op + " on idx " + index.ToString()); // log updates
 	}
-
+    void Awake () {
+        GameObject.DontDestroyOnLoad(this);
+    }
 	// Use this for initialization
 	void Start () {
 		if (unameList.Count != maxPlayers) { // if list is not initialized
@@ -86,6 +88,8 @@ public class GameRoomSlots : NetworkBehaviour {
 					role = GameManager.Role.Engineer;
 					break;
 				}
+                Debug.LogError(team);
+                Debug.LogError(role);
 				return; // found it! exit loop
 			}
 		}

@@ -12,9 +12,9 @@ public class GlobalDataController : NetworkBehaviour {
 
 	// Health
 	[SyncVar]
-	private int blueHealth = 10;
+	private int blueHealth = maxHealth;
 	[SyncVar]
-	private int redHealth = 20;
+	private int redHealth = maxHealth;
 
 	// Ammo
 	[SyncVar]

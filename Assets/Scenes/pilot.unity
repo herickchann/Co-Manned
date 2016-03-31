@@ -939,7 +939,7 @@ GameObject:
   - 114: {fileID: 1260754774}
   - 114: {fileID: 1260754777}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: ControllerCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1447,7 +1447,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.41960788, g: 0.29411766, b: 0.12941177, a: 0.019607844}
+  m_BackGroundColor: {r: 0.038278557, g: 0.04100643, b: 0.43382353, a: 0.019607844}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
