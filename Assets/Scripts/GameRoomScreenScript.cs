@@ -14,6 +14,7 @@ public class GameRoomScreenScript : MonoBehaviour {
 	public Button BlueEngineer;
 	public Button ClearSelection;
 	public Button PlayButton;
+	public Button LeaveButton;
 	public CanvasGroup PilotPanel;
 	public CanvasGroup EngineerPanel;
 	public Text RoleText;
@@ -130,16 +131,6 @@ public class GameRoomScreenScript : MonoBehaviour {
 		b.interactable = false;
 		Text btex = b.GetComponentInChildren<Text>();
 		btex.text = label;
-	}
-
-	// returns to lobby screen
-	public void backToLobby () {
-		GameManager.instance.gameName = "";
-		GameManager.instance.gamePass = "";
-		GameManager.instance.teamSelection = GameManager.Team.None;
-		GameManager.instance.roleSelection = GameManager.Role.None;
-		SceneManager.LoadScene("GameLobbyScreen");
-		// detach from game instance
 	}
 
 }

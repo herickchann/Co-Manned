@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class LobbyPlayerScript : NetworkBehaviour {
 
@@ -41,6 +42,7 @@ public class LobbyPlayerScript : NetworkBehaviour {
 		if (isServer) { // default is ready
 			GameRoomUI.PlayButton.GetComponentInChildren<Text>().text = "Start Game";
 		}
+		GameRoomUI.LeaveButton.onClick.AddListener(() => leaveGame());
 
 		// attach to the shared room object
 		GameObject GameRoomObj = GameObject.Find("/GameRoomSlots");
@@ -144,6 +146,18 @@ public class LobbyPlayerScript : NetworkBehaviour {
 			Debug.LogError("Starting game...");
 			GameObject.Find("LobbyManager").GetComponent<LobbyManager>().startGame();
 		}
+	}
+
+	public void leaveGame() {
+		Debug.Log("Player is leaving match");
+		//GetComponent<NetworkLobbyPlayer>().RemovePlayer();
+		//SceneManager.LoadScene("NewMain");
+		if (isServer) {
+			GameObject.Find("LobbyManager").GetComponent<LobbyManager>().StopHost();
+		} else {
+			GameObject.Find("LobbyManager").GetComponent<LobbyManager>().StopClient();
+		}
+		SceneManager.LoadScene("NewMain");
 	}
 
 	public override void OnStartClient() {

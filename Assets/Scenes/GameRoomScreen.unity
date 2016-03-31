@@ -1130,18 +1130,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 616432917}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 930504944}
-        m_MethodName: backToLobby
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &616432917
@@ -1362,6 +1351,7 @@ MonoBehaviour:
   BlueEngineer: {fileID: 231310137}
   ClearSelection: {fileID: 1036123236}
   PlayButton: {fileID: 100113010}
+  LeaveButton: {fileID: 616432916}
   PilotPanel: {fileID: 1820869954}
   EngineerPanel: {fileID: 2081842493}
   RoleText: {fileID: 1905678406}
