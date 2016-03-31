@@ -34,7 +34,7 @@ public class NewDiscoveryScript : NetworkDiscovery {
 			int.TryParse(gameData[5], out numPlayers) &&
 			int.TryParse(gameData[6], out playerLimit)) {
 			// update UI with gameInfo
-			DiscoveredGameInfo gameInfo = new DiscoveredGameInfo(gameData[1], portNum, timeStamp,
+			DiscoveredGameInfo gameInfo = new DiscoveredGameInfo(fromAddress, portNum, timeStamp,
 				gameData[3], passwordProtected, numPlayers, playerLimit);
 			this.mainRoomUI.addGameInfo(gameInfo);
 		} else {
