@@ -19,7 +19,7 @@ public class MechBehaviour : NetworkBehaviour
     public GameObject restartMiniGame;
     Object energyCell;
     GameObject ammoIcon;
-    const int holdingBaySize = 12;
+    const int holdingBaySize = 10;
     int[] holdingBayArray = new int[holdingBaySize];
     Transform holdingBay;
     Transform StatusPanel;
@@ -277,15 +277,15 @@ public class MechBehaviour : NetworkBehaviour
         temp.GetComponent<AmmoBehaviour>().mech = this;
         float w = holdingBay.localScale.x * holdingBay.gameObject.GetComponent<RectTransform>().rect.width;
         float h = holdingBay.localScale.y * holdingBay.gameObject.GetComponent<RectTransform>().rect.height;
-        Vector3 pos = new Vector3((-1 * w * (float)0.42), (h * (float)0.05), 0);
-        Vector3 scale = new Vector3((float)(energyCellScale.x/5), (float)(energyCellScale.y / 5), (float)(energyCellScale.z / 5));
+        Vector3 pos = new Vector3((-1 * w * (float)0.5), (h * (float)0.15), 0);
+        Vector3 scale = new Vector3((float)(energyCellScale.x/5.5), (float)(energyCellScale.y / 5.5), (float)(energyCellScale.z / 5.5));
         if (index < holdingBaySize / 2)
         {
-            pos.x += (w / (holdingBaySize / 2) * ((holdingBaySize / 2) - index - 1));//2 * (index);
+            pos.x += (w / ((holdingBaySize + 2) / 2) * ((holdingBaySize / 2) - index));//2 * (index);
         }
         else
         {
-            pos.x += ((w / (holdingBaySize / 2)) * (index - (holdingBaySize / 2)));//2 * (index);
+            pos.x += ((w / ((holdingBaySize + 2) / 2)) * (index - (holdingBaySize / 2)+1));//2 * (index);
             pos.y -= ((h / (holdingBaySize / (holdingBaySize / 2))));//2 * (index);(float)2.2;
         }
         
