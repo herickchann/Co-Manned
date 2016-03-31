@@ -440,7 +440,8 @@ public class MechBehaviour : NetworkBehaviour
 	public void reboot()
 	{
 		fuel = GlobalDataController.maxFuel / 10;
-		restart = false;
+        globalData.setParam(team, GlobalDataController.Param.Fuel, fuel);
+        restart = false;
 		timingMiniGame.gameObject.SetActive(true);
 		restartMiniGame.gameObject.SetActive(false);
 		restorationSounds.PlayOneShot(soundEffects[3], 1);
