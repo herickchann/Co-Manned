@@ -37,6 +37,10 @@ public class LobbyPlayerScript : NetworkBehaviour {
 		GameRoomUI.BluePilot.onClick.AddListener(() => selectBluePilot());
 		GameRoomUI.BlueEngineer.onClick.AddListener(() => selectBlueEngineer());
 		GameRoomUI.ClearSelection.onClick.AddListener(() => clearSelection());
+		GameRoomUI.PlayButton.onClick.AddListener(() => startGame());
+		if (isServer) { // default is ready
+			GameRoomUI.PlayButton.GetComponentInChildren<Text>().text = "Start Game";
+		}
 
 		// attach to the shared room object
 		GameObject GameRoomObj = GameObject.Find("/GameRoomSlots");
@@ -48,6 +52,7 @@ public class LobbyPlayerScript : NetworkBehaviour {
 
 	void Update () {
 		// constantly push updated data to UI
+		if (GameRoomUI == null) return;
 		for(int idx = 0; idx < GameRoomSlots.maxPlayers; idx++ ){
 			GameRoomUI.unameArray[idx] = roomSlots.unameList[idx];
 		}
@@ -79,7 +84,7 @@ public class LobbyPlayerScript : NetworkBehaviour {
 		if (team == GameManager.Team.None && role == GameManager.Role.None) return; // nothing to release
 		int idx = getTeamRoleIndex(team, role);
 		Debug.Assert(0 <= idx && idx < GameRoomSlots.maxPlayers, "Bad team/role index: " + idx.ToString());
-		Debug.LogError("attempting to release slot " + idx.ToString());
+		//Debug.LogError("attempting to release slot " + idx.ToString());
 		CmdReleaseRoomSlot(idx);
 		setTeamInfo(GameManager.Team.None, GameManager.Role.None);
 	}
@@ -101,7 +106,7 @@ public class LobbyPlayerScript : NetworkBehaviour {
 		Debug.Assert(0 <= idx && idx < GameRoomSlots.maxPlayers, "Bad team/role index: " + idx.ToString());
 		if (roomSlots.pidList[idx] == "") { // if slot is available
 			releaseCurrentRoleSelection();
-			Debug.LogError("attempting to take slot " + idx.ToString());
+			//Debug.LogError("attempting to take slot " + idx.ToString());
 			CmdTakeRoomSlot(idx, myUserName, myPid);
 			setTeamInfo(selectedTeam, selectedRole);
 		}
@@ -127,6 +132,18 @@ public class LobbyPlayerScript : NetworkBehaviour {
 	public void clearSelection() {
 		releaseCurrentRoleSelection();
 		GameRoomUI.showNone();
+		//GetComponent<NetworkLobbyPlayer>().SendNotReadyToBeginMessage(); // does not work (pilot despawns)
+		//Debug.LogError("Client not ready");
+	}
+
+	public void startGame() {
+		if(!isLocalPlayer) return;
+		//GetComponent<NetworkLobbyPlayer>().SendReadyToBeginMessage(); // for host client too - does not work either
+		//Debug.LogError("Client ready");
+		if(isServer) { // only host can start the game
+			Debug.LogError("Starting game...");
+			GameObject.Find("LobbyManager").GetComponent<LobbyManager>().startGame();
+		}
 	}
 
 	public override void OnStartClient() {
