@@ -9,6 +9,7 @@ TagManager:
   - PowerupSpawn
   - Button
   - Engineer
+  - GlobalData
   layers:
   - Default
   - TransparentFX

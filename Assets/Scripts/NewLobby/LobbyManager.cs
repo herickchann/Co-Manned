@@ -16,6 +16,8 @@ public class LobbyManager : NetworkLobbyManager {
 	public const int playerLimit = 4;
 	public string passwordRequired = "false";
 
+	public NetworkInstanceId globalDataId;
+
 	void Awake(){
 		discovery = GetComponent<NewDiscoveryScript> ();
 	}
@@ -96,6 +98,9 @@ public class LobbyManager : NetworkLobbyManager {
 	{
 		Debug.Log ("client enterred");
 		// hide host here
+
+		Debug.Log ("spawn objects called");
+		NetworkServer.SpawnObjects ();
 	}
 
 	public override void OnLobbyClientConnect (NetworkConnection conn)
@@ -128,7 +133,7 @@ public class LobbyManager : NetworkLobbyManager {
 		}
 		base.OnServerDisconnect(conn);
 	}
-
+		
 	// for users to apply settings from their lobby player object to their in-game player object
 	public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
 	{

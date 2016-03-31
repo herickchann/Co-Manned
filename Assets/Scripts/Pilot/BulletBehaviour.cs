@@ -22,14 +22,14 @@ public class BulletBehaviour : NetworkBehaviour {
 
 		if(hitMech != null){
 			var combat = hitMech.GetComponent<Combat> ();
-			var globalData = hitMech.GetComponent<GlobalData> ();
+			var globalData = hitMech.GetComponent<GlobalDataHook> ();
 
 			if (combat != null) {
 				Debug.Log (GameManager.teamString(this.shooter) + " shoots " + GameManager.teamString(hitMech.team));
 
 				// reduce health on server then replicate to client
 				//combat.TakeDamage (hitMech.team, 10);
-				globalData.setHealth(hitMech.team, 10);
+				globalData.setParam(hitMech.team, GlobalDataController.Param.Health, 10);
 
 
 			} else {

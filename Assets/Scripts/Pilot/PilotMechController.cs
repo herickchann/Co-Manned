@@ -40,14 +40,19 @@ public class PilotMechController : NetworkBehaviour {
     private int health;
     private Combat combat;
 
-	private GlobalData globalData;
+	private bool print = true;
+
+	private GlobalDataHook globalData;
 
     void Awake () {
         rb = GetComponent<Rigidbody>();
-		globalData = GetComponent<GlobalData> ();
+		globalData = GetComponent<GlobalDataHook> ();
+		Debug.LogError ("pilot created");
     }
 
     void Start () {
+		// hook to global data
+		Debug.Log ("loaded " + GameManager.teamString(this.team) + " health: " + globalData.getParam(this.team, GlobalDataController.Param.Health));
         if (this.role == GameManager.Role.Engineer) {
             //Camera.main.gameObject.SetActive(false);
             //GameObject.Find("ControllerCanvas").SetActive(false);
@@ -61,8 +66,8 @@ public class PilotMechController : NetworkBehaviour {
             // test set up string
             // set up name
 
-            int blue = globalData.getHealth(GameManager.Team.Blue);
-            int red = globalData.getHealth(GameManager.Team.Red);
+			int blue = globalData.getParam(GameManager.Team.Blue, GlobalDataController.Param.Health);
+			int red = globalData.getParam(GameManager.Team.Red, GlobalDataController.Param.Health);
             statusText.GetComponent<TextMesh>().text = "B:" + blue.ToString() + "R:" + red.ToString();
 
             //used for switching arms for shooting
@@ -77,12 +82,13 @@ public class PilotMechController : NetworkBehaviour {
         }
 		if(isClient) CmdNotifyNewPlayer (team, role);
 
+
     }
 
 	public void updateStatusText(){
-		var globalData = GetComponent<GlobalData>();
-		int blue = globalData.getHealth (GameManager.Team.Blue); 
-		int red = globalData.getHealth (GameManager.Team.Red); 
+		var globalData = GetComponent<GlobalDataHook>();
+		int blue = globalData.getParam (GameManager.Team.Blue, GlobalDataController.Param.Health); 
+		int red = globalData.getParam (GameManager.Team.Red, GlobalDataController.Param.Health); 
 		statusText.GetComponent<TextMesh> ().text = "B:" + blue.ToString () + "R:" + red.ToString ();
 	}
 
@@ -90,10 +96,16 @@ public class PilotMechController : NetworkBehaviour {
         if (!isLocalPlayer)
             return;
 
+		if (print) {
+			Debug.Log ("loaded " + GameManager.teamString(this.team) + " health: " + globalData.getParam(this.team, GlobalDataController.Param.Health));
+
+			print = false;
+		}
+
         if (this.role == GameManager.Role.Pilot) {
-            fuel = globalData.getParam(this.team, GlobalData.Param.Fuel);
-            health = globalData.getParam(this.team, GlobalData.Param.Health);
-            ammo = globalData.getParam(this.team, GlobalData.Param.Ammo);
+            fuel = globalData.getParam(this.team, GlobalDataController.Param.Fuel);
+            health = globalData.getParam(this.team, GlobalDataController.Param.Health);
+            ammo = globalData.getParam(this.team, GlobalDataController.Param.Ammo);
 
             rb.isKinematic = true;
             statusText.transform.position = transform.position + statusTextOffset;

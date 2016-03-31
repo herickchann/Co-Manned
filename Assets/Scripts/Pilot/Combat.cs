@@ -8,7 +8,7 @@ public class Combat : NetworkBehaviour {
 	GameObject gameManager;
 
 	// wire up global game info
-	GlobalData globalData;
+	GlobalDataHook globalDataHook;
 
 	public const int maxHealth = 50;
 
@@ -16,7 +16,7 @@ public class Combat : NetworkBehaviour {
 	public int health = maxHealth;
 
 	void Awake(){
-		globalData = GetComponent<GlobalData> ();
+		globalDataHook = GetComponent<GlobalDataHook> ();
 		health = maxHealth;
 	}
 
@@ -42,7 +42,7 @@ public class Combat : NetworkBehaviour {
 		RpcDamage (teamGotHit, amount);
 
 		// also update its copy of global data
-		if (globalData.getHealth(teamGotHit) <= 0)
+		if (globalDataHook.getParam(teamGotHit, GlobalDataController.Param.Health) <= 0)
 		{
 			health = 0;
 			Debug.Log("Dead!");
