@@ -12,6 +12,7 @@ public class GameRoomScreenScript : MonoBehaviour {
 	public Button RedEngineer;
 	public Button BluePilot;
 	public Button BlueEngineer;
+	public Button ClearSelection;
 	public CanvasGroup PilotPanel;
 	public CanvasGroup EngineerPanel;
 	public Text RoleText;
@@ -47,9 +48,6 @@ public class GameRoomScreenScript : MonoBehaviour {
 		for(int idx = 0; idx < GameRoomSlots.maxPlayers; idx++) {
 			unameArray[idx] = "";
 		}
-
-		myTeam = GameManager.Team.None;
-		myRole = GameManager.Role.None;
 	}
 
 	// Update is called once per frame
@@ -116,6 +114,9 @@ public class GameRoomScreenScript : MonoBehaviour {
 	}
 	public void showBlueEngineer() {
 		updateImage(GameManager.Team.Blue, GameManager.Role.Engineer);
+	}
+	public void showNone() {
+		updateImage(GameManager.Team.None, GameManager.Role.None);
 	}
 
 	public void buttonAvailable(Button b, string label) {

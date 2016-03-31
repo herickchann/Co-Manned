@@ -36,6 +36,7 @@ public class LobbyPlayerScript : NetworkBehaviour {
 		GameRoomUI.RedEngineer.onClick.AddListener(() => selectRedEngineer());
 		GameRoomUI.BluePilot.onClick.AddListener(() => selectBluePilot());
 		GameRoomUI.BlueEngineer.onClick.AddListener(() => selectBlueEngineer());
+		GameRoomUI.ClearSelection.onClick.AddListener(() => clearSelection());
 
 		// attach to the shared room object
 		GameObject GameRoomObj = GameObject.Find("/GameRoomSlots");
@@ -50,8 +51,6 @@ public class LobbyPlayerScript : NetworkBehaviour {
 		for(int idx = 0; idx < GameRoomSlots.maxPlayers; idx++ ){
 			GameRoomUI.unameArray[idx] = roomSlots.unameList[idx];
 		}
-		//GameRoomUI.myTeam = team;
-		//GameRoomUI.myRole = role;
 	}
 
 	// hardcode index mappings for now
@@ -124,6 +123,10 @@ public class LobbyPlayerScript : NetworkBehaviour {
 	public void selectBlueEngineer() {
 		selectTeamRole(GameManager.Team.Blue, GameManager.Role.Engineer);
 		GameRoomUI.showBlueEngineer();
+	}
+	public void clearSelection() {
+		releaseCurrentRoleSelection();
+		GameRoomUI.showNone();
 	}
 
 	public override void OnStartClient() {
