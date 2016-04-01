@@ -292,7 +292,19 @@ public class MechBehaviour : NetworkBehaviour
             }
             updateTime += updateInterval;
         }
-	}
+
+        if (this.team == GameManager.Team.Blue && this.role == GameManager.Role.Engineer)
+        {
+            GetComponent<Transform>().Find("Canvas").gameObject.GetComponent<Image>().sprite = BlueBackground;
+            TeamText.text = "Blue Team";
+            TeamText.color = Color.blue;
+        }
+        else if (this.team == GameManager.Team.Red && this.role == GameManager.Role.Engineer)
+        {
+            TeamText.text = "Red Team";
+            TeamText.color = Color.red;
+        }
+    }
 
 	GameObject CreateEnergyCell(int type)
 	{
@@ -472,20 +484,19 @@ public class MechBehaviour : NetworkBehaviour
 
 	public void Convert(double healthMod, double fuelMod, double ammoMod)
 	{
-
-		if (healthMod == 2)
-		{
-			boostTime[0] += (float)((boostLoaded[0]+5)*ammoMod) + (float)((boostLoaded[0] + 5) * fuelMod);
-		}
-		if (fuelMod == 2)
-		{
-			boostTime[1] += (float)((boostLoaded[1] + 5) * ammoMod) + (float)((boostLoaded[1] + 5) * healthMod);
-		}
-		if (ammoMod == 2)
-		{
-			boostTime[2] += (float)((boostLoaded[2] + 5) * healthMod) + (float)((boostLoaded[2] + 5) * fuelMod);
-		}
-		AddHealth((int)(loaded[0] * healthMod * GlobalDataController.maxHealth / 5));
+        if (healthMod == 2)
+            boostTime[0] += (float)((boostLoaded[0] + 5) * ammoMod) + (float)((boostLoaded[0] + 5) * fuelMod);
+        else if (healthMod == 1)
+            boostTime[0] += (float)0.5 *(float)((boostLoaded[0] + 2) * ammoMod) + (float)((boostLoaded[0] + 2) * fuelMod);
+        if (fuelMod == 2)
+            boostTime[1] += (float)((boostLoaded[1] + 5) * ammoMod) + (float)((boostLoaded[1] + 5) * healthMod);
+        else if (fuelMod == 1)
+            boostTime[1] += (float)0.5 * (float)((boostLoaded[1] + 5) * ammoMod) + (float)((boostLoaded[1] + 5) * healthMod);
+        if (ammoMod == 2)
+            boostTime[2] += (float)((boostLoaded[2] + 5) * healthMod) + (float)((boostLoaded[2] + 5) * fuelMod);
+        else if (ammoMod == 1)
+            boostTime[2] += (float)0.5 * (float)((boostLoaded[2] + 5) * healthMod) + (float)((boostLoaded[2] + 5) * fuelMod);
+        AddHealth((int)(loaded[0] * healthMod * GlobalDataController.maxHealth / 5));
 		AddFuel((int)(loaded[1] * fuelMod * GlobalDataController.maxFuel / 5));
 		AddAmmo((int)(loaded[2] *ammoMod* GlobalDataController.maxAmmo / 5));
 		System.Array.Clear(loaded, 0, 3);
@@ -558,16 +569,5 @@ public class MechBehaviour : NetworkBehaviour
 		Debug.Log ("Setting mech team to " + GameManager.teamString(team));
 		this.team = team;
 		this.role = role;
-        if (this.team == GameManager.Team.Blue && this.role == GameManager.Role.Engineer)
-        {
-            GetComponent<Transform>().Find("Canvas").gameObject.GetComponent<Image>().sprite = BlueBackground;
-            TeamText.text = "Blue Team";
-            TeamText.color = Color.blue;
-        }
-        if (this.team == GameManager.Team.Red && this.role == GameManager.Role.Engineer)
-        {
-            TeamText.text = "Red Team";
-            TeamText.color = Color.red;
-        }
     }
 }
