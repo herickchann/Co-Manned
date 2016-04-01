@@ -72,6 +72,8 @@ public class PilotMechController : NetworkBehaviour {
         moveV = CnInputManager.GetAxis("Vertical");
 
         timer += Time.deltaTime;
+        rb.isKinematic = true;
+
 		if (health > 0 && fuel > 0) {
             Move();
             Turn();
@@ -80,7 +82,6 @@ public class PilotMechController : NetworkBehaviour {
         } else if (health <= 0) {
             anim.SetBool("death", true);
         } else if (fuel <= 0) {
-            rb.isKinematic = true;
             anim.SetBool("fuel", false);
         }
     }
