@@ -370,12 +370,11 @@ public class MechBehaviour : NetworkBehaviour
             return;
 
         if (this.role == GameManager.Role.Pilot) { 
-            /*GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
+            GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
             foreach (GameObject engineer in engineers) {
-                engineer.SetActive(false);
-            }*/
-            GameObject engCam = GameObject.Find("Engineer Camera");
-            if (engCam != null) engCam.SetActive(false);
+                var engCam = engineer.GetComponentInChildren<Camera>();
+                if (engCam != null) engCam.gameObject.SetActive(false);
+            }
         }    
 
         if (this.role == GameManager.Role.Engineer) { 
@@ -399,7 +398,8 @@ public class MechBehaviour : NetworkBehaviour
             foreach (GameObject engineer in engineers) {
                 var engScript = engineer.GetComponent<MechBehaviour>();
                 if (engScript.team != this.team) {
-                    engineer.GetComponent<Camera>().gameObject.SetActive(false);
+                    var engCam = engineer.GetComponentInChildren<Camera>();
+                    if (engCam != null) engCam.gameObject.SetActive(false);
                 }
             }
         }

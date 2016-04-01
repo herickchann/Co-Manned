@@ -102,12 +102,11 @@ public class PilotMechController : NetworkBehaviour {
             return; 
 
         if (this.role == GameManager.Role.Pilot) { 
-            /*GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
+            GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
             foreach (GameObject engineer in engineers) {
-                engineer.SetActive(false);
-            }*/
-            GameObject engCam = GameObject.Find("Engineer Camera");
-            if (engCam != null) engCam.SetActive(false);
+                var engCam = engineer.GetComponentInChildren<Camera>();
+                if (engCam != null) engCam.gameObject.SetActive(false);
+            }
         }    
 
         if (this.role == GameManager.Role.Engineer) { 
@@ -131,7 +130,8 @@ public class PilotMechController : NetworkBehaviour {
             foreach (GameObject engineer in engineers) {
                 var engScript = engineer.GetComponent<MechBehaviour>();
                 if (engScript.team != this.team) {
-                    engineer.GetComponent<Camera>().gameObject.SetActive(false);
+                    var engCam = engineer.GetComponentInChildren<Camera>();
+                    if (engCam != null) engCam.gameObject.SetActive(false);
                 }
             }
         }
@@ -151,7 +151,7 @@ public class PilotMechController : NetworkBehaviour {
 
     private void Move () {
         if (moveH != 0 || moveV != 0 && timer > fuelDepleteRate) {
-            //rb.isKinematic = false;
+            rb.isKinematic = false;
             globalData.setParam (team, GlobalDataController.Param.Fuel, fuel-1); 
         }
         Vector3 movement = new Vector3(moveH, 0.0f, moveV);
