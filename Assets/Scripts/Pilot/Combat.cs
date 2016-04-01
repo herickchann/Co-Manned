@@ -30,9 +30,18 @@ public class Combat : NetworkBehaviour {
 	}
 
 	// server executes this: we know who got hit, and by how much
-	public void TakeDamage(GameManager.Team teamGotHit, int amount){
+	public void TakeDamage(GameManager.Team teamGotHit){
 		if (!isServer)
 			return;
+        int amount = GlobalDataController.ammoDamage;
+        int defBoost = globalDataHook.getParam (teamGotHit, GlobalDataController.Param.DefBoost); 
+        int atkBoost = globalDataHook.getParam (teamGotHit, GlobalDataController.Param.AtkBoost);
+
+        if (defBoost == 1) {
+            amount = amount/2;
+        } else if (atkBoost == 1) {
+            amount = amount*2;
+        } 
 
         health = globalDataHook.getParam(teamGotHit, GlobalDataController.Param.Health);
 		// reduce health on the server first

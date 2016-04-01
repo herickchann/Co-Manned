@@ -26,7 +26,7 @@ public class BulletBehaviour : NetworkBehaviour {
 			if (combat != null) {
 				Debug.Log (GameManager.teamString(this.shooter) + " shoots " + GameManager.teamString(hitMech.team));
                 hitMech.anim.Play("Hit");
-				combat.TakeDamage (hitMech.team, 10);
+				combat.TakeDamage (hitMech.team);
 			} else {
 				Debug.Log ("Error: combat is null");
 			}

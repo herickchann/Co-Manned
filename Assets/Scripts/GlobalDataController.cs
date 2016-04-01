@@ -10,6 +10,7 @@ public class GlobalDataController : NetworkBehaviour {
 	public const int maxHealth = 100;
 	public const int maxFuel = 1000;
 	public const int maxAmmo = 25;
+    public const int ammoDamage = 10;
 
 	// Health
 	[SyncVar(hook="OnBlueHealthChange")]
