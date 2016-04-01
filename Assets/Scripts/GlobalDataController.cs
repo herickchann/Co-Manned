@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Networking;
 
 // this is the shared global object that contains the game information
@@ -11,27 +12,27 @@ public class GlobalDataController : NetworkBehaviour {
 	public const int maxAmmo = 25;
 
 	// Health
-	[SyncVar]
+	[SyncVar(hook="OnBlueHealthChange")]
 	private int blueHealth = maxHealth;
-	[SyncVar]
+	[SyncVar(hook="OnRedHealthChange")]
 	private int redHealth = maxHealth;
 
 	// Ammo
-	[SyncVar]
+	[SyncVar(hook="OnBlueAmmoChange")]
 	private int blueAmmo = maxAmmo;
-	[SyncVar]
+	[SyncVar(hook="OnRedAmmoChange")]
 	private int redAmmo = maxAmmo;
 
 	// Powerup type
-	[SyncVar]
+	[SyncVar(hook="OnBluePowerupChange")]
 	private int bluePowerupType;
-	[SyncVar]
+	[SyncVar(hook="OnRedPowerupChange")]
 	private int redPowerupType;
 
 	// Fuel
-	[SyncVar]
+	[SyncVar(hook="OnBlueFuelChange")]
 	private int blueFuel = maxFuel;
-	[SyncVar]
+	[SyncVar(hook="OnRedFuelChange")]
 	private int redFuel = maxFuel;
 
 	[SyncVar]
@@ -49,6 +50,71 @@ public class GlobalDataController : NetworkBehaviour {
 	[SyncVar]
 	private int redAtkBoost;
 
+	// counters for the results screen (updated by server only)
+	// fetched at the end of the match
+	private int blueTotalDmgTaken = 0;
+	private int redTotalDmgTaken = 0;
+	private int blueTotalShotsFired = 0;
+	private int redTotalShotsFired = 0;
+	private int blueTotalTimesHit = 0;
+	private int redTotalTimesHit= 0;
+	private int blueTotalPickups = 0;
+	private int redTotalPickups = 0;
+	private int blueTotalFuelBurned = 0;
+	private int redTotalFuelBurned = 0;
+
+	// update hooks (would be nice to abstract these)
+	private void OnBlueHealthChange(int amount) {
+		if (blueHealth > amount) {
+			blueTotalDmgTaken += blueHealth - amount;
+			blueTotalTimesHit += 1;
+		}
+		blueHealth = amount;
+	}
+	private void OnRedHealthChange(int amount) {
+		if (redHealth > amount) {
+			redTotalDmgTaken += redHealth - amount;
+			redTotalTimesHit += 1;
+		}
+		redHealth = amount;
+	}
+	private void OnBlueAmmoChange(int amount) {
+		if (blueAmmo > amount) {
+			blueTotalShotsFired += blueAmmo - amount;
+		}
+		blueAmmo = amount;
+	}
+	private void OnRedAmmoChange(int amount) {
+		if (redAmmo > amount) {
+			redTotalShotsFired += redAmmo - amount;
+		}
+		redAmmo = amount;
+	}
+	// 0 means empty - else a type is being conveyed
+	private void OnBluePowerupChange(int type) {
+		if (type != 0) {
+			blueTotalPickups += 1;
+		}
+		bluePowerupType = type;
+	}
+	private void OnRedPowerupChange(int type) {
+		if (type != 0) {
+			redTotalPickups += 1;
+		}
+		redPowerupType = type;
+	}
+	private void OnBlueFuelChange(int amount) {
+		if (blueFuel > amount) {
+			blueTotalFuelBurned += blueFuel - amount;
+		}
+		blueFuel = amount;
+	}
+	private void OnRedFuelChange(int amount) {
+		if (redFuel > amount) {
+			redTotalFuelBurned += redFuel - amount;
+		}
+		redFuel = amount;
+	}
 
 	// list of params to be synched between engineers and pilots
 	public enum Param{Health, Ammo, PowerupType, Fuel,DefBoost,SpdBoost,AtkBoost};
@@ -318,7 +384,29 @@ public class GlobalDataController : NetworkBehaviour {
 		RpcSendMsg (GameManager.teamString (team) + " updating para: "+ paramString(param)+" to: " + newValue.ToString ());
 	}
 
+	public Dictionary<string, Dictionary<string, int>> getResultsDict() {
+		Dictionary<string, Dictionary<string, int>> resultsDict = new Dictionary<string, Dictionary<string, int>>();
 
+		Dictionary<string, int> redDict = new Dictionary<string, int>();
+		redDict.Add("endHealth", redHealth);
+		redDict.Add("dmgTaken", redTotalDmgTaken);
+		redDict.Add("timesHit", redTotalTimesHit);
+		redDict.Add("shotsFired", redTotalShotsFired);
+		redDict.Add("pickups", redTotalPickups);
+		redDict.Add("fuelBurned", redTotalFuelBurned);
+		resultsDict.Add("red", redDict);
+
+		Dictionary<string, int> blueDict = new Dictionary<string, int>();
+		blueDict.Add("endHealth", blueHealth);
+		blueDict.Add("dmgTaken", blueTotalDmgTaken);
+		blueDict.Add("timesHit", blueTotalTimesHit);
+		blueDict.Add("shotsFired", blueTotalShotsFired);
+		blueDict.Add("pickups", blueTotalPickups);
+		blueDict.Add("fuelBurned", blueTotalFuelBurned);
+		resultsDict.Add("blue", blueDict);
+
+		return resultsDict;
+	}
 
 	[ClientRpc]
 	public void RpcSendMsg(string message){
