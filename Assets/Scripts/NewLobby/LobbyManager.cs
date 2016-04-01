@@ -23,7 +23,7 @@ public class LobbyManager : NetworkLobbyManager {
 
 	void Awake(){
 		
-		if(Application.platform==RuntimePlatform.IPhonePlayer || Application.platform==RuntimePlatform.tvOS || Application.platform == RuntimePlatform.Android)
+		if(Application.platform==RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android || Application.platform==RuntimePlatform.tvOS)
 		{
 			runInBackground=false;
 		}
@@ -32,7 +32,7 @@ public class LobbyManager : NetworkLobbyManager {
 	void Start(){
 
 		discovery = GetComponent<NewDiscoveryScript> ();
-
+		 
 		// singleton
 		s_singleton = this;
 
