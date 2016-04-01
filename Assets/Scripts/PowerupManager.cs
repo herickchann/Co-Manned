@@ -4,9 +4,9 @@ using System.Collections;
 public class PowerupManager : MonoBehaviour {
 
     public int type;
-    public int respawnTime;
+    public float respawnTimer;
     private float timer;
-    private bool onCooldown;
+    public bool onCooldown;
 	
     void Start () {
         onCooldown = false;
@@ -20,14 +20,15 @@ public class PowerupManager : MonoBehaviour {
             globalData.setParam(hitMech.team, GlobalDataController.Param.PowerupType, type);
             HidePowerup();
             onCooldown = true;
+            respawnTimer = Time.time;
         }
     }
 
-    private void HidePowerup () {
+    public void HidePowerup () {
 		transform.gameObject.SetActive(false);
     }
     
-    private void ShowPowerup () {
+    public void ShowPowerup () {
 		transform.gameObject.SetActive(true);
     }
 }
