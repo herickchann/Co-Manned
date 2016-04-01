@@ -50,7 +50,8 @@ public class PilotMechController : NetworkBehaviour {
     }
 
     void Start () {
-        //used for switching arms for shooting
+        //used for switching arms for shooting\
+        speed = 10;
         altShoot = false;
         fuelDepleteRate = 5;
         //set up camera
@@ -82,6 +83,7 @@ public class PilotMechController : NetworkBehaviour {
         } else if (health <= 0) {
             anim.SetBool("death", true);
         } else if (fuel <= 0) {
+            rb.isKinematic = true;
             anim.SetBool("fuel", false);
         }
     }
@@ -92,6 +94,12 @@ public class PilotMechController : NetworkBehaviour {
 
         health = globalData.getParam(team, GlobalDataController.Param.Health);
         fuel = globalData.getParam (team, GlobalDataController.Param.Fuel); 
+        speedBoost = globalData.getParam (team, GlobalDataController.Param.SpdBoost); 
+        if (speedBoost == 1) {
+            speed = 15;
+        } else {
+            speed = 10;
+        }
     }
 
     void LateUpdate() {
@@ -120,12 +128,9 @@ public class PilotMechController : NetworkBehaviour {
             GameObject pilotCamera = GameObject.Find("CameraRig");
             GameObject pilotMap = GameObject.Find("Map");
 
-            if (cCanvas != null)
-            cCanvas.SetActive(false);
-            if (pilotCamera != null)
-            pilotCamera.SetActive(false);
-            if (pilotMap != null)
-            pilotMap.SetActive(false);
+            if (cCanvas != null) cCanvas.SetActive(false);
+            if (pilotCamera != null) pilotCamera.SetActive(false);
+            if (pilotMap != null) pilotMap.SetActive(false);
 
             GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
             foreach (GameObject engineer in engineers) {
@@ -151,7 +156,7 @@ public class PilotMechController : NetworkBehaviour {
     }
 
     private void Move () {
-        if (moveH != 0 || moveV != 0 && timer > fuelDepleteRate) {
+        if (moveH != 0 || moveV != 0 && timer > fuelDepleteRate && !anim.GetCurrentAnimatorStateInfo(0).IsName("Reboot")) {
             rb.isKinematic = false;
             globalData.setParam (team, GlobalDataController.Param.Fuel, fuel-1); 
         }
