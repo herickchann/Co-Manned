@@ -51,7 +51,7 @@ public class LobbyManager : NetworkLobbyManager {
 
 		roomInfo = GameObject.Find ("RoomInfo").GetComponent<RoomInfoScript>();
 		Debug.Assert(roomInfo, "RoomeInfo not found");
-		Debug.LogError("isFirstMatch = " + isFirstMatch.ToString());
+		//Debug.LogError("isFirstMatch = " + isFirstMatch.ToString());
 		if (isFirstMatch) { // would use isNetworkActive, but that does not work
 			if(roomInfo.role == RoomInfoScript.Role.Host){
 				this.networkAddress = this.defaultAddress;

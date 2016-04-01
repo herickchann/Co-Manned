@@ -64,6 +64,8 @@ public class GlobalDataController : NetworkBehaviour {
 	private int blueTotalFuelBurned = 0;
 	private int redTotalFuelBurned = 0;
 
+	private bool shouldEnd = false;
+	private float timeToEnd = 0;
 	// update hooks (would be nice to abstract these)
 	private void OnBlueHealthChange(int amount) {
 		if (blueHealth > amount) {
@@ -71,6 +73,11 @@ public class GlobalDataController : NetworkBehaviour {
 			blueTotalTimesHit += 1;
 		}
 		blueHealth = amount;
+		if (blueHealth <= 0) {
+			timeToEnd = Time.time + 3;
+			shouldEnd = true;
+			Debug.Log("Ending game...");
+		}
 	}
 	private void OnRedHealthChange(int amount) {
 		if (redHealth > amount) {
@@ -78,6 +85,11 @@ public class GlobalDataController : NetworkBehaviour {
 			redTotalTimesHit += 1;
 		}
 		redHealth = amount;
+		if (redHealth <= 0) {
+			timeToEnd = Time.time + 3;
+			shouldEnd = true;
+			Debug.Log("Ending game...");
+		}
 	}
 	private void OnBlueAmmoChange(int amount) {
 		if (blueAmmo > amount) {
@@ -136,6 +148,13 @@ public class GlobalDataController : NetworkBehaviour {
 		GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ().globalDataId = this.netId;
 		Debug.Log ("let lobby manager know my id as " + this.netId.Value);
 
+	}
+		
+	void Update() {
+		if (shouldEnd && Time.time > timeToEnd) {
+			shouldEnd = false;
+			GameObject.Find("LobbyManager").GetComponent<LobbyManager>().endGame();
+		}
 	}
 
 	void OnEnable(){
