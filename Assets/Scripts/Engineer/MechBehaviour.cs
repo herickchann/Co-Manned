@@ -217,6 +217,7 @@ public class MechBehaviour : NetworkBehaviour
                         }
                         else
                         {
+                            boostTime[x] = 0;
                             toggleBoost(x);
                         }
                     }
@@ -531,19 +532,19 @@ public class MechBehaviour : NetworkBehaviour
 		if (boostEndTime[type] > Time.time)
 		{
 			boostEndTime[type] = Time.time;
-			var cb = boostButtons[type].colors;
+			/*var cb = boostButtons[type].colors;
 			cb.normalColor = BaseColors[type];
-			boostButtons[type].colors = cb;
+			boostButtons[type].colors = cb;*/
 		}
 		else if (boostTime[type]>0)
 		{
 			boostEndTime[type] = Time.time+boostTime[type];
 			isActive = 1;
-			var cb = boostButtons[type].colors;
+			/*var cb = boostButtons[type].colors;
 			cb.normalColor = Color.red;
-			boostButtons[type].colors = cb;
+			boostButtons[type].colors = cb;*/
 		}
-        else
+        else if (!boostUp[type])
         {
             return;
         }
