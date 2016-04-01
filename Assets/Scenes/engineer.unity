@@ -1798,6 +1798,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: d0a419c4378ee504c80ebd0da38a07ec, type: 2}
   - {fileID: 2100000, guid: 3d40a2178bd17b9419e2268d3c2419f7, type: 2}
   BlueBackground: {fileID: 0}
+  TeamText: {fileID: 0}
   team: 0
   role: 0
 --- !u!23 &650120844
@@ -2450,18 +2451,22 @@ Prefab:
       propertyPath: m_Name
       value: mech
       objectReference: {fileID: 0}
-    - target: {fileID: 11439856, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
-      propertyPath: mat.Array.data[0]
+    - target: {fileID: 22421276, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -231.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 22421276, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 320.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 22421276, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: 11427890, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
+      propertyPath: m_Text
       value: 
-      objectReference: {fileID: 2100000, guid: 54d7768f7fcae054ab7c83d6323b0a3b, type: 2}
-    - target: {fileID: 11439856, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
-      propertyPath: mat.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: d0a419c4378ee504c80ebd0da38a07ec, type: 2}
-    - target: {fileID: 11439856, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
-      propertyPath: mat.Array.data[2]
-      value: 
-      objectReference: {fileID: 2100000, guid: 9a96fb19838d47a4aa48e3293607e468, type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
   m_IsPrefabParent: 0

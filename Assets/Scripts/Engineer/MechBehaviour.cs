@@ -52,6 +52,7 @@ public class MechBehaviour : NetworkBehaviour
     const float updateInterval = (float)0.2;
     public Sprite BlueBackground;
     bool isInitialized;
+    public Text TeamText;
 
 	// Wire up game manager
 	GameObject gameManager;
@@ -191,7 +192,7 @@ public class MechBehaviour : NetworkBehaviour
                     restartMiniGame.gameObject.GetComponent<RestartMiniGame>().Setup();
                 }
             }
-            else if (restart == false)
+            else if (fuel != 0)
             {
                 timingMiniGame.gameObject.SetActive(true);
                 restartMiniGame.gameObject.SetActive(false);
@@ -509,6 +510,13 @@ public class MechBehaviour : NetworkBehaviour
         if (this.team == GameManager.Team.Blue && this.role == GameManager.Role.Engineer)
         {
             GetComponent<Transform>().Find("Canvas").gameObject.GetComponent<Image>().sprite = BlueBackground;
+            TeamText.text = "Blue Team";
+            TeamText.color = Color.blue;
         }
-	}
+        if (this.team == GameManager.Team.Red && this.role == GameManager.Role.Engineer)
+        {
+            TeamText.text = "Red Team";
+            TeamText.color = Color.red;
+        }
+    }
 }
