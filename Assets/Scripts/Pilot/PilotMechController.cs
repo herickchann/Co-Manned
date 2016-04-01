@@ -44,6 +44,10 @@ public class PilotMechController : NetworkBehaviour {
     private float timer;
     private bool notify;
 
+    //Sound related
+    public AudioSource soundSystem;
+    public AudioClip[] soundEffects = new AudioClip[5];
+
     void Awake () {
         rb = GetComponent<Rigidbody>();
 		globalData = GetComponent<GlobalDataHook> ();
@@ -80,11 +84,15 @@ public class PilotMechController : NetworkBehaviour {
             Turn();
             Fire();
             anim.SetBool("fuel", true);
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Reboot")) {
+                soundSystem.PlayOneShot(soundEffects[4], 1);
+            }
         } else if (health <= 0) {
             anim.SetBool("death", true);
         } else if (fuel <= 0) {
             rb.isKinematic = true;
             anim.SetBool("fuel", false);
+            soundSystem.PlayOneShot(soundEffects[3], 1);
         }
     }
 
@@ -154,12 +162,17 @@ public class PilotMechController : NetworkBehaviour {
             }
         }
     }
+    public void playWalkSound () {
+        soundSystem.PlayOneShot(soundEffects[2], 1);
+
+    }
 
     private void Move () {
         if (moveH != 0 || moveV != 0 && timer > fuelDepleteRate && !anim.GetCurrentAnimatorStateInfo(0).IsName("Reboot")) {
             rb.isKinematic = false;
             globalData.setParam (team, GlobalDataController.Param.Fuel, fuel-1); 
         }
+
         Vector3 movement = new Vector3(moveH, 0.0f, moveV);
         anim.SetFloat("inputH", moveH);
         anim.SetFloat("inputV", moveV);
@@ -180,6 +193,7 @@ public class PilotMechController : NetworkBehaviour {
         if (ammo != 0) {
             nextFire = Time.time + fireRate;
             GameObject b;
+            soundSystem.PlayOneShot(soundEffects[1], 1);
             if (altShoot) {
                 b = (GameObject)Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
                 altShoot = false;

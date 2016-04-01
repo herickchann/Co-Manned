@@ -7,6 +7,7 @@ public class PowerupManager : MonoBehaviour {
     public float respawnTimer;
     private float timer;
     public bool onCooldown;
+    public AudioSource soundEffects;
 	
     void Start () {
         onCooldown = false;
@@ -18,6 +19,7 @@ public class PowerupManager : MonoBehaviour {
         var globalData = hit.GetComponent<GlobalDataHook>();
         if(hitMech != null && !onCooldown) {
             globalData.setParam(hitMech.team, GlobalDataController.Param.PowerupType, type);
+            soundEffects.Play();
             HidePowerup();
             onCooldown = true;
             respawnTimer = Time.time;

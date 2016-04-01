@@ -8,7 +8,8 @@ public class BulletBehaviour : NetworkBehaviour {
 	[SyncVar]
 	public GameManager.Team shooter;
     public ParticleSystem explosion;
-
+    public AudioSource soundSystem;
+    
 	void Awake(){
 	}
 	
@@ -27,6 +28,7 @@ public class BulletBehaviour : NetworkBehaviour {
 				Debug.Log (GameManager.teamString(this.shooter) + " shoots " + GameManager.teamString(hitMech.team));
                 hitMech.anim.Play("Hit");
 				combat.TakeDamage (hitMech.team);
+                soundSystem.Play();
 			} else {
 				Debug.Log ("Error: combat is null");
 			}
