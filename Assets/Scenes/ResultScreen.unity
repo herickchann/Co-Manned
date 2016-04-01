@@ -359,7 +359,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Exit to Lobby
+  m_Text: Leave Match
 --- !u!222 &407102280
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -376,7 +376,7 @@ GameObject:
   - 4: {fileID: 507381820}
   - 114: {fileID: 507381819}
   m_Layer: 0
-  m_Name: UIEmpty
+  m_Name: ResultScreenUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -405,6 +405,8 @@ MonoBehaviour:
   BlueFuelBurnedText: {fileID: 740723026}
   RedPickupsText: {fileID: 1036575249}
   BluePickupsText: {fileID: 2101501120}
+  RematchButton: {fileID: 1014374490}
+  LeaveButton: {fileID: 1114267207}
 --- !u!4 &507381820
 Transform:
   m_ObjectHideFlags: 0
@@ -1183,7 +1185,7 @@ GameObject:
   - 114: {fileID: 1014374491}
   - 114: {fileID: 1014374490}
   m_Layer: 5
-  m_Name: LobbyButton
+  m_Name: RematchButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1228,7 +1230,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 0.027450982, g: 0.7686275, b: 0.5803922, a: 1}
     m_HighlightedColor: {r: 0, g: 0.98039216, b: 0.78431374, a: 1}
-    m_PressedColor: {r: 0, g: 0.9803922, b: 0.7843138, a: 1}
+    m_PressedColor: {r: 0.7607844, g: 0.7607844, b: 0.7607844, a: 1}
     m_DisabledColor: {r: 0.027450982, g: 0.7686275, b: 0.5803922, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1241,7 +1243,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1014374491}
   m_OnClick:
     m_PersistentCalls:
@@ -1439,7 +1441,7 @@ GameObject:
   - 114: {fileID: 1114267208}
   - 114: {fileID: 1114267207}
   m_Layer: 5
-  m_Name: GameRoomButton
+  m_Name: LeaveMatchButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1484,7 +1486,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 0.015686275, g: 0.77647066, b: 0.58431375, a: 1}
     m_HighlightedColor: {r: 0, g: 0.98039216, b: 0.78431374, a: 1}
-    m_PressedColor: {r: 0, g: 0.9803922, b: 0.7843138, a: 1}
+    m_PressedColor: {r: 0.7607844, g: 0.7607844, b: 0.7607844, a: 1}
     m_DisabledColor: {r: 0.015686275, g: 0.77647066, b: 0.58431375, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1

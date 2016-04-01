@@ -52,6 +52,19 @@ public class LobbyPlayerScript : NetworkBehaviour {
 		this.roomSlots = gameRoomSlots;
 	}
 
+	// called when a level is loaded
+	void OnLevelWasLoaded(int level) {
+		// result screen has index = 4
+		if (level == 4) {
+			// attach to result screen UI
+			// attach to UI
+			ResultsScreenScript ResultUI = GameObject.Find("ResultScreenUI").GetComponent<ResultsScreenScript>();
+			Debug.Assert(ResultUI);
+			ResultUI.LeaveButton.onClick.AddListener(() => leaveGame());
+			ResultUI.RematchButton.onClick.AddListener(() => rematch());
+		}
+	}
+
 	void Update () {
 		// constantly push updated data to UI
 		if (GameRoomUI == null) return;
@@ -158,6 +171,15 @@ public class LobbyPlayerScript : NetworkBehaviour {
 			GameObject.Find("LobbyManager").GetComponent<LobbyManager>().StopClient();
 		}
 		SceneManager.LoadScene("NewMain");
+	}
+
+	public void rematch() {
+		Debug.Log("I want a rematch!");
+		//if (isServer) {
+		//	GameObject.Find("LobbyManager").GetComponent<LobbyManager>().ServerReturnToLobby();
+		//} else {
+			GameObject.Find("LobbyManager").GetComponent<LobbyManager>().SendReturnToLobby();
+		//}
 	}
 
 	public override void OnStartClient() {

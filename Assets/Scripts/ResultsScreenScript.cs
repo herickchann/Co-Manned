@@ -17,6 +17,9 @@ public class ResultsScreenScript : MonoBehaviour {
 	public Text BlueFuelBurnedText;
 	public Text RedPickupsText;
 	public Text BluePickupsText;
+	// Button references to pass to the lobby player
+	public Button RematchButton;
+	public Button LeaveButton;
 
 	Color redColour = new Color(1f, 0.125f, 0f, 1f);
 	Color blueColour = new Color(0f, 0.5f, 1f, 1f);

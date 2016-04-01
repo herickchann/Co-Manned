@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class LobbyManager : NetworkLobbyManager {
 
@@ -19,6 +20,8 @@ public class LobbyManager : NetworkLobbyManager {
     public GameObject redEng;
     public GameObject blueEng;
 
+	public bool isFirstMatch = true; // a flag to prevent duplicate connections
+
 	public NetworkInstanceId globalDataId;
 
 	void Awake(){
@@ -26,6 +29,13 @@ public class LobbyManager : NetworkLobbyManager {
 		if(Application.platform==RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android || Application.platform==RuntimePlatform.tvOS)
 		{
 			runInBackground=false;
+		}
+
+		if(s_singleton == null){
+			s_singleton = this;
+		}
+		else{
+			Destroy(gameObject);
 		}
 	}
 
@@ -41,21 +51,26 @@ public class LobbyManager : NetworkLobbyManager {
 
 		roomInfo = GameObject.Find ("RoomInfo").GetComponent<RoomInfoScript>();
 		Debug.Assert(roomInfo, "RoomeInfo not found");
-		if(roomInfo.role == RoomInfoScript.Role.Host){
-			this.networkAddress = this.defaultAddress;
-			this.networkPort = this.defaultPort;
-			this.gameName = roomInfo.gamename;
-			this.gamePass = roomInfo.password;
-			this.passwordRequired = (this.gamePass == "" ? "false" : "true");
-			Debug.LogError("broadcasting game " + this.gameName);
-			this.Host ();
+		Debug.LogError("isFirstMatch = " + isFirstMatch.ToString());
+		if (isFirstMatch) { // would use isNetworkActive, but that does not work
+			if(roomInfo.role == RoomInfoScript.Role.Host){
+				this.networkAddress = this.defaultAddress;
+				this.networkPort = this.defaultPort;
+				this.gameName = roomInfo.gamename;
+				this.gamePass = roomInfo.password;
+				this.passwordRequired = (this.gamePass == "" ? "false" : "true");
+				Debug.LogError("broadcasting game " + this.gameName);
+				this.Host ();
+			}
+			else if(roomInfo.role == RoomInfoScript.Role.Player){
+				this.networkAddress = roomInfo.address;
+				this.networkPort = roomInfo.port;
+				this.Join ();
+			}
+			isFirstMatch = false;
+		} else {
+			Debug.LogError("Not the first match - using existing connection");
 		}
-		else if(roomInfo.role == RoomInfoScript.Role.Player){
-			this.networkAddress = roomInfo.address;
-			this.networkPort = roomInfo.port;
-			this.Join ();
-		}
-
 	}
 
 	public void Update() {
@@ -65,20 +80,33 @@ public class LobbyManager : NetworkLobbyManager {
 		if (Input.GetKeyDown(KeyCode.Return)) {
 			ServerChangeScene("ResultScreen");
 		}
+		if (Input.GetKeyDown(KeyCode.Backspace)) {
+			ServerChangeScene("GameRoomScreen");
+		}
 	}
 
 	// Use this for initialization
 	public void Host(){
+		if (isNetworkActive) {
+			Debug.LogError("Network is active");
+			return;
+		}
 		StartHost ();
 	}
 
 	public void Join(){
+		if (isNetworkActive) return;
 		StartClient ();
 	}
 
 	public void startGame() {
-		CheckReadyToBegin(); // starts if all clients are ready - does not work
-		//ServerChangeScene("pilot");
+		discovery.StopBroadcast();
+		//CheckReadyToBegin(); // starts if all clients are ready - does not work
+		ServerChangeScene("pilot");
+	}
+
+	public void endGame() {
+		ServerChangeScene("ResultScreen");
 	}
 
 	private void updateBroadcastMessage() {
@@ -92,6 +120,7 @@ public class LobbyManager : NetworkLobbyManager {
 
 	public override void OnStartHost ()
 	{
+		Debug.LogError("OnStartHost was called");
 		discovery.Initialize ();
 		//string addressInfo = string.Format("{0}:{1}", this.networkAddress, this.networkPort.ToString()); 
 		updateBroadcastMessage();
@@ -159,6 +188,7 @@ public class LobbyManager : NetworkLobbyManager {
 
     // for users to apply settings from their lobby player object to their in-game player object
     public override bool OnLobbyServerSceneLoadedForPlayer (GameObject lobbyPlayer, GameObject gamePlayer) {
+		//Debug.LogError("Active Scene = " + SceneManager.GetActiveScene().name);
         Debug.Log("passing information from lobby player to game player");
         var cc = lobbyPlayer.GetComponent<LobbyPlayerScript>();
         if (cc.role == GameManager.Role.Pilot) { 
