@@ -20,6 +20,7 @@ public class BulletBehaviour : NetworkBehaviour {
 	private void OnTriggerEnter (Collider other) {
 		var hit = other.gameObject;
 		var hitMech = hit.GetComponent<PilotMechController> ();
+        soundSystem.Play();
 
 		if(hitMech != null){
 			var combat = hitMech.GetComponent<Combat> ();
@@ -28,7 +29,6 @@ public class BulletBehaviour : NetworkBehaviour {
 				Debug.Log (GameManager.teamString(this.shooter) + " shoots " + GameManager.teamString(hitMech.team));
                 hitMech.anim.Play("Hit");
 				combat.TakeDamage (hitMech.team);
-                soundSystem.Play();
 			} else {
 				Debug.Log ("Error: combat is null");
 			}
