@@ -175,13 +175,13 @@ public class LobbyManager : NetworkLobbyManager {
 		}
 
         if (GameManager.teamString(team) == "red" && GameManager.roleString(role) == "pilot") {
-            newGamePlayer = (GameObject) Instantiate(redMech, new Vector3(19, 0, 24), pos.rotation);
+            newGamePlayer = (GameObject) Instantiate(redMech, pos.position, pos.rotation);
         } else if (GameManager.teamString(team) == "blue" && GameManager.roleString(role) == "pilot") {
-            newGamePlayer = (GameObject) Instantiate(blueMech, new Vector3(19, 0, -40), pos.rotation);
+            newGamePlayer = (GameObject) Instantiate(blueMech, pos.position, pos.rotation);
         } else if (GameManager.teamString(team) == "red" && GameManager.roleString(role) == "engineer") { 
             newGamePlayer = (GameObject) Instantiate(engineer, new Vector3(-200, -202, -200), Quaternion.identity);
         } else if (GameManager.teamString(team) == "blue" && GameManager.roleString(role) == "engineer") { 
-            newGamePlayer = (GameObject) Instantiate(engineer, new Vector3(200, -202, -200), Quaternion.identity);
+            newGamePlayer = (GameObject) Instantiate(engineer, new Vector3(200, 202, 200), Quaternion.identity);
         } 
         return newGamePlayer;
     }

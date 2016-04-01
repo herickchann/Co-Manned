@@ -41,7 +41,6 @@ public class PilotMechController : NetworkBehaviour {
     private int atkBoost;
 	private GlobalDataHook globalData;
     private int fuelDepleteRate;
-    private bool oneTime;
     private float timer;
 
     void Awake () {
@@ -69,34 +68,8 @@ public class PilotMechController : NetworkBehaviour {
         if (!isLocalPlayer)
             return;
 
-        if (true) {
-            if (this.role == GameManager.Role.Pilot) { 
-                GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
-                foreach (GameObject engineer in engineers) {
-                    engineer.SetActive(false);
-                }
-            }    
-            if (role == GameManager.Role.Engineer) { 
-                GameObject[] pilots = GameObject.FindGameObjectsWithTag("Player");
-                foreach (GameObject pilot in pilots) {
-                    pilot.SetActive(false);
-                }
+       
 
-                GameObject.Find("ControllerCanvas").SetActive(false);
-                GameObject.Find("CameraRig").SetActive(false);
-                GameObject.Find("Map").SetActive(false);
-
-                GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
-                foreach (GameObject engineer in engineers) {
-                    var engScript = engineer.GetComponent<MechBehaviour>();
-                    if (engScript.team != this.team) {
-                        engineer.SetActive(false);
-                    }
-                }
-            }
-
-            oneTime = true;   
-        }
         moveH = CnInputManager.GetAxis("Horizontal");
         moveV = CnInputManager.GetAxis("Vertical");
 
@@ -117,6 +90,42 @@ public class PilotMechController : NetworkBehaviour {
     void FixedUpdate () {
         health = globalData.getParam(team, GlobalDataController.Param.Health);
         fuel = globalData.getParam (team, GlobalDataController.Param.Fuel); 
+    }
+
+    void LateUpdate() {
+        if (!isLocalPlayer)
+            return; 
+
+        if (this.role == GameManager.Role.Pilot) { 
+            GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
+            foreach (GameObject engineer in engineers) {
+                engineer.SetActive(false);
+            }
+        }    
+        //if (this.role == GameManager.Role.Engineer) { 
+        //    GameObject[] pilots = GameObject.FindGameObjectsWithTag("Player");
+        //    foreach (GameObject pilot in pilots) {
+        //        pilot.SetActive(false);
+        //    }
+
+        //    GameObject cCanvas = GameObject.Find("ControllerCanvas");
+        //    GameObject pilotCamera = GameObject.Find("CameraRig");
+        //    GameObject pilotMap = GameObject.Find("Map");
+        //        if (cCanvas != null)
+        //        cCanvas.SetActive(false);
+        //        if (pilotCamera != null)
+        //        pilotCamera.SetActive(false);
+        //        if (pilotMap != null)
+        //        pilotMap.SetActive(false);
+
+        //    GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
+        //    foreach (GameObject engineer in engineers) {
+        //        var engScript = engineer.GetComponent<MechBehaviour>();
+        //        if (engScript.team != this.team) {
+        //            engineer.SetActive(false);
+        //        }
+        //    }
+        //}
     }
 
     private void SetCamera () {
