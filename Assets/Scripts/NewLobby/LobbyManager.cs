@@ -54,6 +54,9 @@ public class LobbyManager : NetworkLobbyManager {
 		if (Input.GetKeyDown(KeyCode.Space)) { // for dev purposes, hitting space will start the game
 			ServerChangeScene("pilot");
 		}
+		if (Input.GetKeyDown(KeyCode.Return)) {
+			ServerChangeScene("ResultScreen");
+		}
 	}
 
 	// Use this for initialization
