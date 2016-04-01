@@ -53,6 +53,7 @@ public class MechBehaviour : NetworkBehaviour
     public Sprite BlueBackground;
     bool isInitialized;
     public Text TeamText;
+    float restartTime;
 
 	// Wire up game manager
 	GameObject gameManager;
@@ -169,16 +170,20 @@ public class MechBehaviour : NetworkBehaviour
 
             if (fuel == 0 && restart == false)
             {
-                restart = true;
-                foreach (int x in loaded)
+                if (restartTime < Time.time)
                 {
-                    if (x != 0) { restart = false; }
-                }
-                if (restart)
-                {
-                    timingMiniGame.gameObject.SetActive(false);
-                    restartMiniGame.gameObject.SetActive(true);
-                    restartMiniGame.gameObject.GetComponent<RestartMiniGame>().Setup();
+                    restart = true;
+                
+                    foreach (int x in loaded)
+                    {
+                        if (x != 0) { restart = false; }
+                    }
+                    if (restart)
+                    {
+                        timingMiniGame.gameObject.SetActive(false);
+                        restartMiniGame.gameObject.SetActive(true);
+                        restartMiniGame.gameObject.GetComponent<RestartMiniGame>().Setup();
+                    }
                 }
             }
             else if (fuel != 0)
@@ -468,6 +473,7 @@ public class MechBehaviour : NetworkBehaviour
 
 	public void reboot()
 	{
+        restartTime = Time.time + 1;
 		fuel = GlobalDataController.maxFuel / 3;
         restart = false;
         globalData.setParam(team, GlobalDataController.Param.Fuel, fuel);
