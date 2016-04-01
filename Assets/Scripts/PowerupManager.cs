@@ -12,16 +12,6 @@ public class PowerupManager : MonoBehaviour {
         onCooldown = false;
     }
 
-    void Update () {
-        if (onCooldown) { 
-            timer += Time.deltaTime;
-            if (timer > respawnTime) {
-                timer = 0;
-                ShowPowerup();
-                onCooldown = false;
-            }
-        }
-    }
 
     private void OnTriggerEnter (Collider other) {
         var hit = other.gameObject;

@@ -16,7 +16,8 @@ public class LobbyManager : NetworkLobbyManager {
 	public string passwordRequired = "false";
     public GameObject redMech;
     public GameObject blueMech;
-    public GameObject engineer;
+    public GameObject redEng;
+    public GameObject blueEng;
 
 	public NetworkInstanceId globalDataId;
 
@@ -168,10 +169,11 @@ public class LobbyManager : NetworkLobbyManager {
         GameObject newGamePlayer = null;
         GameManager.Team team = GameManager.Team.None;
         GameManager.Role role = GameManager.Role.None;
-
-        foreach(NetworkInstanceId netiid in conn.clientOwnedObjects) {
+        
+        foreach(NetworkInstanceId netid in conn.clientOwnedObjects) {
             GameObject gameRoomSlots = GameObject.Find("GameRoomSlots");
-			gameRoomSlots.GetComponent<GameRoomSlots>().lookupTeamRole(netiid.Value.ToString(), out team, out role);
+			gameRoomSlots.GetComponent<GameRoomSlots>().lookupTeamRole(netid.Value.ToString(), out team, out role);
+            Debug.LogError(netid.Value.ToString() + " " + team + " " + role);
 		}
 
         if (GameManager.teamString(team) == "red" && GameManager.roleString(role) == "pilot") {
@@ -179,10 +181,12 @@ public class LobbyManager : NetworkLobbyManager {
         } else if (GameManager.teamString(team) == "blue" && GameManager.roleString(role) == "pilot") {
             newGamePlayer = (GameObject) Instantiate(blueMech, pos.position, pos.rotation);
         } else if (GameManager.teamString(team) == "red" && GameManager.roleString(role) == "engineer") { 
-            newGamePlayer = (GameObject) Instantiate(engineer, new Vector3(-200, -202, -200), Quaternion.identity);
+            newGamePlayer = (GameObject) Instantiate(redEng, new Vector3(-200, -202, -200), Quaternion.identity);
         } else if (GameManager.teamString(team) == "blue" && GameManager.roleString(role) == "engineer") { 
-            newGamePlayer = (GameObject) Instantiate(engineer, new Vector3(200, 202, 200), Quaternion.identity);
-        } 
+            newGamePlayer = (GameObject) Instantiate(blueEng, new Vector3(200, -202, 200), Quaternion.identity);
+        } else {
+            Debug.LogError("GTFO");
+        }
         return newGamePlayer;
     }
 }

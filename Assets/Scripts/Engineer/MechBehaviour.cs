@@ -63,6 +63,7 @@ public class MechBehaviour : NetworkBehaviour
 	public GameManager.Role role;
 
 	private GlobalDataHook globalData;
+    private bool notify;
 
 	void Awake()
 	{
@@ -139,7 +140,15 @@ public class MechBehaviour : NetworkBehaviour
 		}
 	}
 
+    [Command]
+	public void CmdNotifyNewPlayer(GameManager.Team team, GameManager.Role role){
+		RpcNotifyNewPlayer (team, role);
+	}
 
+	[ClientRpc]
+	public void RpcNotifyNewPlayer(GameManager.Team team, GameManager.Role role){
+		Debug.LogError (GameManager.teamString(team) + " " + GameManager.roleString(role) + " joined the game");
+	}
 
 	// Update is called once per frame
 	void Update()
@@ -345,15 +354,20 @@ public class MechBehaviour : NetworkBehaviour
 	}
 
     void LateUpdate() {
+        if (!notify) { 
+		    if(isLocalPlayer) CmdNotifyNewPlayer (team, role);
+            notify = true;
+        }
         if (!isLocalPlayer)
-            return; 
+            return;
 
-        //if (this.role == GameManager.Role.Pilot) { 
-        //    GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
-        //    foreach (GameObject engineer in engineers) {
-        //        engineer.SetActive(false);
-        //    }
-        //}    
+        if (this.role == GameManager.Role.Pilot) {
+            GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
+            foreach (GameObject engineer in engineers) {
+                engineer.SetActive(false);
+            }
+        }
+
         if (this.role == GameManager.Role.Engineer) { 
             GameObject[] pilots = GameObject.FindGameObjectsWithTag("Player");
             foreach (GameObject pilot in pilots) {

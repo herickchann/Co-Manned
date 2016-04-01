@@ -97,8 +97,6 @@ public class GameRoomSlots : NetworkBehaviour {
 					role = GameManager.Role.Engineer;
 					break;
 				}
-                Debug.LogError(team);
-                Debug.LogError(role);
 				return; // found it! exit loop
 			}
 		}
