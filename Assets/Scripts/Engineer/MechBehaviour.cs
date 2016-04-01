@@ -57,7 +57,9 @@ public class MechBehaviour : NetworkBehaviour
 	// Wire up game manager
 	GameObject gameManager;
 	// public GameObject serverData;
+    [SyncVar]
 	public GameManager.Team team;
+    [SyncVar]
 	public GameManager.Role role;
 
 	private GlobalDataHook globalData;
@@ -146,19 +148,6 @@ public class MechBehaviour : NetworkBehaviour
         {
             if (!isLocalPlayer)
                 return;
-            if (role == GameManager.Role.Engineer)
-            {
-                var controllerCanvas = GameObject.Find("ControllerCanvas");
-                var cameraRig = GameObject.Find("CameraRig");
-                if (controllerCanvas != null)
-                {
-                    controllerCanvas.SetActive(false);
-                }
-                if (cameraRig != null)
-                {
-                    cameraRig.SetActive(false);
-                }
-            }
 
             if (!isInitialized)
             {
@@ -354,6 +343,40 @@ public class MechBehaviour : NetworkBehaviour
 		ammoIcons[index].GetComponent<Transform>().localScale = new Vector3(1, 1, 1);
 		ammoIcons[index].GetComponent<Transform>().localPosition = pos;
 	}
+
+    void LateUpdate() {
+        if (!isLocalPlayer)
+            return; 
+
+        //if (this.role == GameManager.Role.Pilot) { 
+        //    GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
+        //    foreach (GameObject engineer in engineers) {
+        //        engineer.SetActive(false);
+        //    }
+        //}    
+        if (this.role == GameManager.Role.Engineer) { 
+            GameObject[] pilots = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject pilot in pilots) {
+                pilot.SetActive(false);
+            }
+
+            GameObject cCanvas = GameObject.Find("ControllerCanvas");
+            GameObject pilotCamera = GameObject.Find("CameraRig");
+            GameObject pilotMap = GameObject.Find("Map");
+
+            if (cCanvas != null) cCanvas.SetActive(false);
+            if (pilotCamera != null) pilotCamera.SetActive(false);
+            if (pilotMap != null) pilotMap.SetActive(false);
+
+            GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
+            foreach (GameObject engineer in engineers) {
+                var engScript = engineer.GetComponent<MechBehaviour>();
+                if (engScript.team != this.team) {
+                    engineer.SetActive(false);
+                }
+            }
+        }
+    }
 
 	void DeleteAmmoIcon(int index)
 	{
