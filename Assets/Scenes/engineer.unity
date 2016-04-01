@@ -1799,6 +1799,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 3d40a2178bd17b9419e2268d3c2419f7, type: 2}
   BlueBackground: {fileID: 0}
   TeamText: {fileID: 0}
+  eventsystem: {fileID: 0}
   team: 0
   role: 0
 --- !u!23 &650120844
@@ -2451,6 +2452,10 @@ Prefab:
       propertyPath: m_Name
       value: mech
       objectReference: {fileID: 0}
+    - target: {fileID: 11439856, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
+      propertyPath: eventsystem
+      value: 
+      objectReference: {fileID: 1773839563}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
   m_IsPrefabParent: 0
@@ -3720,6 +3725,10 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1732003992}
+--- !u!1 &1773839563 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 127436, guid: 62f70558cfd0adf47a7faa5977a9d38d, type: 2}
+  m_PrefabInternal: {fileID: 998714932}
 --- !u!1 &1794542444
 GameObject:
   m_ObjectHideFlags: 0

@@ -53,6 +53,7 @@ public class MechBehaviour : NetworkBehaviour
     public Sprite BlueBackground;
     bool isInitialized;
     public Text TeamText;
+    public GameObject eventsystem;
     float restartTime;
 
 	// Wire up game manager
@@ -152,6 +153,8 @@ public class MechBehaviour : NetworkBehaviour
 
             if (!isInitialized)
             {
+                eventsystem.SetActive(false);
+                eventsystem.SetActive(true);
                 for (int x = 0; x < 4; x++)
                 {
                     CreateEnergyCell(x);

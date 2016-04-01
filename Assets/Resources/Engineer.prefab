@@ -3022,6 +3022,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 3d40a2178bd17b9419e2268d3c2419f7, type: 2}
   BlueBackground: {fileID: 21300000, guid: 2b988a7ccbeae29478a9eaf64b86fbfd, type: 3}
   TeamText: {fileID: 11427890}
+  eventsystem: {fileID: 127436}
   team: 0
   role: 0
 --- !u!114 &11442224
