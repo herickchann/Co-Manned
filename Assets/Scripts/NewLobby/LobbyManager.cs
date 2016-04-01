@@ -22,10 +22,17 @@ public class LobbyManager : NetworkLobbyManager {
 	public NetworkInstanceId globalDataId;
 
 	void Awake(){
-		discovery = GetComponent<NewDiscoveryScript> ();
+		
+		if(Application.platform==RuntimePlatform.IPhonePlayer || Application.platform==RuntimePlatform.tvOS || Application.platform == RuntimePlatform.Android)
+		{
+			runInBackground=false;
+		}
 	}
 
 	void Start(){
+
+		discovery = GetComponent<NewDiscoveryScript> ();
+
 		// singleton
 		s_singleton = this;
 
