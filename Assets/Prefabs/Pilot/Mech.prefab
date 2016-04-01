@@ -656,7 +656,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 141468}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -12.32, y: 0.11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 436916}
@@ -1208,8 +1208,8 @@ Light:
   serializedVersion: 6
   m_Type: 2
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_Intensity: 1.9
-  m_Range: 10
+  m_Intensity: 2
+  m_Range: 12
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -1309,15 +1309,11 @@ MonoBehaviour:
   speed: 10
   fireRate: 0
   bullet: {fileID: 152828, guid: 0845020765c8443409b574fcc13a029c, type: 2}
-  statusText: {fileID: 157992}
   bulletSpawn: {fileID: 450914}
   bulletSpawn2: {fileID: 414044}
   anim: {fileID: 11100000, guid: 7c2d94ae752cfea41a408633caa4f066, type: 3}
   team: 0
   role: 0
-  ammo: 100000000
-  powerupType: 0
-  fuel: 500
 --- !u!114 &11465308
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1567,6 +1563,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: role
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Intensity
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -35,13 +35,14 @@ public class PilotMechController : NetworkBehaviour {
     // Game related info
     private int health;
     private int ammo;
-    private int powerupType;
     private int fuel;
     private int defBoost;
     private int speedBoost;
     private int atkBoost;
-    private Combat combat;
 	private GlobalDataHook globalData;
+    private int fuelDepleteRate;
+    private bool oneTime;
+    private float timer;
 
     void Awake () {
         rb = GetComponent<Rigidbody>();
@@ -49,12 +50,9 @@ public class PilotMechController : NetworkBehaviour {
     }
 
     void Start () {
-        // set up physics
-        powerupType = 0;
-
         //used for switching arms for shooting
         altShoot = false;
-        combat = transform.GetComponent<Combat>();
+        fuelDepleteRate = 5;
         //set up camera
         SetCamera();
         //set up animations
@@ -63,43 +61,62 @@ public class PilotMechController : NetworkBehaviour {
         GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
 		if(isClient) CmdNotifyNewPlayer (team, role);
 
+        health = globalData.getParam(team, GlobalDataController.Param.Health);
+        fuel = globalData.getParam (team, GlobalDataController.Param.Fuel); 
     }
 
 	void Update () {
         if (!isLocalPlayer)
             return;
-        
-        // Deactivate objects depending on role
-        if (role == GameManager.Role.Pilot) { 
-            var eng = GameObject.Find("Engineer camera");
-            if (eng != null) {
-                eng.SetActive(false);
-            }
-        } else if (role == GameManager.Role.Engineer) {
-            var controllerCanvas = GameObject.Find("ControllerCanvas");
-            var cameraRig = GameObject.Find("CameraRig");
-            if (controllerCanvas != null) {
-                controllerCanvas.SetActive(false);
-            }
-            if (cameraRig != null) {
-                cameraRig.SetActive(false);
-            }
-        }
 
-        //rb.isKinematic = true;
+        if (true) {
+            if (this.role == GameManager.Role.Pilot) { 
+                GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
+                foreach (GameObject engineer in engineers) {
+                    engineer.SetActive(false);
+                }
+            }    
+            if (role == GameManager.Role.Engineer) { 
+                GameObject[] pilots = GameObject.FindGameObjectsWithTag("Player");
+                foreach (GameObject pilot in pilots) {
+                    pilot.SetActive(false);
+                }
+
+                GameObject.Find("ControllerCanvas").SetActive(false);
+                GameObject.Find("CameraRig").SetActive(false);
+                GameObject.Find("Map").SetActive(false);
+
+                GameObject[] engineers = GameObject.FindGameObjectsWithTag("Engineer");
+                foreach (GameObject engineer in engineers) {
+                    var engScript = engineer.GetComponent<MechBehaviour>();
+                    if (engScript.team != this.team) {
+                        engineer.SetActive(false);
+                    }
+                }
+            }
+
+            oneTime = true;   
+        }
         moveH = CnInputManager.GetAxis("Horizontal");
         moveV = CnInputManager.GetAxis("Vertical");
 
-        health = globalData.getParam(team, GlobalDataController.Param.Health);
-        fuel = globalData.getParam (team, GlobalDataController.Param.Fuel); 
-
+        timer += Time.deltaTime;
 		if (health > 0 && fuel > 0) {
             Move();
             Turn();
             Fire();
-        } else {
+            anim.SetBool("fuel", true);
+        } else if (health <= 0) {
             anim.SetBool("death", true);
+        } else if (fuel <= 0) {
+            rb.isKinematic = true;
+            anim.SetBool("fuel", false);
         }
+    }
+
+    void FixedUpdate () {
+        health = globalData.getParam(team, GlobalDataController.Param.Health);
+        fuel = globalData.getParam (team, GlobalDataController.Param.Fuel); 
     }
 
     private void SetCamera () {
@@ -115,7 +132,7 @@ public class PilotMechController : NetworkBehaviour {
     }
 
     private void Move () {
-        if (moveH != 0 || moveV != 0) {
+        if (moveH != 0 || moveV != 0 && timer > fuelDepleteRate) {
             //rb.isKinematic = false;
             globalData.setParam (team, GlobalDataController.Param.Fuel, fuel-1); 
         }

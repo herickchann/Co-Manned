@@ -153,7 +153,7 @@ public class LobbyManager : NetworkLobbyManager {
         if (cc.role == GameManager.Role.Pilot) { 
             var player = gamePlayer.GetComponent<PilotMechController>();
             player.setTeamInfo(cc.team, cc.role);
-        } else {
+        } else if(cc.role == GameManager.Role.Engineer) {
             var player = gamePlayer.GetComponent<MechBehaviour>();
             player.setTeamInfo(cc.team, cc.role);
         }
