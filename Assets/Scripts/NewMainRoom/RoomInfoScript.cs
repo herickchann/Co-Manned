@@ -11,8 +11,18 @@ public class RoomInfoScript : MonoBehaviour {
 	public string gamename;
 	public string password;
 
+	static RoomInfoScript s_instance;
+
+	void Awake(){
+		if (s_instance == null) {
+			s_instance = this;
+		} else {
+			Destroy (gameObject);
+		}
+	}
+
 	void Start(){
-		DontDestroyOnLoad (this); // persists between scenes
+		DontDestroyOnLoad (gameObject); // persists between scenes
 		role = Role.None;
 		address = "";
 		port = 0;

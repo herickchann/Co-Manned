@@ -53,7 +53,16 @@ public class GlobalDataController : NetworkBehaviour {
 	// list of params to be synched between engineers and pilots
 	public enum Param{Health, Ammo, PowerupType, Fuel,DefBoost,SpdBoost,AtkBoost};
 
+	static GlobalDataController s_instance;
 
+	void Awake(){
+		if (s_instance == null) {
+			s_instance = this;
+		} else {
+			Destroy (this.gameObject);
+		}
+	}
+		
 	void Start(){
 		DontDestroyOnLoad (this);
 		Debug.Log ("global data started");

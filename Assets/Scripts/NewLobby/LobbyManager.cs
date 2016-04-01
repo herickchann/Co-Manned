@@ -94,10 +94,13 @@ public class LobbyManager : NetworkLobbyManager {
 //	}
 
 	public override void OnStopHost(){
-		discovery.StopBroadcast ();
+		if(discovery.running){
+			discovery.StopBroadcast ();
+		}
+			
 		this.gameName = "";
 		this.gamePass = "";
-		base.OnStopHost();
+		//base.OnStopHost();
 	}
 //	public override void OnStopClient()
 //	{

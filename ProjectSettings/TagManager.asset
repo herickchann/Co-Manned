@@ -10,6 +10,7 @@ TagManager:
   - Button
   - Engineer
   - GlobalData
+  - GameRoomObjects
   layers:
   - Default
   - TransparentFX

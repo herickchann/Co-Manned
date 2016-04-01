@@ -4,6 +4,9 @@ using UnityEngine.Networking;
 
 public class GameRoomSlots : NetworkBehaviour {
 
+	// singleton
+	static GameRoomSlots s_instance;
+
 	[SyncVar] // user names for rendering buttons (might not be unique)
 	public SyncListString unameList = new SyncListString();
 	[SyncVar] // player id for uniquely identifying players (in case of duplicate user names)
@@ -19,7 +22,13 @@ public class GameRoomSlots : NetworkBehaviour {
 		Debug.LogError("list op " + op + " on idx " + index.ToString()); // log updates
 	}
     void Awake () {
-        GameObject.DontDestroyOnLoad(this);
+		if (s_instance == null) {
+			s_instance = this;
+			
+		} else {
+			Destroy (gameObject);
+		}
+        DontDestroyOnLoad(this);
     }
 	// Use this for initialization
 	void Start () {
