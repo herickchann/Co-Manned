@@ -25,7 +25,6 @@ ExportedObj/
 sysinfo.txt
 
 # Builds
-*.apk
 *.unitypackage
 *.app
 .DS_STORE
